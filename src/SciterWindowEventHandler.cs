@@ -1,4 +1,5 @@
-﻿namespace SciterLibraryAPI {
+﻿
+namespace SciterLibraryAPI {
 
     public class SciterWindowEventHandler {
 
@@ -13,6 +14,10 @@
 
         public virtual void KeyboardEvent ( KeyEvents command, KeyboardStates keyboardStates ) {
 
+        }
+
+        public virtual void FocusEvent ( FocusEvents command, bool byMouseClick, bool cancel, nint element ) {
+            
         }
 
     }

@@ -19,7 +19,7 @@ namespace SciterLibraryAPI {
         SciterApiStruct m_basicApi;
 
         public void LoadAPI () {
-            var m_apiPointer = SciterAPI ();
+            m_apiPointer = SciterAPI ();
             if ( m_apiPointer == IntPtr.Zero ) return;
 
             m_basicApi = Marshal.PtrToStructure<SciterApiStruct> ( m_apiPointer );
@@ -74,6 +74,9 @@ namespace SciterLibraryAPI {
             if ( RuntimeInformation.IsOSPlatform ( OSPlatform.Linux ) ) {
                 LinuxProcess ();
             }
+            if ( RuntimeInformation.IsOSPlatform ( OSPlatform.OSX ) ) {
+                MacOSProcess ();
+            }
         }
 
         public void WindowsProcess () {
@@ -99,6 +102,10 @@ namespace SciterLibraryAPI {
             LinuxApis.gtk_main ();
         }
 
+        public void MacOSProcess () {
+            MacOsApis.CreateNsApplicationAndRun ();
+        }
+
         public void SelectElement ( string cssSelector ) {
             //first step, get root element
             //var getRoot = m_basicApi.SciterGetRootElement ( m_mainWindow );
@@ -118,10 +125,10 @@ namespace SciterLibraryAPI {
             m_basicApi.SciterWindowAttachEventHandler ( m_mainWindow, @delegate, 1, (uint) EventBehaviourGroups.HandleAll );
         }
 
-        private bool Handle ( EventBehaviourGroups groups, IntPtr @params, SciterWindowEventHandler handler ) {
+        private bool Handle ( EventBehaviourGroups groups, IntPtr parameters, SciterWindowEventHandler handler ) {
             switch ( groups ) {
                 case EventBehaviourGroups.SUBSCRIPTIONS_REQUEST:
-                    Marshal.WriteInt32 ( @params, (int) EventBehaviourGroups.HandleAll );
+                    Marshal.WriteInt32 ( parameters, (int) EventBehaviourGroups.HandleAll );
                     return true;
                 case EventBehaviourGroups.HANDLE_INITIALIZATION:
                     /*
@@ -155,18 +162,16 @@ namespace SciterLibraryAPI {
 					 */
                     return true;
                 case EventBehaviourGroups.HANDLE_MOUSE:
-                    var mouseArguments = Marshal.PtrToStructure<MouseParameters> ( @params );
-                    handler.MouseEvent ( mouseArguments.cmd, mouseArguments.pos, mouseArguments.pos_view, mouseArguments.alt_state, mouseArguments.dragging_mode, mouseArguments.cursor_type);
+                    var mouseArguments = Marshal.PtrToStructure<MouseParameters> ( parameters );
+                    handler.MouseEvent ( mouseArguments.cmd, mouseArguments.pos, mouseArguments.pos_view, mouseArguments.alt_state, mouseArguments.dragging_mode, mouseArguments.cursor_type );
                     break;
                 case EventBehaviourGroups.HANDLE_KEY:
-					var keyboardArguments = Marshal.PtrToStructure<KeyParams>( @params );
+                    var keyboardArguments = Marshal.PtrToStructure<KeyParams> ( parameters );
                     handler.KeyboardEvent ( keyboardArguments.cmd, keyboardArguments.alt_state );
                     break;
                 case EventBehaviourGroups.HANDLE_FOCUS:
-                    /*
-					 var args = Marshal.PtrToStructure<SciterBehaviors.FOCUS_PARAMS>(prms).ToEventArgs();
-					return OnFocus(element: sourceElement, args: args);
-					 */
+                    var focusArguments = Marshal.PtrToStructure<FocusParameters> ( parameters );
+                    handler.FocusEvent ( focusArguments.cmd, focusArguments.by_mouse_click, focusArguments.cancel, focusArguments.target );
                     break;
                 case EventBehaviourGroups.HANDLE_SCROLL:
                     /*
