@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SciterLibraryAPI": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\IDEs\\sciter\\sciter-js-sdk-6.0.0.1\\sciter-js-sdk-6.0.0.1\\samples\\vue"
+    }
+  }
+}
