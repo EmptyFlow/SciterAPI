@@ -65,7 +65,7 @@ namespace SciterLibraryAPI.SystemApis {
             var application = objc_getClass ( "NSApplication" );
             var sharedWorkspace = objc_msgSend_retIntPtr ( application, GetSelector ( "sharedApplication" ) );
 
-            objc_msgSend_retIntPtr ( sharedWorkspace, GetSelector ( "run" ) );
+            objc_msgSend_retVoid ( sharedWorkspace, GetSelector ( "run" ) );
 
             CFRelease ( sharedWorkspace );
 

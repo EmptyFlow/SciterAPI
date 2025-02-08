@@ -17,9 +17,36 @@ namespace SciterLibraryAPI {
         }
 
         public virtual void FocusEvent ( FocusEvents command, bool byMouseClick, bool cancel, nint element ) {
+
+        }
+
+        public virtual void ScrollEvent ( ScrollEvents cmd, nint target, int pos, bool vertical, ScrollSource source, uint reason ) {
+
+        }
+
+        public virtual void TimerEvent ( nint timerId ) {
+
+        }
+
+        public virtual void SizeEvent () {
+
+        }
+
+        public virtual void GestureEvent ( uint command, nint target, SciterPoint positionElement, SciterPoint positionView ) {
+
+        }
+
+        public virtual void DrawEvent ( DrawEvents command, nint gfx, SciterRectangle area, uint reserved ) {
             
         }
 
+        public virtual void DataArrived ( nint initiator, byte[] data, uint dataSize, uint dataType, uint status, string uri ) {
+
+        }
+
+        public virtual void ExchangeParameters ( uint cmd, nint target, nint source, SciterPoint pos, SciterPoint pos_view, uint mode, SciterValue data ) {
+
+        }
     }
 
 }

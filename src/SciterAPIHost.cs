@@ -30,6 +30,8 @@ namespace SciterLibraryAPI {
             var revision = m_basicApi.SciterVersion ( 3 );
             var sciterVersion = new Version ( (int) major, (int) minor, (int) build, (int) revision );
 
+            if ( major < 6 ) throw new Exception ( "Supported only Sciter version 6.0.0.0 or greather!" );
+
             m_className = Marshal.PtrToStringUni ( m_basicApi.SciterClassName () ) ?? "";
             Console.WriteLine ( m_className );
             Console.WriteLine ( sciterVersion.ToString () );
@@ -174,34 +176,39 @@ namespace SciterLibraryAPI {
                     handler.FocusEvent ( focusArguments.cmd, focusArguments.by_mouse_click, focusArguments.cancel, focusArguments.target );
                     break;
                 case EventBehaviourGroups.HANDLE_SCROLL:
-                    /*
-					var eventArgs = Marshal.PtrToStructure<SciterBehaviors.SCROLL_PARAMS>(prms).ToEventArgs();
-					return OnScroll(element: sourceElement, args: eventArgs);
-					 */
+                    var scrollArguments = Marshal.PtrToStructure<ScrollParameters> ( parameters );
+                    handler.ScrollEvent ( scrollArguments.cmd, scrollArguments.target, scrollArguments.pos, scrollArguments.vertical, scrollArguments.source, scrollArguments.reason );
                     break;
                 case EventBehaviourGroups.HANDLE_TIMER:
-                    /*
-					 var timerParams = Marshal.PtrToStructure<SciterBehaviors.TIMER_PARAMS>(prms);
-					return OnTimer(sourceElement,
-						timerParams.timerId.Equals(IntPtr.Zero) ? (IntPtr?) null : timerParams.timerId);
-					 */
+                    var timerArguments = Marshal.PtrToStructure<TimerParameters> ( parameters );
+                    handler.TimerEvent ( timerArguments.timerId );
                     break;
                 case EventBehaviourGroups.HANDLE_SIZE:
-                    /*
-					 return OnSize(sourceElement);
-					 */
+                    handler.SizeEvent ();
+                    break;
+                case EventBehaviourGroups.HANDLE_GESTURE:
+                    var gestureArguments = Marshal.PtrToStructure<GestureParameters> ( parameters );
+                    handler.GestureEvent ( gestureArguments.cmd, gestureArguments.target, gestureArguments.pos, gestureArguments.pos_view );
                     break;
                 case EventBehaviourGroups.HANDLE_DRAW:
-                    /*
-					 var args = Marshal.PtrToStructure<SciterBehaviors.DRAW_PARAMS>(prms).ToEventArgs();
-					return OnDraw(element: sourceElement, args: args);
-					 */
+                    var drawArguments = Marshal.PtrToStructure<DrawParameters> ( parameters );
+                    handler.DrawEvent ( drawArguments.cmd, drawArguments.gfx, drawArguments.area, drawArguments.reserved );
                     break;
                 case EventBehaviourGroups.HANDLE_DATA_ARRIVED:
-                    /*
-					 var arrivedParams = Marshal.PtrToStructure<SciterBehaviors.DATA_ARRIVED_PARAMS>(prms);
-					return OnDataArrived(sourceElement, arrivedParams);
-					 */
+                    var arrivedArguments = Marshal.PtrToStructure<DataArrivedParameters> ( parameters );
+                    handler.DataArrived ( arrivedArguments.initiator, arrivedArguments.data, arrivedArguments.dataSize, arrivedArguments.dataType, arrivedArguments.status, arrivedArguments.uri );
+                    break;
+                case EventBehaviourGroups.HANDLE_EXCHANGE:
+                    var exchangeArguments = Marshal.PtrToStructure<ExchangeParameters> ( parameters );
+                    handler.ExchangeParameters (
+                        exchangeArguments.cmd,
+                        exchangeArguments.target,
+                        exchangeArguments.source,
+                        exchangeArguments.pos,
+                        exchangeArguments.pos_view,
+                        exchangeArguments.mode,
+                        exchangeArguments.data
+                    );
                     break;
                 case EventBehaviourGroups.HANDLE_BEHAVIOR_EVENT:
                     /*
@@ -289,18 +296,6 @@ namespace SciterLibraryAPI {
 					}
 
 					return scriptResult.IsSuccessful;
-					 */
-                    break;
-                case EventBehaviourGroups.HANDLE_EXCHANGE:
-                    /*
-					 var eventArgs = Marshal.PtrToStructure<SciterBehaviors.EXCHANGE_PARAMS>(prms).ToEventArgs();
-					return OnExchange(element: sourceElement, args: eventArgs);
-					 */
-                    break;
-                case EventBehaviourGroups.HANDLE_GESTURE:
-                    /*
-					var eventArgs = Marshal.PtrToStructure<SciterBehaviors.GESTURE_PARAMS>(prms).ToEventArgs();
-					return OnGesture(element: sourceElement, args: eventArgs);
 					 */
                     break;
                 case EventBehaviourGroups.HANDLE_SOM:
