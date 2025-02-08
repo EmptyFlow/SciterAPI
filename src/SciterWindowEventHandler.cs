@@ -47,6 +47,35 @@ namespace SciterLibraryAPI {
         public virtual void ExchangeParameters ( uint cmd, nint target, nint source, SciterPoint pos, SciterPoint pos_view, uint mode, SciterValue data ) {
 
         }
+
+        public virtual void MethodCall ( BehaviourMerhodIdentifiers methodID ) {
+            throw new NotImplementedException ();
+        }
+
+        public virtual void SOMEvent ( SOMEvents cmd, nint data ) {
+            if ( cmd == SOMEvents.SOM_GET_PASSPORT ) {
+                //	p->data.passport = pThis->asset_get_passport();
+                return;
+            }
+            
+            if ( cmd == SOMEvents.SOM_GET_ASSET ) {
+                //	p->data.asset = static_cast<som_asset_t*>(pThis); // note: no add_ref
+            }
+        }
+
+        public virtual void BehaviourEvent ( BehaviourEvents cmd, nint heTarget, nint he, nint reason, SciterValue data, string name ) {
+
+        }
+
+        public virtual SciterValue ScriptMethodCall ( string? v, nint argv, uint argc ) {
+            var value = new SciterValue ();
+            return value;
+        }
+
+        public virtual void HandleInitializationEvent ( InitializationEvents cmd ) {
+
+        }
+
     }
 
 }

@@ -132,37 +132,6 @@ namespace SciterLibraryAPI {
                 case EventBehaviourGroups.SUBSCRIPTIONS_REQUEST:
                     Marshal.WriteInt32 ( parameters, (int) EventBehaviourGroups.HandleAll );
                     return true;
-                case EventBehaviourGroups.HANDLE_INITIALIZATION:
-                    /*
-					 var initializationParams =
-						Marshal.PtrToStructure<SciterBehaviors.INITIALIZATION_PARAMS>(ptr: prms);
-
-					switch (initializationParams.cmd)
-					{
-						case SciterBehaviors.INITIALIZATION_EVENTS.BEHAVIOR_ATTACH:
-#if DEBUG
-							Debug.WriteLine($"Attach {this.Name}");
-							Debug.Assert(_isAttached == false);
-							_isAttached = true;
-#endif
-							this.Element = sourceElement;
-							AttachedHandlers.Add(this);
-							Attached(sourceElement);
-							break;
-						case SciterBehaviors.INITIALIZATION_EVENTS.BEHAVIOR_DETACH:
-#if DEBUG
-							Debug.Assert(_isAttached == true);
-							_isAttached = false;
-#endif
-							Detached(sourceElement);
-							AttachedHandlers.Remove(this);
-							this.Element = null;
-							break;
-						default:
-							return false;
-					}
-					 */
-                    return true;
                 case EventBehaviourGroups.HANDLE_MOUSE:
                     var mouseArguments = Marshal.PtrToStructure<MouseParameters> ( parameters );
                     handler.MouseEvent ( mouseArguments.cmd, mouseArguments.pos, mouseArguments.pos_view, mouseArguments.alt_state, mouseArguments.dragging_mode, mouseArguments.cursor_type );
@@ -210,113 +179,45 @@ namespace SciterLibraryAPI {
                         exchangeArguments.data
                     );
                     break;
-                case EventBehaviourGroups.HANDLE_BEHAVIOR_EVENT:
-                    /*
-					 var eventParams = Marshal.PtrToStructure<SciterBehaviors.BEHAVIOR_EVENT_PARAMS>(prms);
-					var targetElement = eventParams.he != IntPtr.Zero ? SciterElement.Attach(eventParams.he) : null;
-
-					Element = eventParams.cmd switch
-					{
-						SciterBehaviors.BEHAVIOR_EVENTS.DOCUMENT_CREATED => targetElement,
-						SciterBehaviors.BEHAVIOR_EVENTS.DOCUMENT_CLOSE => null,
-						_ => Element
-					};
-
-					return OnEvent(sourceElement: sourceElement, targetElement: targetElement,
-						eventType: (BehaviorEvents) (int) eventParams.cmd, reason: eventParams.reason,
-						data: SciterValue.Attach(eventParams.data), eventName: eventParams.name);
-					 */
-                    break;
                 case EventBehaviourGroups.HANDLE_METHOD_CALL:
-                    /*
-					 var methodParams = Marshal.PtrToStructure<SciterXDom.METHOD_PARAMS>(prms);
-					return OnMethodCall(sourceElement, methodParams.methodID);
-					 */
+                    var methodCallArguments = Marshal.PtrToStructure<MethodParameters> ( parameters );
+                    handler.MethodCall ( methodCallArguments.methodID );
+                    break;
+                case EventBehaviourGroups.HANDLE_BEHAVIOR_EVENT:
+                    var behaviourArguments = Marshal.PtrToStructure<BehaviourEventsParameters> ( parameters );
+                    handler.BehaviourEvent (
+                        behaviourArguments.cmd,
+                        behaviourArguments.heTarget,
+                        behaviourArguments.he,
+                        behaviourArguments.reason,
+                        behaviourArguments.data,
+                        behaviourArguments.name
+                    );
                     break;
                 case EventBehaviourGroups.HANDLE_SCRIPTING_METHOD_CALL:
-                    /*
-					 var resultOffset = Marshal.OffsetOf(typeof(SciterBehaviors.SCRIPTING_METHOD_PARAMS),
-						nameof(SciterBehaviors.SCRIPTING_METHOD_PARAMS.result));
-#if OSX
-					if(IntPtr.Size == 4)
-						Debug.Assert(resultOffset.ToInt32() == 12);
-#else
-					if (IntPtr.Size == 4)
-						Debug.Assert(resultOffset.ToInt32() == 16); // yep 16, strange but is what VS C++ compiler says
-#endif
-					else if (IntPtr.Size == 8)
-						Debug.Assert(resultOffset.ToInt32() == 24);
+                    var scriptArguments = Marshal.PtrToStructure<ScriptingMethodParameters> ( parameters );
+                    var resultOffset = Marshal.OffsetOf ( typeof ( ScriptingMethodParameters ), nameof ( ScriptingMethodParameters.result ) );
 
-					var methodParams = Marshal.PtrToStructure<SciterBehaviors.SCRIPTING_METHOD_PARAMS>(prms);
-					var methodParamsWrapper = new SciterBehaviors.SCRIPTING_METHOD_PARAMS_WRAPPER(methodParams);
+                    //create 
+                    /*for ( var i = 0; i < prms.argc; i++ ) {
+                        var ptr = IntPtr.Add ( prms.argv,
+                            i * Marshal.SizeOf ( typeof ( SciterValue.VALUE ) ) );
 
-					var scriptResult = OnScriptCall(sourceElement, methodParamsWrapper.name, methodParamsWrapper.args);
+                        args[i] = SciterCore.SciterValue.Attach ( Marshal.PtrToStructure<SciterValue.VALUE> ( ptr ) );
+                    }*/
 
-					if (!scriptResult.IsSuccessful)
-					{
-						var methodInfos = GetType().GetMethods()
-							.Where(w => w.GetCustomAttributes<SciterFunctionNameAttribute>()
-								.Any(a => a.FunctionName.Equals(methodParamsWrapper.name)) || w.Name.Equals(methodParamsWrapper.name))
-							.ToArray();
-
-						if (methodInfos?.Any() != true)
-							return false;
-
-						MethodInfo methodInfo;
-
-						if (methodInfos.Length == 1)
-						{
-							methodInfo = methodInfos.First();
-						}
-						else
-						{
-							methodInfo = methodInfos.Where(w =>
-								(w.GetParameters().Count(c => c.ParameterType == typeof(SciterValue)) ==
-								 methodParamsWrapper.args.Length)
-								||
-								w.GetParameters().Any(a =>
-									a.ParameterType == typeof(SciterValue[]))
-							).OrderByDescending(ob =>
-								ob.GetParameters().Count(c => c.ParameterType == typeof(SciterValue)) ==
-								methodParamsWrapper.args.Length).FirstOrDefault();
-						}
-
-						if (methodInfo == null)
-							return false;
-						
-						scriptResult = OnScriptCall(sourceElement, methodInfo, methodParamsWrapper.args);
-
-						if (scriptResult.IsSuccessful)
-						{
-							//pw.result = scriptResult.Value;
-							var resultValue = (scriptResult.Value ?? SciterValue.Null).ToVALUE();
-							var resultValuePtr = IntPtr.Add(prms, resultOffset.ToInt32());
-							Marshal.StructureToPtr(resultValue, resultValuePtr, false);
-						}
-					}
-
-					return scriptResult.IsSuccessful;
-					 */
+                    var resultValue = handler.ScriptMethodCall ( Marshal.PtrToStringAnsi ( scriptArguments.name ), scriptArguments.argv, scriptArguments.argc );
+                    var resultValuePtr = IntPtr.Add ( parameters, resultOffset.ToInt32 () );
+                    Marshal.StructureToPtr ( resultValue, resultValuePtr, false );
                     break;
                 case EventBehaviourGroups.HANDLE_SOM:
-                    /*
-					 //SOM_PARAMS *p = (SOM_PARAMS *)prms;
-					SciterBehaviors.SOM_PARAMS p = Marshal.PtrToStructure<SciterBehaviors.SOM_PARAMS>(ptr: prms);
-
-					if (p.cmd == SciterBehaviors.SOM_EVENTS.SOM_GET_PASSPORT)
-					{
-						//	p->data.passport = pThis->asset_get_passport();
-					}
-					else if (p.cmd == SciterBehaviors.SOM_EVENTS.SOM_GET_ASSET)
-					{
-						//	p->data.asset = static_cast<som_asset_t*>(pThis); // note: no add_ref
-					}
-
-					return false;
-					 */
+                    var somArguments = Marshal.PtrToStructure<SOMParameters> ( parameters );
+                    handler.SOMEvent ( somArguments.cmd, somArguments.data );
                     break;
-                case EventBehaviourGroups.HandleAll:
-                    break;
+                case EventBehaviourGroups.HANDLE_INITIALIZATION:
+                    var initializationArguments = Marshal.PtrToStructure<InitializationParameters> ( parameters );
+                    handler.HandleInitializationEvent ( initializationArguments.cmd );
+                    return true;
             }
 
             return false;
