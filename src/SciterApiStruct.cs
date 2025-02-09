@@ -121,13 +121,119 @@ namespace SciterLibraryAPI {
     public delegate DomResult SciterGetHighlightedElement ( IntPtr hwnd, out IntPtr phe );
     public delegate DomResult SciterSetHighlightedElement ( IntPtr hwnd, IntPtr he );
 
+    //DOM Node API
+
+    public delegate DomResult SciterNodeAddRef ( IntPtr hn );
+    public delegate DomResult SciterNodeRelease ( IntPtr hn );
+    public delegate DomResult SciterNodeCastFromElement ( IntPtr he, out IntPtr phn );
+    public delegate DomResult SciterNodeCastToElement ( IntPtr hn, out IntPtr he );
+    public delegate DomResult SciterNodeFirstChild ( IntPtr hn, out IntPtr phn );
+    public delegate DomResult SciterNodeLastChild ( IntPtr hn, out IntPtr phn );
+    public delegate DomResult SciterNodeNextSibling ( IntPtr hn, out IntPtr phn );
+    public delegate DomResult SciterNodePrevSibling ( IntPtr hn, out IntPtr phn );
+    public delegate DomResult SciterNodeParent ( IntPtr hn, out IntPtr pheParent );
+    public delegate DomResult SciterNodeNthChild ( IntPtr hn, uint n, out IntPtr phn );
+    public delegate DomResult SciterNodeChildrenCount ( IntPtr hn, out uint pn );
+    public delegate DomResult SciterNodeType ( IntPtr hn, out NodeType pn );
+    public delegate DomResult SciterNodeGetText ( IntPtr hn, lpcwstReceiver rcv, IntPtr rcvParam );
+    public delegate DomResult SciterNodeSetText ( IntPtr hn, [MarshalAs ( UnmanagedType.LPWStr )] string text, uint textLength );
+    public delegate DomResult SciterNodeInsert ( IntPtr hn, uint where, IntPtr what );
+    public delegate DomResult SciterNodeRemove ( IntPtr hn, bool finalize );
+    public delegate DomResult SciterCreateTextNode ( [MarshalAs ( UnmanagedType.LPWStr )] string text, uint textLength, out IntPtr phnode );
+    public delegate DomResult SciterCreateCommentNode ( [MarshalAs ( UnmanagedType.LPWStr )] string text, uint textLength, out IntPtr phnode );
+
+    // Value API
+
+    public delegate ValueResult ValueInit ( out SciterValue pval );
+    public delegate ValueResult ValueClear ( out SciterValue pval );
+    public delegate ValueResult ValueCompare ( ref SciterValue pval, ref IntPtr pval2 );
+    public delegate ValueResult ValueCopy ( out SciterValue pdst, ref SciterValue psrc );
+    public delegate ValueResult ValueIsolate ( ref SciterValue pdst );
+    public delegate ValueResult ValueTypeDelegate ( ref SciterValue pval, out uint pType, out uint pUnits );
+    public delegate ValueResult ValueStringData ( ref SciterValue pval, out IntPtr pChars, out uint pNumChars );
+    public delegate ValueResult ValueStringDataSet ( ref SciterValue pval, [MarshalAs ( UnmanagedType.LPWStr )] string chars, uint numChars, uint units );
+    public delegate ValueResult ValueIntData ( ref SciterValue pval, out int pData );
+    public delegate ValueResult ValueIntDataSet ( ref SciterValue pval, int data, uint type, uint units );
+    public delegate ValueResult ValueInt64Data ( ref SciterValue pval, out long pData );
+    public delegate ValueResult ValueInt64DataSet ( ref SciterValue pval, long data, uint type, uint units );
+    public delegate ValueResult ValueFloatData ( ref SciterValue pval, out double pData );
+    public delegate ValueResult ValueFloatDataSet ( ref SciterValue pval, double data, uint type, uint units );
+    public delegate ValueResult ValueBinaryData ( ref SciterValue pval, out IntPtr pBytes, out uint pnBytes );
+    public delegate ValueResult ValueBinaryDataSet ( ref SciterValue pval, [MarshalAs ( UnmanagedType.LPArray )] byte[] pBytes, uint nBytes, uint type, uint units );
+    public delegate ValueResult ValueElementsCount ( ref SciterValue pval, out int pn );
+    public delegate ValueResult ValueNthElementValue ( ref SciterValue pval, int n, out SciterValue pretval );
+    public delegate ValueResult ValueNthElementValueSet ( ref SciterValue pval, int n, ref SciterValue pvalToSet );
+    public delegate ValueResult ValueNthElementKey ( ref SciterValue pval, int n, out SciterValue pretval );
+    public delegate ValueResult ValueEnumElements ( ref SciterValue pval, KeyValueCallback penum, IntPtr param );
+    public delegate ValueResult ValueSetValueToKey ( ref SciterValue pval, ref SciterValue pkey, ref SciterValue pvalToSet );
+    public delegate ValueResult ValueGetValueOfKey ( ref SciterValue pval, ref SciterValue pkey, out SciterValue pretval );
+    public delegate ValueResult ValueToString ( ref SciterValue pval, ValueStringCvtType how );
+    public delegate ValueResult ValueFromString ( ref SciterValue pval, [MarshalAs ( UnmanagedType.LPWStr )] string str, uint strLength, uint how );
+    public delegate ValueResult ValueInvoke ( ref SciterValue pval, ref SciterValue pthis, uint argc, SciterValue[] argv, out SciterValue pretval, [MarshalAs ( UnmanagedType.LPWStr )] string url );
+    public delegate ValueResult ValueNativeFunctorSet ( ref SciterValue pval, NativeFunctorInvoke pinvoke, NativeFunctorRelease prelease, IntPtr tag );
+    public delegate ValueResult ValueIsNativeFunctor ( ref SciterValue pval );
+
+    // Archive API
+
+    public delegate IntPtr SciterOpenArchive ( IntPtr archiveData, uint archiveDataLength ); // archiveData must point to a pinned byte[] array!
+    public delegate bool SciterGetArchiveItem ( IntPtr harc, [MarshalAs ( UnmanagedType.LPWStr )] string path, out IntPtr pdata, out uint pdataLength );
+    public delegate bool SciterCloseArchive ( IntPtr harc );
+
+    // Graphics and other routine API
+
+    public delegate DomResult SciterFireEvent ( ref BehaviourEventsParameters evt, bool post, out bool handled );
+    public delegate IntPtr SciterGetCallbackParam ( IntPtr hwnd );
+    public delegate IntPtr SciterPostCallback ( IntPtr hwnd, IntPtr wparam, IntPtr lparam, uint timeoutms );
+    public delegate IntPtr GetSciterGraphicsApi ();
+    public delegate IntPtr GetSciterRequestApi ();
+    public delegate bool SciterCreateOnDirectXWindow ( IntPtr hwnd, IntPtr pSwapChain );
+    public delegate bool SciterRenderOnDirectXWindow ( IntPtr hwnd, IntPtr elementToRenderOrNull, bool frontLayer );
+    public delegate bool SciterRenderOnDirectXTexture ( IntPtr hwnd, IntPtr elementToRenderOrNull, IntPtr surface );
+    public delegate bool SciterProcX ( IntPtr hwnd, IntPtr pMsg );
+
+    public delegate ulong SciterAtomValue ( IntPtr name );
+    public delegate bool SciterAtomNameCB ( ulong atomv, lpcstrReceiver rcv, IntPtr rcv_param );
+    public delegate bool SciterSetGlobalAsset ( SomAsset pass );
+    public delegate DomResult SciterGetElementAsset ( IntPtr el, ulong nameAtom, IntPtr ppass /* som_asset_t** */ );
+
+    public delegate uint SciterSetVariable ( IntPtr hwndOrNull, [MarshalAs(UnmanagedType.LPStr)]IntPtr name, IntPtr pvalToSet /* const VALUE* */ );
+    public delegate uint SciterGetVariable ( IntPtr hwndOrNull, [MarshalAs ( UnmanagedType.LPStr )] IntPtr name, IntPtr pvalToGet /* VALUE* */ );
+    public delegate uint SciterElementUnwrap ( IntPtr pval /*const VALUE* */, IntPtr ppElement /* HELEMENT* */ );
+    public delegate uint SciterElementWrap ( IntPtr pval /* VALUE* */, IntPtr pElement /* HELEMENT */ );
+
+    public delegate uint SciterNodeUnwrap ( IntPtr pval /* const VALUE* */, IntPtr ppNode /* HNODE* */ );
+    public delegate uint SciterNodeWrap ( IntPtr pval /* VALUE* */, IntPtr pNode /* HNODE */ );
+
+    public delegate bool SciterReleaseGlobalAsset ( SomAsset pass );
+
+    public delegate IntPtr SciterExec ( SomAsset pass );
+    public delegate IntPtr SciterWindowExec ( IntPtr hwnd, uint windowCmd, IntPtr p1, IntPtr p2 );
+
+    public delegate IntPtr /* typedef void(* proc_ptr_t)(void) */ SciterEGLGetProcAddress ( IntPtr procName /* char const* */ );
+
+    public delegate DomResult SciterEGLSendEvent ( IntPtr he, uint eventCode, IntPtr reason );
+    public delegate DomResult SciterRequestAnimationFrameEvent ( IntPtr he, uint eventCode, IntPtr reason );
+
+    // Delegates participiating in API
+
     public delegate void lpcbyteReceiver ( IntPtr bytes, uint num_bytes, IntPtr param );
     public delegate void lpcwstReceiver ( IntPtr str, uint str_length, IntPtr param );
     public delegate void lpcstrReceiver ( IntPtr str, uint str_length, IntPtr param );
     public delegate bool SciterElementCallback ( IntPtr he, IntPtr param );
     public delegate bool ElementComparator ( IntPtr he1, IntPtr he2, IntPtr param );
-
     public delegate bool ElementEventProc ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms );
+    public delegate bool KeyValueCallback ( IntPtr param, ref SciterValue pkey, ref SciterValue pval ); // Original name KEY_VALUE_CALLBACK
+    public delegate bool NativeFunctorInvoke ( IntPtr tag, uint argc, IntPtr argv, out SciterValue retval ); // Original name NATIVE_FUNCTOR_INVOKE
+    public delegate bool NativeFunctorRelease ( IntPtr tag ); // Original name NATIVE_FUNCTOR_RELEASE
+    public delegate long AssetAddOrReleasesDelegate ( IntPtr thing /* SomAsset */ );
+    public delegate long AssetGetInterface ( IntPtr thing /* SomAsset */, IntPtr name /* const char* */, IntPtr @out );
+    public delegate SomPassport AssetGetPassport ( IntPtr thing /* SomAsset */ );
+    public delegate bool SomPropertyGetterOrSetter ( IntPtr thing /* SomAsset */, SciterValue p_value );
+    public delegate bool SomItemGetterOrSetter ( IntPtr thing /* SomAsset */, SciterValue p_key, SciterValue p_value );
+    public delegate bool SomMethod ( IntPtr thing /* SomAsset */, uint argc, SciterValue argv, SciterValue p_result ); // original name som_method_t
+    public delegate bool SomAnyPropertyGetterOrSetter ( IntPtr thing /* SomAsset */, ulong propSymbol, SciterValue p_value ); // original name som_any_prop_getter_t, som_any_prop_setter_t
+    public delegate bool SomNameResolver ( IntPtr thing /* SomAsset */, ulong propSymbol, uint pIndex, bool pIsMethod ); // original name som_name_resolver_t
+
 
     [StructLayout ( LayoutKind.Sequential )]
     internal readonly struct SciterApiStruct {
@@ -243,6 +349,84 @@ namespace SciterLibraryAPI {
         public readonly SciterGetElementNamespace SciterGetElementNamespace;
         public readonly SciterGetHighlightedElement SciterGetHighlightedElement;
         public readonly SciterSetHighlightedElement SciterSetHighlightedElement;
+
+        public readonly SciterNodeAddRef SciterNodeAddRef;
+        public readonly SciterNodeRelease SciterNodeRelease;
+        public readonly SciterNodeCastFromElement SciterNodeCastFromElement;
+        public readonly SciterNodeCastToElement SciterNodeCastToElement;
+        public readonly SciterNodeFirstChild SciterNodeFirstChild;
+        public readonly SciterNodeLastChild SciterNodeLastChild;
+        public readonly SciterNodeNextSibling SciterNodeNextSibling;
+        public readonly SciterNodePrevSibling SciterNodePrevSibling;
+        public readonly SciterNodeParent SciterNodeParent;
+        public readonly SciterNodeNthChild SciterNodeNthChild;
+        public readonly SciterNodeChildrenCount SciterNodeChildrenCount;
+        public readonly SciterNodeType SciterNodeType;
+        public readonly SciterNodeGetText SciterNodeGetText;
+        public readonly SciterNodeSetText SciterNodeSetText;
+        public readonly SciterNodeInsert SciterNodeInsert;
+        public readonly SciterNodeRemove SciterNodeRemove;
+        public readonly SciterCreateTextNode SciterCreateTextNode;
+        public readonly SciterCreateCommentNode SciterCreateCommentNode;
+
+        public readonly ValueInit ValueInit;
+        public readonly ValueClear ValueClear;
+        public readonly ValueCompare ValueCompare;
+        public readonly ValueCopy ValueCopy;
+        public readonly ValueIsolate ValueIsolate;
+        public readonly ValueTypeDelegate ValueType;
+        public readonly ValueStringData ValueStringData;
+        public readonly ValueStringDataSet ValueStringDataSet;
+        public readonly ValueIntData ValueIntData;
+        public readonly ValueIntDataSet ValueIntDataSet;
+        public readonly ValueInt64Data ValueInt64Data;
+        public readonly ValueInt64DataSet ValueInt64DataSet;
+        public readonly ValueFloatData ValueFloatData;
+        public readonly ValueFloatDataSet ValueFloatDataSet;
+        public readonly ValueBinaryData ValueBinaryData;
+        public readonly ValueBinaryDataSet ValueBinaryDataSet;
+        public readonly ValueElementsCount ValueElementsCount;
+        public readonly ValueNthElementValue ValueNthElementValue;
+        public readonly ValueNthElementValueSet ValueNthElementValueSet;
+        public readonly ValueNthElementKey ValueNthElementKey;
+        public readonly ValueEnumElements ValueEnumElements;
+        public readonly ValueSetValueToKey ValueSetValueToKey;
+        public readonly ValueGetValueOfKey ValueGetValueOfKey;
+        public readonly ValueToString ValueToString;
+        public readonly ValueFromString ValueFromString;
+        public readonly ValueInvoke ValueInvoke;
+        public readonly ValueNativeFunctorSet ValueNativeFunctorSet;
+        public readonly ValueIsNativeFunctor ValueIsNativeFunctor;
+
+        public readonly SciterFireEvent SciterFireEvent;
+        public readonly SciterGetCallbackParam SciterGetCallbackParam;
+        public readonly SciterPostCallback SciterPostCallback;
+        public readonly GetSciterGraphicsApi GetSciterGraphicsApi;
+        public readonly GetSciterRequestApi GetSciterRequestApi;
+        public readonly SciterCreateOnDirectXWindow SciterCreateOnDirectXWindow;
+        public readonly SciterRenderOnDirectXWindow SciterRenderOnDirectXWindow;
+        public readonly SciterRenderOnDirectXTexture SciterRenderOnDirectXTexture;
+        public readonly SciterProcX SciterProcX;
+
+        public readonly SciterAtomValue SciterAtomValue;
+        public readonly SciterAtomNameCB SciterAtomNameCB;
+        public readonly SciterSetGlobalAsset SciterSetGlobalAsset;
+        public readonly SciterGetElementAsset SciterGetElementAsset;
+
+        public readonly SciterSetVariable SciterSetVariable;
+        public readonly SciterGetVariable SciterGetVariable;
+        public readonly SciterElementUnwrap SciterElementUnwrap;
+        public readonly SciterElementWrap SciterElementWrap;
+        public readonly SciterNodeUnwrap SciterNodeUnwrap;
+        public readonly SciterNodeWrap SciterNodeWrap;
+
+        public readonly SciterReleaseGlobalAsset SciterReleaseGlobalAsset;
+        public readonly SciterExec SciterExec;
+        public readonly SciterWindowExec SciterWindowExec;
+        public readonly SciterEGLGetProcAddress SciterEGLGetProcAddress;
+        public readonly SciterEGLSendEvent SciterEGLSendEvent;
+        public readonly SciterRequestAnimationFrameEvent SciterRequestAnimationFrameEvent;
+
     }
 
 }
