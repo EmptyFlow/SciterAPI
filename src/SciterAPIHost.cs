@@ -123,6 +123,26 @@ namespace SciterLibraryAPI {
             return elements;
         }
 
+        public string GetElementHtml ( IntPtr element, bool outer ) {
+            var strings = new List<string> ();
+            lpcbyteReceiver callback = ( IntPtr bytes, uint num_bytes, IntPtr param ) => {
+                strings.Add ( Marshal.PtrToStringAnsi ( bytes, Convert.ToInt32 ( num_bytes ) ) );
+            };
+            m_basicApi.SciterGetElementHtmlCb ( element, outer, callback, 1 );
+
+            return string.Join ( "", strings );
+        }
+
+        public string GetElementText ( IntPtr element ) {
+            var strings = new List<string> ();
+            lpcwstReceiver callback = ( IntPtr bytes, uint num_bytes, IntPtr param ) => {
+                strings.Add ( Marshal.PtrToStringUni ( bytes, Convert.ToInt32 ( num_bytes ) ) );
+            };
+            m_basicApi.SciterGetElementTextCb ( element, callback, 1 );
+
+            return string.Join ( "", strings );
+        }
+
         private List<ElementEventProc> m_windowEventHandlers = new List<ElementEventProc> ();
 
         public void AddWindowEventHandler ( SciterEventHandler handler ) {
