@@ -1,15 +1,12 @@
 ﻿
 namespace SciterLibraryAPI {
 
-    public class SciterWindowEventHandler {
+    public class SciterEventHandler {
 
-        public virtual void MouseEvent ( MouseEvents command, SciterPoint elementRelated, SciterPoint ViewRelated, KeyboardStates keyboardStates, DraggingType draggingMode, CursorType cursorType ) {
-            /*
-        public IntPtr target;// HELEMENT target element
-        public uint button_state;// UINT ->> actually SciterXBehaviors MOUSE_BUTTONS, but for MOUSE_EVENTS.MOUSE_WHEEL event it is the delta
-        public bool is_on_icon;// BOOL mouse is over icon (foreground-image, foreground-repeat:no-repeat)
-        public IntPtr dragging;// HELEMENT element that is being dragged over, this field is not NULL if (cmd & DRAGGING) != 0
-             */
+        public IntPtr SubscribedElement { get; set; } = IntPtr.Zero;
+
+        public virtual void MouseEvent ( MouseEvents command, SciterPoint elementRelated, SciterPoint ViewRelated, KeyboardStates keyboardStates, DraggingType draggingMode, CursorType cursorType, IntPtr target, IntPtr dragging, bool is_on_icon, uint button_state ) {
+
         }
 
         public virtual void KeyboardEvent ( KeyEvents command, KeyboardStates keyboardStates ) {
@@ -37,7 +34,7 @@ namespace SciterLibraryAPI {
         }
 
         public virtual void DrawEvent ( DrawEvents command, nint gfx, SciterRectangle area, uint reserved ) {
-            
+
         }
 
         public virtual void DataArrived ( nint initiator, byte[] data, uint dataSize, uint dataType, uint status, string uri ) {
@@ -57,7 +54,7 @@ namespace SciterLibraryAPI {
                 //	p->data.passport = pThis->asset_get_passport();
                 return;
             }
-            
+
             if ( cmd == SOMEvents.SOM_GET_ASSET ) {
                 //	p->data.asset = static_cast<som_asset_t*>(pThis); // note: no add_ref
             }
@@ -67,7 +64,7 @@ namespace SciterLibraryAPI {
 
         }
 
-        public virtual SciterValue ScriptMethodCall ( string? v, nint argv, uint argc ) {
+        public virtual SciterValue ScriptMethodCall ( string? v, IEnumerable<SciterValue> arguments ) {
             var value = new SciterValue ();
             return value;
         }

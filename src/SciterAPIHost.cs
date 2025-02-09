@@ -118,7 +118,9 @@ namespace SciterLibraryAPI {
 
         private List<ElementEventProc> m_windowEventHandlers = new List<ElementEventProc> ();
 
-        public void AddWindowEventHandler ( SciterWindowEventHandler handler ) {
+        public void AddWindowEventHandler ( SciterEventHandler handler ) {
+            if ( handler.SubscribedElement != IntPtr.Zero ) throw new ArgumentException ( "Passed element inside property SubscribedElement must be IntPtr.Zero!" );
+
             ElementEventProc @delegate = ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) => {
                 return Handle ( (EventBehaviourGroups) evtg, prms, handler );
             };
@@ -127,14 +129,36 @@ namespace SciterLibraryAPI {
             m_basicApi.SciterWindowAttachEventHandler ( m_mainWindow, @delegate, 1, (uint) EventBehaviourGroups.HandleAll );
         }
 
-        private bool Handle ( EventBehaviourGroups groups, IntPtr parameters, SciterWindowEventHandler handler ) {
+        public void AddElementEventHandler ( SciterEventHandler handler ) {
+            if ( handler.SubscribedElement == IntPtr.Zero ) throw new ArgumentException ( "Passed element inside property SubscribedElement must be non IntPtr.Zero!" );
+
+            ElementEventProc @delegate = ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) => {
+                return Handle ( (EventBehaviourGroups) evtg, prms, handler );
+            };
+            m_windowEventHandlers.Add ( @delegate );
+
+            m_basicApi.SciterAttachEventHandler ( handler.SubscribedElement, @delegate, 1 );
+        }
+
+        private bool Handle ( EventBehaviourGroups groups, IntPtr parameters, SciterEventHandler handler ) {
             switch ( groups ) {
                 case EventBehaviourGroups.SUBSCRIPTIONS_REQUEST:
                     Marshal.WriteInt32 ( parameters, (int) EventBehaviourGroups.HandleAll );
                     return true;
                 case EventBehaviourGroups.HANDLE_MOUSE:
                     var mouseArguments = Marshal.PtrToStructure<MouseParameters> ( parameters );
-                    handler.MouseEvent ( mouseArguments.cmd, mouseArguments.pos, mouseArguments.pos_view, mouseArguments.alt_state, mouseArguments.dragging_mode, mouseArguments.cursor_type );
+                    handler.MouseEvent (
+                        mouseArguments.cmd,
+                        mouseArguments.pos,
+                        mouseArguments.pos_view,
+                        mouseArguments.alt_state,
+                        mouseArguments.dragging_mode,
+                        mouseArguments.cursor_type,
+                        mouseArguments.target,
+                        mouseArguments.dragging,
+                        mouseArguments.is_on_icon,
+                        mouseArguments.button_state
+                    );
                     break;
                 case EventBehaviourGroups.HANDLE_KEY:
                     var keyboardArguments = Marshal.PtrToStructure<KeyParams> ( parameters );
@@ -198,15 +222,14 @@ namespace SciterLibraryAPI {
                     var scriptArguments = Marshal.PtrToStructure<ScriptingMethodParameters> ( parameters );
                     var resultOffset = Marshal.OffsetOf ( typeof ( ScriptingMethodParameters ), nameof ( ScriptingMethodParameters.result ) );
 
-                    //create 
-                    /*for ( var i = 0; i < prms.argc; i++ ) {
-                        var ptr = IntPtr.Add ( prms.argv,
-                            i * Marshal.SizeOf ( typeof ( SciterValue.VALUE ) ) );
+                    var scriptValues = new List<SciterValue> ( Convert.ToInt32 ( scriptArguments.argc ) );
+                    for ( var i = 0; i < scriptArguments.argc; i++ ) {
+                        var ptr = IntPtr.Add ( scriptArguments.argv, i * Marshal.SizeOf<SciterValue> () );
 
-                        args[i] = SciterCore.SciterValue.Attach ( Marshal.PtrToStructure<SciterValue.VALUE> ( ptr ) );
-                    }*/
+                        scriptValues.Add ( Marshal.PtrToStructure<SciterValue> ( ptr ) );
+                    }
 
-                    var resultValue = handler.ScriptMethodCall ( Marshal.PtrToStringAnsi ( scriptArguments.name ), scriptArguments.argv, scriptArguments.argc );
+                    var resultValue = handler.ScriptMethodCall ( Marshal.PtrToStringAnsi ( scriptArguments.name ), scriptValues );
                     var resultValuePtr = IntPtr.Add ( parameters, resultOffset.ToInt32 () );
                     Marshal.StructureToPtr ( resultValue, resultValuePtr, false );
                     break;
