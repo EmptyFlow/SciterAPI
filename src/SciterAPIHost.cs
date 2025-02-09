@@ -108,12 +108,19 @@ namespace SciterLibraryAPI {
             MacOsApis.CreateNsApplicationAndRun ();
         }
 
-        public void SelectElement ( string cssSelector ) {
-            //first step, get root element
-            //var getRoot = m_basicApi.SciterGetRootElement ( m_mainWindow );
+        public IEnumerable<IntPtr> MakeCssSelector ( string cssSelector ) {
+            IntPtr element;
+            var domResult = m_basicApi.SciterGetRootElement ( m_mainWindow, out element );
+            if ( domResult != DomResult.SCDOM_OK ) return Enumerable.Empty<IntPtr> ();
 
-            //second step, select elements by css selector
-            //m_basicApi.SciterSelectElementsW(getRoot, cssSelector)
+            var elements = new List<IntPtr> ();
+            SciterElementCallback callback = ( IntPtr he, IntPtr param ) => {
+                elements.Add ( he );
+                return true;
+            };
+            m_basicApi.SciterSelectElementsW ( element, cssSelector, callback, 1 );
+
+            return elements;
         }
 
         private List<ElementEventProc> m_windowEventHandlers = new List<ElementEventProc> ();
