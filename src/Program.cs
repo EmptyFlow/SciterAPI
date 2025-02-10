@@ -4,6 +4,18 @@ using SciterLibraryAPI;
 SciterLoader.Initialize ( @"C:\IDEs\sciter\sciter-js-sdk-6.0.0.1\sciter-js-sdk-6.0.0.1\bin\windows\x64" );
 var host = new SciterAPIHost ();
 host.LoadAPI ();
-host.CreateMainWindow ( 300, 300, enableDebug: true, enableFeature: true );
+host.CreateMainWindow ( "file://C:/IDEs/sciter/sciter-js-sdk-6.0.0.1/sciter-js-sdk-6.0.0.1/samples/vue/hello-vue.htm", 300, 300, enableDebug: true, enableFeature: true );
 host.AddWindowEventHandler (new SciterEventHandler());
-host.WindowsProcess ();
+/*Task.Run (
+    async () => {
+        await Task.Delay ( 2000 );
+
+        var elements = host.MakeCssSelector ( "#app" );
+        var appDiv = elements.First ();
+        var text = host.GetElementText ( appDiv );
+        if ( text == null) {
+
+        }
+    }
+);*/
+host.Process ();

@@ -43,7 +43,7 @@ namespace SciterLibraryAPI {
 
         public const SciterRuntimeFeatures DefaultRuntimeFeatures = SciterRuntimeFeatures.ALLOW_EVAL | SciterRuntimeFeatures.ALLOW_FILE_IO | SciterRuntimeFeatures.ALLOW_SOCKET_IO | SciterRuntimeFeatures.ALLOW_SYSINFO;
 
-        public void CreateMainWindow ( int width, int height, bool enableDebug = false, bool enableFeature = false ) {
+        public void CreateMainWindow ( string htmlPath, int width, int height, bool enableDebug = false, bool enableFeature = false ) {
             if ( enableDebug ) m_basicApi.SciterSetOption ( IntPtr.Zero, RtOptions.SCITER_SET_DEBUG_MODE, new IntPtr ( 1 ) );
             if ( enableFeature ) m_basicApi.SciterSetOption ( IntPtr.Zero, RtOptions.SCITER_SET_SCRIPT_RUNTIME_FEATURES, new IntPtr ( (int) DefaultRuntimeFeatures ) );
 
@@ -66,7 +66,7 @@ namespace SciterLibraryAPI {
                 }
             );*/
 
-            m_basicApi.SciterLoadFile ( m_mainWindow, "file://C:/IDEs/sciter/sciter-js-sdk-6.0.0.1/sciter-js-sdk-6.0.0.1/samples/vue/hello-vue.htm" );
+            m_basicApi.SciterLoadFile ( m_mainWindow, htmlPath );
         }
 
         public void Process () {
@@ -100,8 +100,12 @@ namespace SciterLibraryAPI {
         }
 
         public void LinuxProcess () {
-            LinuxApis.gtk_widget_get_toplevel ( m_mainWindow );
-            LinuxApis.gtk_main ();
+            while (LinuxApis.g_list_model_get_n_items ( LinuxApis.gtk_window_get_toplevels() ) > 0) {
+                LinuxApis.g_main_context_iteration ( IntPtr.Zero, true );
+            }
+
+            /*while ( g_list_model_get_n_items ( gtk_window_get_toplevels () ) > 0 )
+                g_main_context_iteration ( NULL, TRUE );*/
         }
 
         public void MacOSProcess () {
