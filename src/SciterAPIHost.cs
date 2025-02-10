@@ -100,12 +100,16 @@ namespace SciterLibraryAPI {
         }
 
         public void LinuxProcess () {
+            // gtk3 setup
+            LinuxApis.gtk_init ( IntPtr.Zero, IntPtr.Zero );
+            LinuxApis.gtk_widget_get_toplevel ( m_mainWindow );
+            LinuxApis.gtk_main ();
+
+            // gtk4 setup
+            /*LinuxApis.gtk_window_present ( m_mainWindow );
             while (LinuxApis.g_list_model_get_n_items ( LinuxApis.gtk_window_get_toplevels() ) > 0) {
                 LinuxApis.g_main_context_iteration ( IntPtr.Zero, true );
-            }
-
-            /*while ( g_list_model_get_n_items ( gtk_window_get_toplevels () ) > 0 )
-                g_main_context_iteration ( NULL, TRUE );*/
+            }*/
         }
 
         public void MacOSProcess () {
