@@ -1,5 +1,4 @@
-﻿using SciterLibraryAPI.SystemApis;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace SciterLibraryAPI {
 
@@ -18,6 +17,8 @@ namespace SciterLibraryAPI {
 
         SciterApiStruct m_basicApi;
 
+        private string VersionOfLibrary = "1.0.0.0";
+
         public void LoadAPI () {
             m_apiPointer = SciterAPI ();
             if ( m_apiPointer == IntPtr.Zero ) return;
@@ -33,8 +34,11 @@ namespace SciterLibraryAPI {
             if ( major < 6 ) throw new Exception ( "Supported only Sciter version 6.0.0.0 or greather!" );
 
             m_className = Marshal.PtrToStringUni ( m_basicApi.SciterClassName () ) ?? "";
-            Console.WriteLine ( m_className );
-            Console.WriteLine ( sciterVersion.ToString () );
+            Console.WriteLine ( $"Sciter class name: {m_className}" );
+            Console.WriteLine ( $"Sciter version: {sciterVersion}" );
+            Console.WriteLine ( $"SciterAPI version: {VersionOfLibrary}" );
+
+            m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_INIT, IntPtr.Zero, IntPtr.Zero );
         }
 
         public string ClassName => m_className;
@@ -43,77 +47,56 @@ namespace SciterLibraryAPI {
 
         public const SciterRuntimeFeatures DefaultRuntimeFeatures = SciterRuntimeFeatures.ALLOW_EVAL | SciterRuntimeFeatures.ALLOW_FILE_IO | SciterRuntimeFeatures.ALLOW_SOCKET_IO | SciterRuntimeFeatures.ALLOW_SYSINFO;
 
+        // delegate for windows was copied from example
+        // not sure if it actually need
+        private delegate IntPtr WindowDelegate ( IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, IntPtr pParam, IntPtr handled );
+
+        public static IntPtr WindowsDelegateImplementaion ( IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, IntPtr pParam, IntPtr handled ) {
+            return 0;
+        }
+
         public void CreateMainWindow ( string htmlPath, int width, int height, bool enableDebug = false, bool enableFeature = false ) {
             if ( enableDebug ) m_basicApi.SciterSetOption ( IntPtr.Zero, RtOptions.SCITER_SET_DEBUG_MODE, new IntPtr ( 1 ) );
             if ( enableFeature ) m_basicApi.SciterSetOption ( IntPtr.Zero, RtOptions.SCITER_SET_SCRIPT_RUNTIME_FEATURES, new IntPtr ( (int) DefaultRuntimeFeatures ) );
 
-            var rectangle = new SciterRectangle ( 100, 100, width, height );
+            var rectangle = new SciterRectangle ( 0, 0, width, height );
+
+            var ptr = Marshal.GetFunctionPointerForDelegate<WindowDelegate> ( WindowsDelegateImplementaion );
 
             m_mainWindow = m_basicApi.SciterCreateWindow (
                 WindowsFlags.Main | WindowsFlags.Resizeable | WindowsFlags.Titlebar | WindowsFlags.Controls,
                 ref rectangle,
-                IntPtr.Zero,
+                RuntimeInformation.IsOSPlatform ( OSPlatform.Windows ) ? ptr : IntPtr.Zero,
                 IntPtr.Zero,
                 IntPtr.Zero
             );
 
-            /*m_basicApi.SciterSetupDebugOutput (
+            m_basicApi.SciterSetupDebugOutput (
                 m_mainWindow,
                 1,
                 ( IntPtr param, uint subsystem, uint severity, IntPtr text_ptr, uint text_length ) => {
-                    Console.WriteLine ( "text_ptr" + Marshal.PtrToStringUni ( text_ptr, (int) text_length ) );
+                    Console.WriteLine ( Marshal.PtrToStringUni ( text_ptr, (int) text_length ) );
                     return IntPtr.Zero;
                 }
-            );*/
+            );
 
             m_basicApi.SciterLoadFile ( m_mainWindow, htmlPath );
         }
 
-        public void Process () {
-            if ( RuntimeInformation.IsOSPlatform ( OSPlatform.Windows ) ) {
-                WindowsProcess ();
-            }
-            if ( RuntimeInformation.IsOSPlatform ( OSPlatform.Linux ) ) {
-                LinuxProcess ();
-            }
-            if ( RuntimeInformation.IsOSPlatform ( OSPlatform.OSX ) ) {
-                MacOSProcess ();
-            }
-        }
+        public int Process () {
+            //activate window
+            m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_ACTIVATE, 1, IntPtr.Zero );
 
-        public void WindowsProcess () {
-            WindowsApis.ShowWindow ( m_mainWindow, ShowWindowCommands.Normal );
+            //expand window
+            m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_SET_STATE, 1, IntPtr.Zero );
 
-            var windowisOpened = true;
-            while ( windowisOpened ) {
-                while ( WindowsApis.GetMessage ( out var msg, m_mainWindow, 0, 0 ) != 0 ) {
-                    // mean main windows is closed
-                    if ( msg.message == 0 ) {
-                        windowisOpened = false;
-                        break;
-                    }
+            // run loop for waiting close all windows
+            var code = m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_LOOP, IntPtr.Zero, IntPtr.Zero );
 
-                    WindowsApis.TranslateMessage ( ref msg );
-                    WindowsApis.DispatchMessage ( ref msg );
-                }
-            }
-        }
+            // deinitialize engine
+            m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_SHUTDOWN, IntPtr.Zero, IntPtr.Zero );
 
-        public void LinuxProcess () {
-            // gtk3 setup
-            LinuxApis.gtk_init ( IntPtr.Zero, IntPtr.Zero );
-            LinuxApis.gtk_widget_get_toplevel ( m_mainWindow );
-            LinuxApis.gtk_main ();
-
-            // gtk4 setup
-            /*LinuxApis.gtk_window_present ( m_mainWindow );
-            while (LinuxApis.g_list_model_get_n_items ( LinuxApis.gtk_window_get_toplevels() ) > 0) {
-                LinuxApis.g_main_context_iteration ( IntPtr.Zero, true );
-            }*/
-        }
-
-        public void MacOSProcess () {
-            MacOsApis.CreateNsApplicationAndRun ();
+            return code;
         }
 
         public IEnumerable<IntPtr> MakeCssSelector ( string cssSelector ) {

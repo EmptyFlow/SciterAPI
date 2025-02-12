@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using System.Xml.Linq;
 
 namespace SciterLibraryAPI {
 
@@ -196,8 +195,8 @@ namespace SciterLibraryAPI {
     public delegate bool SciterSetGlobalAsset ( SomAsset pass );
     public delegate DomResult SciterGetElementAsset ( IntPtr el, ulong nameAtom, IntPtr ppass /* som_asset_t** */ );
 
-    public delegate uint SciterSetVariable ( IntPtr hwndOrNull, [MarshalAs(UnmanagedType.LPStr)]IntPtr name, IntPtr pvalToSet /* const VALUE* */ );
-    public delegate uint SciterGetVariable ( IntPtr hwndOrNull, [MarshalAs ( UnmanagedType.LPStr )] IntPtr name, IntPtr pvalToGet /* VALUE* */ );
+    public delegate uint SciterSetVariable ( IntPtr hwndOrNull, [MarshalAs ( UnmanagedType.LPStr )] string name, IntPtr pvalToSet /* const VALUE* */ );
+    public delegate uint SciterGetVariable ( IntPtr hwndOrNull, [MarshalAs ( UnmanagedType.LPStr )] string name, IntPtr pvalToGet /* VALUE* */ );
     public delegate uint SciterElementUnwrap ( IntPtr pval /*const VALUE* */, IntPtr ppElement /* HELEMENT* */ );
     public delegate uint SciterElementWrap ( IntPtr pval /* VALUE* */, IntPtr pElement /* HELEMENT */ );
 
@@ -206,8 +205,8 @@ namespace SciterLibraryAPI {
 
     public delegate bool SciterReleaseGlobalAsset ( SomAsset pass );
 
-    public delegate IntPtr SciterExec ( SomAsset pass );
-    public delegate IntPtr SciterWindowExec ( IntPtr hwnd, uint windowCmd, IntPtr p1, IntPtr p2 );
+    public delegate int SciterExec ( ApplicationCommand appCmd, IntPtr p1, IntPtr p2 );
+    public delegate int SciterWindowExec ( IntPtr hwnd, WindowCommand windowCmd, int p1, IntPtr p2 );
 
     public delegate IntPtr /* typedef void(* proc_ptr_t)(void) */ SciterEGLGetProcAddress ( IntPtr procName /* char const* */ );
 
@@ -397,6 +396,15 @@ namespace SciterLibraryAPI {
         public readonly ValueInvoke ValueInvoke;
         public readonly ValueNativeFunctorSet ValueNativeFunctorSet;
         public readonly ValueIsNativeFunctor ValueIsNativeFunctor;
+
+        public readonly IntPtr reserved1;
+        public readonly IntPtr reserved2;
+        public readonly IntPtr reserved3;
+        public readonly IntPtr reserved4;
+
+        public readonly SciterOpenArchive SciterOpenArchive;
+        public readonly SciterGetArchiveItem SciterGetArchiveItem;
+        public readonly SciterCloseArchive SciterCloseArchive;
 
         public readonly SciterFireEvent SciterFireEvent;
         public readonly SciterGetCallbackParam SciterGetCallbackParam;
