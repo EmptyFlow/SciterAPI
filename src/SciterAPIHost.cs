@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Text;
 
 namespace SciterLibraryAPI {
 
@@ -132,6 +133,15 @@ namespace SciterLibraryAPI {
             m_basicApi.SciterGetElementTextCb ( element, callback, 1 );
 
             return string.Join ( "", strings );
+        }
+
+        public void SetElementText ( IntPtr element, string text ) {
+            m_basicApi.SciterSetElementText ( element, text, (uint)text.Length );
+        }
+
+        public void SetElementHtml ( IntPtr element, string text, SetElementHtml insertMode ) {
+            var bytes = Encoding.UTF8.GetBytes ( text );
+            m_basicApi.SciterSetElementHtml ( element, bytes, (uint)bytes.Length, insertMode );
         }
 
         private List<ElementEventProc> m_windowEventHandlers = new List<ElementEventProc> ();
