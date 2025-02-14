@@ -20,6 +20,8 @@ namespace SciterLibraryAPI {
 
         private string VersionOfLibrary = "1.0.0.0";
 
+        SciterAPIResource? m_resource = null;
+
         public void LoadAPI () {
             m_apiPointer = SciterAPI ();
             if ( m_apiPointer == IntPtr.Zero ) return;
@@ -41,6 +43,12 @@ namespace SciterLibraryAPI {
 
             m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_INIT, IntPtr.Zero, IntPtr.Zero );
         }
+
+        public IntPtr MainWindow => m_mainWindow;
+
+        public SciterApiStruct OriginalApi => m_basicApi;
+
+        public SciterAPIResource? Resource => m_resource;
 
         public string ClassName => m_className;
 
@@ -80,6 +88,8 @@ namespace SciterLibraryAPI {
                     return IntPtr.Zero;
                 }
             );
+
+            m_resource = new SciterAPIResource ( this );
 
             m_basicApi.SciterLoadFile ( m_mainWindow, htmlPath );
         }
