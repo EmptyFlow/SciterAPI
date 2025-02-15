@@ -20,7 +20,7 @@ namespace SciterLibraryAPI {
 
         private string VersionOfLibrary = "1.0.0.0";
 
-        SciterAPIResource? m_resource = null;
+        SciterAPIGlobalCallbacks? m_callbacks = null;
 
         public void LoadAPI () {
             m_apiPointer = SciterAPI ();
@@ -48,7 +48,7 @@ namespace SciterLibraryAPI {
 
         public SciterApiStruct OriginalApi => m_basicApi;
 
-        public SciterAPIResource? Resource => m_resource;
+        public SciterAPIGlobalCallbacks? Callbacks => m_callbacks;
 
         public string ClassName => m_className;
 
@@ -59,7 +59,6 @@ namespace SciterLibraryAPI {
         // delegate for windows was copied from example
         // not sure if it actually need
         private delegate IntPtr WindowDelegate ( IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, IntPtr pParam, IntPtr handled );
-
         public static IntPtr WindowsDelegateImplementaion ( IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, IntPtr pParam, IntPtr handled ) {
             return 0;
         }
@@ -89,7 +88,7 @@ namespace SciterLibraryAPI {
                 }
             );
 
-            m_resource = new SciterAPIResource ( this );
+            m_callbacks = new SciterAPIGlobalCallbacks ( this );
 
             m_basicApi.SciterLoadFile ( m_mainWindow, htmlPath );
         }
@@ -154,7 +153,7 @@ namespace SciterLibraryAPI {
             m_basicApi.SciterSetElementHtml ( element, bytes, (uint)bytes.Length, insertMode );
         }
 
-        private List<ElementEventProc> m_windowEventHandlers = new List<ElementEventProc> ();
+        private List<ElementEventProc> m_eventHandlers = new List<ElementEventProc> ();
 
         public void AddWindowEventHandler ( SciterEventHandler handler ) {
             if ( handler.SubscribedElement != IntPtr.Zero ) throw new ArgumentException ( "Passed element inside property SubscribedElement must be IntPtr.Zero!" );
@@ -162,20 +161,22 @@ namespace SciterLibraryAPI {
             ElementEventProc @delegate = ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) => {
                 return Handle ( (EventBehaviourGroups) evtg, prms, handler );
             };
-            m_windowEventHandlers.Add ( @delegate );
+            m_eventHandlers.Add ( @delegate );
 
             m_basicApi.SciterWindowAttachEventHandler ( m_mainWindow, @delegate, 1, (uint) EventBehaviourGroups.HandleAll );
         }
 
-        public void AddElementEventHandler ( SciterEventHandler handler ) {
+        public ElementEventProc AddElementEventHandler ( SciterEventHandler handler ) {
             if ( handler.SubscribedElement == IntPtr.Zero ) throw new ArgumentException ( "Passed element inside property SubscribedElement must be non IntPtr.Zero!" );
 
             ElementEventProc @delegate = ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) => {
                 return Handle ( (EventBehaviourGroups) evtg, prms, handler );
             };
-            m_windowEventHandlers.Add ( @delegate );
+            m_eventHandlers.Add ( @delegate );
 
             m_basicApi.SciterAttachEventHandler ( handler.SubscribedElement, @delegate, 1 );
+
+            return @delegate;
         }
 
         private bool Handle ( EventBehaviourGroups groups, IntPtr parameters, SciterEventHandler handler ) {

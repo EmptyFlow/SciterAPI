@@ -2,32 +2,34 @@
 
 namespace SciterLibraryAPI {
 
-    public class SciterAPIResource {
+    public class SciterAPIGlobalCallbacks {
 
-        SciterApiStruct m_sciterApiStruct;
+        private SciterApiStruct m_sciterApiStruct;
 
-        SciterAPIHost m_host;
+        private SciterAPIHost m_host;
 
-        SciterHostCallback m_sciterHostCallback;
+        private SciterHostCallback m_sciterHostCallback;
 
-        Dictionary<string, Func<string, byte[]>> m_protocolHandlers = new Dictionary<string, Func<string, byte[]>> ();
+        private Dictionary<string, Func<string, byte[]>> m_protocolHandlers = new Dictionary<string, Func<string, byte[]>> ();
 
-        Action<string, uint, uint> m_loadedDataAction;
+        private Action<string, uint, uint> m_loadedDataAction;
 
-        Action m_engineDestroyedAction;
+        private Action m_engineDestroyedAction;
 
-        Action m_graphicalFailureAction;
+        private Action m_graphicalFailureAction;
 
-        Action<IntPtr, IntPtr, IntPtr> m_notificationPostedAction;
+        private Action<IntPtr, IntPtr, IntPtr> m_notificationPostedAction;
 
-        Func<string, ElementEventProc?> m_attachBehaviourAction;
+        private Func<string, IntPtr, ElementEventProc?> m_attachBehaviourAction;
 
-        public SciterAPIResource ( SciterAPIHost host ) {
+        protected Dictionary<string, Func<IntPtr, SciterEventHandler>> m_attachBehaviourFactories = new Dictionary<string, Func<IntPtr, SciterEventHandler>> ();
+
+        public SciterAPIGlobalCallbacks ( SciterAPIHost host ) {
             m_loadedDataAction = EmptyLoadedDataAction;
             m_engineDestroyedAction = EmptyAction;
             m_graphicalFailureAction = EmptyAction;
             m_notificationPostedAction = EmptyNotificationPostedAction;
-            m_attachBehaviourAction = EmptyAttachedBahaviourAction;
+            m_attachBehaviourAction = DefaultAttachedBahaviourAction;
 
             m_sciterApiStruct = host.OriginalApi;
             m_host = host;
@@ -39,6 +41,26 @@ namespace SciterLibraryAPI {
         public Action<string, uint, uint> LoadedDataAction {
             get => m_loadedDataAction;
             set => m_loadedDataAction = value;
+        }
+
+        public Action EngineDestroyedAction {
+            get => m_engineDestroyedAction;
+            set => m_engineDestroyedAction = value;
+        }
+
+        public Action GraphicalFailureAction {
+            get => m_graphicalFailureAction;
+            set => m_graphicalFailureAction = value;
+        }
+
+        public Action<IntPtr, IntPtr, IntPtr> NotificationPostedAction {
+            get => m_notificationPostedAction;
+            set => m_notificationPostedAction = value;
+        }
+
+        public Func<string, IntPtr, ElementEventProc?> AttachBehaviourAction {
+            get => m_attachBehaviourAction;
+            set => m_attachBehaviourAction = value;
         }
 
         public void AddProtocolHandler ( string protocol, Func<string, byte[]> handlers ) {
@@ -61,9 +83,10 @@ namespace SciterLibraryAPI {
                     return 0;
                 case SciterCallbackNotificationCode.SC_ATTACH_BEHAVIOR:
                     var behaviourStructure = Marshal.PtrToStructure<SciterCallbackNotificationAttachBehaviour> ( pns );
-                    var elementProc = m_attachBehaviourAction ( behaviourStructure.behaviorName );
+                    var elementProc = m_attachBehaviourAction ( behaviourStructure.behaviorName, behaviourStructure.element );
                     if ( elementProc != null ) {
                         behaviourStructure.elementProc = Marshal.GetFunctionPointerForDelegate ( elementProc );
+                        behaviourStructure.elementTag = 1;
                         return 1;
                     }
                     return 0;
@@ -111,7 +134,19 @@ namespace SciterLibraryAPI {
         private void EmptyNotificationPostedAction ( IntPtr wparam, IntPtr lparam, IntPtr lreturn ) {
         }
 
-        private ElementEventProc? EmptyAttachedBahaviourAction ( string behaviourName ) => null;
+        private ElementEventProc? DefaultAttachedBahaviourAction ( string behaviourName, IntPtr element ) {
+            if ( m_attachBehaviourFactories.ContainsKey ( behaviourName ) ) {
+                try {
+                    var handler = m_attachBehaviourFactories[behaviourName] ( element );
+                    var handlerDelegate = m_host.AddElementEventHandler ( handler );
+                    return handlerDelegate;
+                } catch ( Exception e ) {
+                    Console.WriteLine ( $"Error while create behaviour handler with name {behaviourName}: " + e.Message );
+                    return null;
+                }
+            }
+            return null;
+        }
 
         /*
          virtual LRESULT on_load_data(LPSCN_LOAD_DATA pnmld)
