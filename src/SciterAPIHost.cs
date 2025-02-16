@@ -153,136 +153,34 @@ namespace SciterLibraryAPI {
             m_basicApi.SciterSetElementHtml ( element, bytes, (uint)bytes.Length, insertMode );
         }
 
-        private List<ElementEventProc> m_eventHandlers = new List<ElementEventProc> ();
+        private List<SciterEventHandler> m_eventHandlers = new List<SciterEventHandler> ();
 
         public void AddWindowEventHandler ( SciterEventHandler handler ) {
             if ( handler.SubscribedElement != IntPtr.Zero ) throw new ArgumentException ( "Passed element inside property SubscribedElement must be IntPtr.Zero!" );
 
-            ElementEventProc @delegate = ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) => {
-                return Handle ( (EventBehaviourGroups) evtg, prms, handler );
-            };
-            m_eventHandlers.Add ( @delegate );
+            m_eventHandlers.Add ( handler );
 
-            m_basicApi.SciterWindowAttachEventHandler ( m_mainWindow, @delegate, 1, (uint) EventBehaviourGroups.HandleAll );
+            m_basicApi.SciterWindowAttachEventHandler ( m_mainWindow, handler.InnerDelegate, 1, (uint) EventBehaviourGroups.HandleAll );
         }
 
         public ElementEventProc AddElementEventHandler ( SciterEventHandler handler ) {
             if ( handler.SubscribedElement == IntPtr.Zero ) throw new ArgumentException ( "Passed element inside property SubscribedElement must be non IntPtr.Zero!" );
 
-            ElementEventProc @delegate = ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) => {
-                return Handle ( (EventBehaviourGroups) evtg, prms, handler );
-            };
-            m_eventHandlers.Add ( @delegate );
+            m_eventHandlers.Add ( handler );
+            m_basicApi.SciterAttachEventHandler ( handler.SubscribedElement, handler.InnerDelegate, 1 );
 
-            m_basicApi.SciterAttachEventHandler ( handler.SubscribedElement, @delegate, 1 );
-
-            return @delegate;
+            return handler.InnerDelegate;
         }
 
-        private bool Handle ( EventBehaviourGroups groups, IntPtr parameters, SciterEventHandler handler ) {
-            switch ( groups ) {
-                case EventBehaviourGroups.SUBSCRIPTIONS_REQUEST:
-                    Marshal.WriteInt32 ( parameters, (int) EventBehaviourGroups.HandleAll );
-                    return true;
-                case EventBehaviourGroups.HANDLE_MOUSE:
-                    var mouseArguments = Marshal.PtrToStructure<MouseParameters> ( parameters );
-                    handler.MouseEvent (
-                        mouseArguments.cmd,
-                        mouseArguments.pos,
-                        mouseArguments.pos_view,
-                        mouseArguments.alt_state,
-                        mouseArguments.dragging_mode,
-                        mouseArguments.cursor_type,
-                        mouseArguments.target,
-                        mouseArguments.dragging,
-                        mouseArguments.is_on_icon,
-                        mouseArguments.button_state
-                    );
-                    break;
-                case EventBehaviourGroups.HANDLE_KEY:
-                    var keyboardArguments = Marshal.PtrToStructure<KeyParams> ( parameters );
-                    handler.KeyboardEvent ( keyboardArguments.cmd, keyboardArguments.alt_state );
-                    break;
-                case EventBehaviourGroups.HANDLE_FOCUS:
-                    var focusArguments = Marshal.PtrToStructure<FocusParameters> ( parameters );
-                    handler.FocusEvent ( focusArguments.cmd, focusArguments.by_mouse_click, focusArguments.cancel, focusArguments.target );
-                    break;
-                case EventBehaviourGroups.HANDLE_SCROLL:
-                    var scrollArguments = Marshal.PtrToStructure<ScrollParameters> ( parameters );
-                    handler.ScrollEvent ( scrollArguments.cmd, scrollArguments.target, scrollArguments.pos, scrollArguments.vertical, scrollArguments.source, scrollArguments.reason );
-                    break;
-                case EventBehaviourGroups.HANDLE_TIMER:
-                    var timerArguments = Marshal.PtrToStructure<TimerParameters> ( parameters );
-                    handler.TimerEvent ( timerArguments.timerId );
-                    break;
-                case EventBehaviourGroups.HANDLE_SIZE:
-                    handler.SizeEvent ();
-                    break;
-                case EventBehaviourGroups.HANDLE_GESTURE:
-                    var gestureArguments = Marshal.PtrToStructure<GestureParameters> ( parameters );
-                    handler.GestureEvent ( gestureArguments.cmd, gestureArguments.target, gestureArguments.pos, gestureArguments.pos_view );
-                    break;
-                case EventBehaviourGroups.HANDLE_DRAW:
-                    var drawArguments = Marshal.PtrToStructure<DrawParameters> ( parameters );
-                    handler.DrawEvent ( drawArguments.cmd, drawArguments.gfx, drawArguments.area, drawArguments.reserved );
-                    break;
-                case EventBehaviourGroups.HANDLE_DATA_ARRIVED:
-                    var arrivedArguments = Marshal.PtrToStructure<DataArrivedParameters> ( parameters );
-                    handler.DataArrived ( arrivedArguments.initiator, arrivedArguments.data, arrivedArguments.dataSize, arrivedArguments.dataType, arrivedArguments.status, arrivedArguments.uri );
-                    break;
-                case EventBehaviourGroups.HANDLE_EXCHANGE:
-                    var exchangeArguments = Marshal.PtrToStructure<ExchangeParameters> ( parameters );
-                    handler.ExchangeParameters (
-                        exchangeArguments.cmd,
-                        exchangeArguments.target,
-                        exchangeArguments.source,
-                        exchangeArguments.pos,
-                        exchangeArguments.pos_view,
-                        exchangeArguments.mode,
-                        exchangeArguments.data
-                    );
-                    break;
-                case EventBehaviourGroups.HANDLE_METHOD_CALL:
-                    var methodCallArguments = Marshal.PtrToStructure<MethodParameters> ( parameters );
-                    handler.MethodCall ( methodCallArguments.methodID );
-                    break;
-                case EventBehaviourGroups.HANDLE_BEHAVIOR_EVENT:
-                    var behaviourArguments = Marshal.PtrToStructure<BehaviourEventsParameters> ( parameters );
-                    handler.BehaviourEvent (
-                        behaviourArguments.cmd,
-                        behaviourArguments.heTarget,
-                        behaviourArguments.he,
-                        behaviourArguments.reason,
-                        behaviourArguments.data,
-                        behaviourArguments.name
-                    );
-                    break;
-                case EventBehaviourGroups.HANDLE_SCRIPTING_METHOD_CALL:
-                    var scriptArguments = Marshal.PtrToStructure<ScriptingMethodParameters> ( parameters );
-                    var resultOffset = Marshal.OffsetOf ( typeof ( ScriptingMethodParameters ), nameof ( ScriptingMethodParameters.result ) );
+        /// <summary>
+        /// Remove from handler but you need to be sure it event handler actually detached from Sciter.
+        /// By default it behaviout happened only in SciterEventHandler.HandleInitializationEvent.
+        /// </summary>
+        /// <param name="handler">The handler to be removed.</param>
+        public void RemoveEventHandler( SciterEventHandler handler ) {
+            if ( !m_eventHandlers.Contains ( handler ) ) return;
 
-                    var scriptValues = new List<SciterValue> ( Convert.ToInt32 ( scriptArguments.argc ) );
-                    for ( var i = 0; i < scriptArguments.argc; i++ ) {
-                        var ptr = IntPtr.Add ( scriptArguments.argv, i * Marshal.SizeOf<SciterValue> () );
-
-                        scriptValues.Add ( Marshal.PtrToStructure<SciterValue> ( ptr ) );
-                    }
-
-                    var resultValue = handler.ScriptMethodCall ( Marshal.PtrToStringAnsi ( scriptArguments.name ), scriptValues );
-                    var resultValuePtr = IntPtr.Add ( parameters, resultOffset.ToInt32 () );
-                    Marshal.StructureToPtr ( resultValue, resultValuePtr, false );
-                    break;
-                case EventBehaviourGroups.HANDLE_SOM:
-                    var somArguments = Marshal.PtrToStructure<SOMParameters> ( parameters );
-                    handler.SOMEvent ( somArguments.cmd, somArguments.data );
-                    break;
-                case EventBehaviourGroups.HANDLE_INITIALIZATION:
-                    var initializationArguments = Marshal.PtrToStructure<InitializationParameters> ( parameters );
-                    handler.HandleInitializationEvent ( initializationArguments.cmd );
-                    return true;
-            }
-
-            return false;
+            m_eventHandlers.Remove ( handler );
         }
 
     }
