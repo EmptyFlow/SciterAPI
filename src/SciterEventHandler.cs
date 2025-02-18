@@ -167,11 +167,9 @@ namespace SciterLibraryAPI {
         }
 
         public virtual void ExchangeParameters ( uint cmd, nint target, nint source, SciterPoint pos, SciterPoint pos_view, uint mode, SciterValue data ) {
-
         }
 
         public virtual void MethodCall ( BehaviourMerhodIdentifiers methodID ) {
-            throw new NotImplementedException ();
         }
 
         public virtual void SOMEvent ( SOMEvents cmd, nint data ) {
