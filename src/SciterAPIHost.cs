@@ -79,14 +79,16 @@ namespace SciterLibraryAPI {
                 IntPtr.Zero
             );
 
-            m_basicApi.SciterSetupDebugOutput (
-                m_mainWindow,
-                1,
-                ( IntPtr param, uint subsystem, uint severity, IntPtr text_ptr, uint text_length ) => {
-                    Console.WriteLine ( Marshal.PtrToStringUni ( text_ptr, (int) text_length ) );
-                    return IntPtr.Zero;
-                }
-            );
+            if ( enableDebug ) {
+                m_basicApi.SciterSetupDebugOutput (
+                    m_mainWindow,
+                    1,
+                    ( IntPtr param, uint subsystem, uint severity, IntPtr text_ptr, uint text_length ) => {
+                        Console.WriteLine ( Marshal.PtrToStringUni ( text_ptr, (int) text_length ) );
+                        return IntPtr.Zero;
+                    }
+                );
+            }
 
             m_callbacks = new SciterAPIGlobalCallbacks ( this );
 
@@ -102,6 +104,10 @@ namespace SciterLibraryAPI {
 
             // run loop for waiting close all windows
             var code = m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_LOOP, IntPtr.Zero, IntPtr.Zero );
+
+            // detach window handler
+            m_basicApi.SciterWindowDetachEventHandler ( m_mainWindow, m_windowHandlers[m_mainWindow].InnerDelegate, 1 );
+            m_windowHandlers.Remove ( m_mainWindow );
 
             // deinitialize engine
             m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_SHUTDOWN, IntPtr.Zero, IntPtr.Zero );
@@ -145,20 +151,22 @@ namespace SciterLibraryAPI {
         }
 
         public void SetElementText ( IntPtr element, string text ) {
-            m_basicApi.SciterSetElementText ( element, text, (uint)text.Length );
+            m_basicApi.SciterSetElementText ( element, text, (uint) text.Length );
         }
 
         public void SetElementHtml ( IntPtr element, string text, SetElementHtml insertMode ) {
             var bytes = Encoding.UTF8.GetBytes ( text );
-            m_basicApi.SciterSetElementHtml ( element, bytes, (uint)bytes.Length, insertMode );
+            m_basicApi.SciterSetElementHtml ( element, bytes, (uint) bytes.Length, insertMode );
         }
 
         private List<SciterEventHandler> m_eventHandlers = new List<SciterEventHandler> ();
 
+        private Dictionary<nint, SciterEventHandler> m_windowHandlers = new Dictionary<nint, SciterEventHandler> ();
+
         public void AddWindowEventHandler ( SciterEventHandler handler ) {
             if ( handler.SubscribedElement != IntPtr.Zero ) throw new ArgumentException ( "Passed element inside property SubscribedElement must be IntPtr.Zero!" );
 
-            m_eventHandlers.Add ( handler );
+            m_windowHandlers.Add ( m_mainWindow, handler );
 
             m_basicApi.SciterWindowAttachEventHandler ( m_mainWindow, handler.InnerDelegate, 1, (uint) EventBehaviourGroups.HandleAll );
         }
@@ -177,7 +185,7 @@ namespace SciterLibraryAPI {
         /// By default it behaviout happened only in SciterEventHandler.HandleInitializationEvent.
         /// </summary>
         /// <param name="handler">The handler to be removed.</param>
-        public void RemoveEventHandler( SciterEventHandler handler ) {
+        public void RemoveEventHandler ( SciterEventHandler handler ) {
             if ( !m_eventHandlers.Contains ( handler ) ) return;
 
             m_eventHandlers.Remove ( handler );
