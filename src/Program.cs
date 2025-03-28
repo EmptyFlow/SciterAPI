@@ -1,5 +1,5 @@
 ﻿
-using SciterLibraryAPI;
+using EmptyFlow.SciterAPI;
 
 SciterLoader.Initialize ( @"C:\IDEs\sciter\sciter-js-sdk-6.0.1.1\bin\windows\x64" );
 var host = new SciterAPIHost ();

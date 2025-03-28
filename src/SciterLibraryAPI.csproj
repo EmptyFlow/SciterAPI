@@ -18,4 +18,8 @@
 		<Description>The library contains bindings for the Sciter library, as well as some simple helpers to make working with raw bindings easier.</Description>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\EmptyFlow.SciterAPI\EmptyFlow.SciterAPI.csproj" />
+	</ItemGroup>
+
 </Project>

@@ -5,6 +5,10 @@ VisualStudioVersion = 17.11.35431.28
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SciterLibraryAPI", "SciterLibraryAPI.csproj", "{5A6742B8-D292-4D59-9EDB-FC2188611EED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyFlow.SciterAPI", "..\EmptyFlow.SciterAPI\EmptyFlow.SciterAPI.csproj", "{CAA92F2E-3DE0-4167-8D0D-A6BFD4362005}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyFlow.SciterAPI.Tests", "..\EmptyFlow.SciterAPI.UnitTest\EmptyFlow.SciterAPI.Tests.csproj", "{472298FC-FFBA-4FA0-9A73-FE56EAEF2940}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,22 @@ Global
 		{5A6742B8-D292-4D59-9EDB-FC2188611EED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5A6742B8-D292-4D59-9EDB-FC2188611EED}.Release|x64.ActiveCfg = Release|x64
 		{5A6742B8-D292-4D59-9EDB-FC2188611EED}.Release|x64.Build.0 = Release|x64
+		{CAA92F2E-3DE0-4167-8D0D-A6BFD4362005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAA92F2E-3DE0-4167-8D0D-A6BFD4362005}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAA92F2E-3DE0-4167-8D0D-A6BFD4362005}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CAA92F2E-3DE0-4167-8D0D-A6BFD4362005}.Debug|x64.Build.0 = Debug|Any CPU
+		{CAA92F2E-3DE0-4167-8D0D-A6BFD4362005}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAA92F2E-3DE0-4167-8D0D-A6BFD4362005}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAA92F2E-3DE0-4167-8D0D-A6BFD4362005}.Release|x64.ActiveCfg = Release|Any CPU
+		{CAA92F2E-3DE0-4167-8D0D-A6BFD4362005}.Release|x64.Build.0 = Release|Any CPU
+		{472298FC-FFBA-4FA0-9A73-FE56EAEF2940}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{472298FC-FFBA-4FA0-9A73-FE56EAEF2940}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{472298FC-FFBA-4FA0-9A73-FE56EAEF2940}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{472298FC-FFBA-4FA0-9A73-FE56EAEF2940}.Debug|x64.Build.0 = Debug|Any CPU
+		{472298FC-FFBA-4FA0-9A73-FE56EAEF2940}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{472298FC-FFBA-4FA0-9A73-FE56EAEF2940}.Release|Any CPU.Build.0 = Release|Any CPU
+		{472298FC-FFBA-4FA0-9A73-FE56EAEF2940}.Release|x64.ActiveCfg = Release|Any CPU
+		{472298FC-FFBA-4FA0-9A73-FE56EAEF2940}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
