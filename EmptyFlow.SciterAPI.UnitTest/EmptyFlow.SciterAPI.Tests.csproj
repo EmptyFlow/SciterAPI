@@ -15,7 +15,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EmptyFlow.SciterAPI\EmptyFlow.SciterAPI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SciterAPIHost_Completed_MakeCssSelectorFewItems.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SciterAPIHost_Completed_MakeCssSelector.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

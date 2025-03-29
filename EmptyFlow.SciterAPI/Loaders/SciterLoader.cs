@@ -17,7 +17,14 @@ namespace EmptyFlow.SciterAPI {
 
         private const string MacOSName = "libsciter.dylib";
 
+        private static bool m_isInitialized = false;
+
+        public static bool IsInitialized => m_isInitialized;
+
         public static void Initialize ( string sciterPath ) {
+            if ( m_isInitialized ) return;
+
+            m_isInitialized = true;
             m_sciterPath = sciterPath;
             NativeLibrary.SetDllImportResolver ( typeof ( SciterAPIHost ).Assembly, ImportResolver );
         }

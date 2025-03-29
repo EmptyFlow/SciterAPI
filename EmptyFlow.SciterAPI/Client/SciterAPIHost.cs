@@ -115,6 +115,12 @@ namespace EmptyFlow.SciterAPI {
             return code;
         }
 
+        public void CloseMainWindow () {
+            if ( m_mainWindow == IntPtr.Zero) return;
+
+            m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_SET_STATE, (int) WindowState.SCITER_WINDOW_STATE_CLOSED, IntPtr.Zero );
+        }
+
         public IEnumerable<IntPtr> MakeCssSelector ( string cssSelector ) {
             IntPtr element;
             var domResult = m_basicApi.SciterGetRootElement ( m_mainWindow, out element );
@@ -123,7 +129,7 @@ namespace EmptyFlow.SciterAPI {
             var elements = new List<IntPtr> ();
             SciterElementCallback callback = ( IntPtr he, IntPtr param ) => {
                 elements.Add ( he );
-                return true;
+                return false;
             };
             m_basicApi.SciterSelectElementsW ( element, cssSelector, callback, 1 );
 
@@ -164,7 +170,7 @@ namespace EmptyFlow.SciterAPI {
         private Dictionary<nint, SciterEventHandler> m_windowHandlers = new Dictionary<nint, SciterEventHandler> ();
 
         public void AddWindowEventHandler ( SciterEventHandler handler ) {
-            if ( handler.SubscribedElement != IntPtr.Zero ) throw new ArgumentException ( "Passed element inside property SubscribedElement must be IntPtr.Zero!" );
+            if ( handler.SubscribedElement != IntPtr.Zero ) throw new ArgumentException ( "Passed element inside property SubscribedElement must be not IntPtr.Zero!" );
 
             m_windowHandlers.Add ( m_mainWindow, handler );
 

@@ -1,5 +1,9 @@
 ﻿namespace EmptyFlow.SciterAPI {
-    public enum WindowState { // Original name SCITER_WINDOW_STATE
+
+    /// <summary>
+    /// Window state, can be used for get or set windows state. Name in C++ SCITER_WINDOW_STATE.
+    /// </summary>
+    public enum WindowState {
         SCITER_WINDOW_STATE_CLOSED = 0, // close window
         SCITER_WINDOW_STATE_SHOWN = 1,
         SCITER_WINDOW_STATE_MINIMIZED = 2,

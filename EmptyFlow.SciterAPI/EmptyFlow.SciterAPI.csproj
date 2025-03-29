@@ -8,7 +8,7 @@
 		<IsTrimmable>true</IsTrimmable>
 		<PublishTrimmed>true</PublishTrimmed>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Title>API for working with Sciter HTML engine from C#</Title>
+		<Title>C# Binding for Sciter HTML engine</Title>
 		<Description>API for working with Sciter HTML engine from C#</Description>
 		<Copyright>Copyright (c) Roman Vladimirov</Copyright>
 		<PackageProjectUrl>https://github.com/EmptyFlow/SciterAPI</PackageProjectUrl>
