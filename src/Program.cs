@@ -1,10 +1,11 @@
 ﻿
 using EmptyFlow.SciterAPI;
 
-SciterLoader.Initialize ( @"C:\IDEs\sciter\sciter-js-sdk-6.0.1.1\bin\windows\x64" );
+SciterLoader.Initialize ( Environment.CurrentDirectory );
 var host = new SciterAPIHost ();
 host.LoadAPI ();
-var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.1/samples/vue/hello-vue.htm";
+var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.2/samples.sciter/video/test-video-rendering.htm";
+//var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.2/samples/vue/hello-vue.htm";
 //var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.1/samples.sciter/audio/test-basic.htm";
 //var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.0.4/samples.webgl/basic/1-cube-lights/index.htm";
 //var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.0.4/samples.webgl/threejs/1-hello-world.htm";

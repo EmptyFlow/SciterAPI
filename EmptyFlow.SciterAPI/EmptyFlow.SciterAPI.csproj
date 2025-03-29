@@ -7,6 +7,8 @@
 		<NativeAot>enable</NativeAot>
 		<IsTrimmable>true</IsTrimmable>
 		<PublishTrimmed>true</PublishTrimmed>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>API for working with Sciter HTML engine from C#</Title>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">

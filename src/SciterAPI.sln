@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35431.28
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SciterLibraryAPI", "SciterLibraryAPI.csproj", "{5A6742B8-D292-4D59-9EDB-FC2188611EED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "Example.csproj", "{5A6742B8-D292-4D59-9EDB-FC2188611EED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyFlow.SciterAPI", "..\EmptyFlow.SciterAPI\EmptyFlow.SciterAPI.csproj", "{CAA92F2E-3DE0-4167-8D0D-A6BFD4362005}"
 EndProject
