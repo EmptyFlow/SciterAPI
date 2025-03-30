@@ -121,6 +121,12 @@ namespace EmptyFlow.SciterAPI {
             m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_SET_STATE, (int) WindowState.SCITER_WINDOW_STATE_CLOSED, IntPtr.Zero );
         }
 
+        public void CloseWindow (IntPtr window) {
+            if ( window == IntPtr.Zero ) return;
+
+            m_basicApi.SciterWindowExec ( window, WindowCommand.SCITER_WINDOW_SET_STATE, (int) WindowState.SCITER_WINDOW_STATE_CLOSED, IntPtr.Zero );
+        }
+
         public IEnumerable<IntPtr> MakeCssSelector ( string cssSelector ) {
             IntPtr element;
             var domResult = m_basicApi.SciterGetRootElement ( m_mainWindow, out element );

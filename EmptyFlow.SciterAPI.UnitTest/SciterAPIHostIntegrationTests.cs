@@ -57,6 +57,53 @@ namespace EmptyFlow.SciterAPI.Tests {
             }
         }
 
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_GetElementText_FewItems () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
+            host.CreateMainWindow ( path, 300, 300 );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+            var result = "";
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var element = host.MakeCssSelector ( "#textspan" ).First ();
+                result = host.GetElementText ( element );
+                host.CloseMainWindow ();
+                Assert.Equal ( "Lalalala", result );
+            }
+        }
+
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_SetElementText_FewItems () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
+            host.CreateMainWindow ( path, 300, 300 );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+            var result = "";
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var element = host.MakeCssSelector ( "#textspan" ).First ();
+                host.SetElementText ( element, "new value11111" );
+                result = host.GetElementText ( element );
+                host.CloseMainWindow ();
+                Assert.Equal ( "new value11111", result );
+            }
+        }
+
     }
 
     public class DocumentReadyHandler : SciterEventHandler {
