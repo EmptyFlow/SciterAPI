@@ -104,6 +104,73 @@ namespace EmptyFlow.SciterAPI.Tests {
             }
         }
 
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_GetElementHtml_WithoutOuter () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
+            host.CreateMainWindow ( path, 300, 300 );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var element = host.MakeCssSelector ( "body" ).First ();
+                var html = host.GetElementHtml ( element, false );
+                host.CloseMainWindow ();
+                Assert.Equal ( "\n    <span id=\"textspan\">Lalalala</span>\n", html );
+            }
+        }
+
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_GetElementHtml_WithOuter () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
+            host.CreateMainWindow ( path, 300, 300 );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var element = host.MakeCssSelector ( "body" ).First ();
+                var html = host.GetElementHtml ( element, true );
+                host.CloseMainWindow ();
+                Assert.Equal ( "<body>\n    <span id=\"textspan\">Lalalala</span>\n</body>", html );
+            }
+        }
+
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_SetElementHtml_ReplaceContent () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
+            host.CreateMainWindow ( path, 300, 300 );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var element = host.MakeCssSelector ( "#textspan" ).First ();
+                host.SetElementHtml ( element, "<b>Bold</b><i>Italic</i>", SetElementHtml.SIH_REPLACE_CONTENT );
+                var html = host.GetElementHtml ( element, false );
+                host.CloseMainWindow ();
+                Assert.Equal ( "<b>Bold</b><i>Italic</i>", html );
+            }
+        }
+
     }
 
     public class DocumentReadyHandler : SciterEventHandler {
