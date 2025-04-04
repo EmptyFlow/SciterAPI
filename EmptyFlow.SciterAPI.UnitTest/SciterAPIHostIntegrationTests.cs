@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using System.IO.Compression;
+using System.Text;
 
 [assembly: CollectionBehavior ( CollectionBehavior.CollectionPerClass, DisableTestParallelization = true )]
 
@@ -168,6 +169,47 @@ namespace EmptyFlow.SciterAPI.Tests {
                 var html = host.GetElementHtml ( element, false );
                 host.CloseMainWindow ();
                 Assert.Equal ( "<b>Bold</b><i>Italic</i>", html );
+            }
+        }
+
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_Callbacks_RegisterProtocolHandler () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow (
+                "embedded://test.html",
+                300,
+                300,
+                adjustCallbacks: ( callbacks ) => {
+                    callbacks.AddProtocolHandler (
+                        "embedded://",
+                        ( path ) => {
+                            return Encoding.UTF8.GetBytes (
+""""
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
+    <body>
+        <span id="world">Hello world!!!</span>
+    </body>
+</html>
+
+"""" );
+                        }
+                    );
+                }
+            );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                Assert.Single ( host.MakeCssSelector ( "#world" ) );
+                host.CloseMainWindow ();
             }
         }
 

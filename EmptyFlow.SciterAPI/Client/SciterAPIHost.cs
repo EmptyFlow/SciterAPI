@@ -63,7 +63,7 @@ namespace EmptyFlow.SciterAPI {
             return 0;
         }
 
-        public void CreateMainWindow ( string htmlPath, int width, int height, bool enableDebug = false, bool enableFeature = false ) {
+        public void CreateMainWindow ( string htmlPath, int width, int height, bool enableDebug = false, bool enableFeature = false, Action<SciterAPIGlobalCallbacks>? adjustCallbacks = null ) {
             if ( enableDebug ) m_basicApi.SciterSetOption ( IntPtr.Zero, RtOptions.SCITER_SET_DEBUG_MODE, new IntPtr ( 1 ) );
             if ( enableFeature ) m_basicApi.SciterSetOption ( IntPtr.Zero, RtOptions.SCITER_SET_SCRIPT_RUNTIME_FEATURES, new IntPtr ( (int) DefaultRuntimeFeatures ) );
 
@@ -92,6 +92,14 @@ namespace EmptyFlow.SciterAPI {
 
             m_callbacks = new SciterAPIGlobalCallbacks ( this );
 
+            if ( adjustCallbacks != null ) adjustCallbacks.Invoke ( m_callbacks );
+
+            m_basicApi.SciterLoadFile ( m_mainWindow, htmlPath );
+        }
+
+        public void LoadFile ( string htmlPath ) {
+            if ( m_mainWindow == IntPtr.Zero ) return;
+
             m_basicApi.SciterLoadFile ( m_mainWindow, htmlPath );
         }
 
@@ -116,12 +124,12 @@ namespace EmptyFlow.SciterAPI {
         }
 
         public void CloseMainWindow () {
-            if ( m_mainWindow == IntPtr.Zero) return;
+            if ( m_mainWindow == IntPtr.Zero ) return;
 
             m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_SET_STATE, (int) WindowState.SCITER_WINDOW_STATE_CLOSED, IntPtr.Zero );
         }
 
-        public void CloseWindow (IntPtr window) {
+        public void CloseWindow ( IntPtr window ) {
             if ( window == IntPtr.Zero ) return;
 
             m_basicApi.SciterWindowExec ( window, WindowCommand.SCITER_WINDOW_SET_STATE, (int) WindowState.SCITER_WINDOW_STATE_CLOSED, IntPtr.Zero );
