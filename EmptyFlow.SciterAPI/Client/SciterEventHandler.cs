@@ -11,6 +11,8 @@ namespace EmptyFlow.SciterAPI {
 
         protected ElementEventProc m_innerDelegate;
 
+        public SciterAPIHost Host => m_host;
+
         public IntPtr SubscribedElement => m_subscribedElement;
 
         public ElementEventProc InnerDelegate => m_innerDelegate;

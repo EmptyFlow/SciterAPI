@@ -20,9 +20,9 @@ public class MyWindowEventHandler : SciterEventHandler {
 
     public override void BehaviourEvent ( BehaviourEvents cmd, nint heTarget, nint he, nint reason, SciterValue data, string name ) {
         if ( cmd == BehaviourEvents.DOCUMENT_READY ) {
-            var elements = m_host.MakeCssSelector ( "#app" );
+            var elements = Host.MakeCssSelector ( "#app" );
             var appDiv = elements.First ();
-            m_host.SetElementHtml ( appDiv, "<b>Bold Text!!!!!!!!!!!!!!</b>", SetElementHtml.SIH_REPLACE_CONTENT );
+            Host.SetElementHtml ( appDiv, "<b>Bold Text!!!!!!!!!!!!!!</b>", SetElementHtml.SIH_REPLACE_CONTENT );
         }
     }
 
