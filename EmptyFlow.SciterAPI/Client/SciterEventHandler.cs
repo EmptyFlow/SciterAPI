@@ -5,11 +5,11 @@ namespace EmptyFlow.SciterAPI {
 
     public class SciterEventHandler {
 
-        public IntPtr m_subscribedElement = IntPtr.Zero;
+        private IntPtr m_subscribedElement = IntPtr.Zero;
 
-        public SciterAPIHost m_host;
+        private SciterAPIHost m_host;
 
-        ElementEventProc m_innerDelegate;
+        protected ElementEventProc m_innerDelegate;
 
         public IntPtr SubscribedElement => m_subscribedElement;
 
@@ -21,12 +21,13 @@ namespace EmptyFlow.SciterAPI {
             m_innerDelegate = SciterHandleEvent;
         }
 
-        private bool SciterHandleEvent( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) {
+        private bool SciterHandleEvent ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) {
             var parameters = prms;
 
             switch ( (EventBehaviourGroups) evtg ) {
                 case EventBehaviourGroups.SUBSCRIPTIONS_REQUEST:
                     Marshal.WriteInt32 ( parameters, (int) EventBehaviourGroups.HandleAll );
+                    AfterRegisterEvent ();
                     return true;
                 case EventBehaviourGroups.HANDLE_MOUSE:
                     var mouseArguments = Marshal.PtrToStructure<MouseParameters> ( parameters );
@@ -130,6 +131,10 @@ namespace EmptyFlow.SciterAPI {
             return false;
         }
 
+        public virtual void AfterRegisterEvent () {
+
+        }
+
         public virtual void MouseEvent ( MouseEvents command, SciterPoint elementRelated, SciterPoint ViewRelated, KeyboardStates keyboardStates, DraggingType draggingMode, CursorType cursorType, IntPtr target, IntPtr dragging, bool is_on_icon, uint button_state ) {
 
         }
@@ -193,7 +198,7 @@ namespace EmptyFlow.SciterAPI {
         }
 
         public virtual void HandleInitializationEvent ( InitializationEvents cmd ) {
-            if (cmd == InitializationEvents.BEHAVIOR_DETACH) {
+            if ( cmd == InitializationEvents.BEHAVIOR_DETACH ) {
                 //we need to handle behaviour detaching and remove event handler from attached list in host
                 m_host.RemoveEventHandler ( this );
             }

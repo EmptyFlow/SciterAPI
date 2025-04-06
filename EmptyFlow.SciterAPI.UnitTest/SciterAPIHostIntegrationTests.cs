@@ -213,6 +213,66 @@ namespace EmptyFlow.SciterAPI.Tests {
             }
         }
 
+        public class SciterAPIHost_Completed_Callbacks_AttachCustomBehaviorHit ( IntPtr element, SciterAPIHost host ) : SciterEventHandler(element, host) {
+            
+            public Action? AfterRegisterEventFired { get; set; }
+
+            public override void AfterRegisterEvent () {
+                AfterRegisterEventFired?.Invoke ();
+            }
+
+        }
+
+        [Fact, Trait ( "Category", "Integration" )]
+        public async Task SciterAPIHost_Completed_Callbacks_AttachCustomBehavior () {
+            //Arrange
+            var handlerFired = false;
+            SciterAPIHost_Completed_Callbacks_AttachCustomBehaviorHit newSciterEventHandler;
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow (
+                "embedded://test.html",
+                300,
+                300,
+                adjustCallbacks: ( callbacks ) => {
+                    callbacks.AddProtocolHandler (
+                        "embedded://",
+                        ( path ) => {
+                            return Encoding.UTF8.GetBytes (
+""""
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
+    <body>
+        <span id="world" style="behavior: 'testcustombehaviour';">Hello world!!!</span>
+    </body>
+</html>
+
+"""" );
+                        }
+                    );
+                    callbacks.AttachBehaviourAction = ( name, element ) => {
+                        newSciterEventHandler = new SciterAPIHost_Completed_Callbacks_AttachCustomBehaviorHit ( element, host );
+                        newSciterEventHandler.AfterRegisterEventFired = () => {
+                            handlerFired = true;
+                            host.CloseMainWindow ();
+                        };
+                        return newSciterEventHandler;
+                    };
+                }
+            );
+
+            //Act
+            host.Process ();
+
+            await Task.Delay ( 2000 );
+            host.CloseMainWindow ();
+
+            //Assert
+            Assert.True ( handlerFired );
+        }
+
     }
 
     public class DocumentReadyHandler : SciterEventHandler {

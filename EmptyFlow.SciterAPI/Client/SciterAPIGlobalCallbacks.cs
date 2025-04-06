@@ -20,7 +20,7 @@ namespace EmptyFlow.SciterAPI {
 
         private Action<IntPtr, IntPtr, IntPtr> m_notificationPostedAction;
 
-        private Func<string, IntPtr, ElementEventProc?> m_attachBehaviourAction;
+        private Func<string, IntPtr, SciterEventHandler?> m_attachBehaviourAction;
 
         protected Dictionary<string, Func<IntPtr, SciterEventHandler>> m_attachBehaviourFactories = new Dictionary<string, Func<IntPtr, SciterEventHandler>> ();
 
@@ -58,7 +58,7 @@ namespace EmptyFlow.SciterAPI {
             set => m_notificationPostedAction = value;
         }
 
-        public Func<string, IntPtr, ElementEventProc?> AttachBehaviourAction {
+        public Func<string, IntPtr, SciterEventHandler?> AttachBehaviourAction {
             get => m_attachBehaviourAction;
             set => m_attachBehaviourAction = value;
         }
@@ -69,6 +69,13 @@ namespace EmptyFlow.SciterAPI {
             if ( m_protocolHandlers.ContainsKey ( protocol ) ) throw new ArgumentException ( $"Protocol {protocol} already added!" );
 
             m_protocolHandlers.Add ( protocol, handlers );
+        }
+
+        public void AddAttachBehaviourFactory ( string name, Func<IntPtr, SciterEventHandler> handler ) {
+            if ( m_attachBehaviourFactories.ContainsKey ( name ) ) throw new ArgumentException ( $"Factory with name {name} already attached!" );
+            if ( handler == null ) throw new ArgumentException ( $"Parameter handler contains null!" );
+
+            m_attachBehaviourFactories.Add ( name, handler );
         }
 
         private uint SciterHostCallback ( IntPtr pns, IntPtr callbackParam ) {
@@ -83,10 +90,13 @@ namespace EmptyFlow.SciterAPI {
                     return 0;
                 case SciterCallbackNotificationCode.SC_ATTACH_BEHAVIOR:
                     var behaviourStructure = Marshal.PtrToStructure<SciterCallbackNotificationAttachBehaviour> ( pns );
-                    var elementProc = m_attachBehaviourAction ( behaviourStructure.behaviorName, behaviourStructure.element );
-                    if ( elementProc != null ) {
-                        behaviourStructure.elementProc = Marshal.GetFunctionPointerForDelegate ( elementProc );
-                        behaviourStructure.elementTag = 1;
+                    var behaviourName = Marshal.PtrToStringUTF8 ( behaviourStructure.behaviorName ) ?? "";
+                    var eventHandler = m_attachBehaviourAction ( behaviourName, behaviourStructure.element );
+                    if ( eventHandler != null ) {
+                        behaviourStructure.elementProc = Marshal.GetFunctionPointerForDelegate ( eventHandler.InnerDelegate );
+                        behaviourStructure.elementTag = 1; // Is need customization???
+                        Marshal.StructureToPtr ( behaviourStructure, pns, true );
+                        m_host.AddEventHandler ( eventHandler, fromFactory: true );
                         return 1;
                     }
                     return 0;
@@ -134,12 +144,11 @@ namespace EmptyFlow.SciterAPI {
         private void EmptyNotificationPostedAction ( IntPtr wparam, IntPtr lparam, IntPtr lreturn ) {
         }
 
-        private ElementEventProc? DefaultAttachedBahaviourAction ( string behaviourName, IntPtr element ) {
+        private SciterEventHandler? DefaultAttachedBahaviourAction ( string behaviourName, IntPtr element ) {
             if ( m_attachBehaviourFactories.ContainsKey ( behaviourName ) ) {
                 try {
                     var handler = m_attachBehaviourFactories[behaviourName] ( element );
-                    var handlerDelegate = m_host.AddElementEventHandler ( handler );
-                    return handlerDelegate;
+                    return handler;
                 } catch ( Exception e ) {
                     Console.WriteLine ( $"Error while create behaviour handler with name {behaviourName}: " + e.Message );
                     return null;
@@ -148,68 +157,6 @@ namespace EmptyFlow.SciterAPI {
             return null;
         }
 
-        /*
-         virtual LRESULT on_load_data(LPSCN_LOAD_DATA pnmld)
-      {
-        LPCBYTE pb = 0; UINT cb = 0;
-        aux::wchars wu = aux::chars_of(pnmld->uri);
-
-        if(wu.like(WSTR("res:*")))
-        {
-          // then by calling possibly overloaded load_resource_data method
-          if (static_cast<BASE*>(this)->load_resource_data(wu.start + 4, pb, cb))
-            ::SciterDataReady(pnmld->hwnd, pnmld->uri, pb, cb);
-          else {
-#ifdef SDEBUG
-#ifdef CPP11
-            auto console = debug_output::instance();
-            if (console)
-              console->printf("LOAD FAILURE:%S\n", pnmld->uri);
-#endif
-#endif
-            return LOAD_DISCARD;
-          }
-        } else if(wu.like(WSTR("this://app/*"))) {
-          // try to get them from archive first
-          aux::bytes adata = archive::instance().get(wu.start+11);
-          if (adata.length)
-            ::SciterDataReady(pnmld->hwnd, pnmld->uri, adata.start, UINT(adata.length));
-          else {
-#ifdef SDEBUG
-#ifdef CPP11
-            auto console = debug_output::instance();
-            if (console)
-              console->printf("LOAD FAILURE:%S\n", pnmld->uri);
-#endif
-#endif
-            return LOAD_DISCARD;
-          }
-        }
-        return LOAD_OK;
-      }
-         */
-
-        /*
-
-  LRESULT handle_notification(LPSCITER_CALLBACK_NOTIFICATION pnm)
-  {
-    // Crack and call appropriate method
-
-    // here are all notifiactions
-    switch(pnm->code)
-    {
-      case SC_LOAD_DATA:          return static_cast<BASE*>(this)->on_load_data((LPSCN_LOAD_DATA) pnm);
-      case SC_DATA_LOADED:        return static_cast<BASE*>(this)->on_data_loaded((LPSCN_DATA_LOADED)pnm);
-      //case SC_DOCUMENT_COMPLETE: return on_document_complete();
-      case SC_ATTACH_BEHAVIOR:    return static_cast<BASE*>(this)->on_attach_behavior((LPSCN_ATTACH_BEHAVIOR)pnm );
-      case SC_ENGINE_DESTROYED:   return static_cast<BASE*>(this)->on_engine_destroyed();
-      case SC_POSTED_NOTIFICATION: return static_cast<BASE*>(this)->on_posted_notification((LPSCN_POSTED_NOTIFICATION)pnm);
-      case SC_GRAPHICS_CRITICAL_FAILURE: static_cast<BASE*>(this)->on_graphics_critical_failure(); return 0;
-    }
-    return 0;
-  }
-
-         */
 
     }
 

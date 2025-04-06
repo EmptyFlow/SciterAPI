@@ -114,8 +114,13 @@ namespace EmptyFlow.SciterAPI {
             var code = m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_LOOP, IntPtr.Zero, IntPtr.Zero );
 
             // detach window handler
-            m_basicApi.SciterWindowDetachEventHandler ( m_mainWindow, m_windowHandlers[m_mainWindow].InnerDelegate, 1 );
-            m_windowHandlers.Remove ( m_mainWindow );
+            if ( m_windowHandlers.ContainsKey ( m_mainWindow ) ) {
+                m_basicApi.SciterWindowDetachEventHandler ( m_mainWindow, m_windowHandlers[m_mainWindow].InnerDelegate, 1 );
+                m_windowHandlers.Remove ( m_mainWindow );
+            }
+
+            // remove event handlers
+            if ( m_eventHandlers.Any () ) m_eventHandlers.Clear ();
 
             // deinitialize engine
             m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_SHUTDOWN, IntPtr.Zero, IntPtr.Zero );
@@ -191,13 +196,19 @@ namespace EmptyFlow.SciterAPI {
             m_basicApi.SciterWindowAttachEventHandler ( m_mainWindow, handler.InnerDelegate, 1, (uint) EventBehaviourGroups.HandleAll );
         }
 
-        public ElementEventProc AddElementEventHandler ( SciterEventHandler handler ) {
-            if ( handler.SubscribedElement == IntPtr.Zero ) throw new ArgumentException ( "Passed element inside property SubscribedElement must be non IntPtr.Zero!" );
+        /// <summary>
+        /// Add event handler and optionally attach to element.
+        /// </summary>
+        /// <param name="handler">Handler that will be attached to element.</param>
+        /// <param name="fromFactory">If parameter is true which mean </param>
+        /// <exception cref="ArgumentException"></exception>
+        public void AddEventHandler ( SciterEventHandler handler, bool fromFactory = false ) {
+            if ( handler.SubscribedElement == IntPtr.Zero ) throw new ArgumentException ( "Passed event handler with non attached element, you need to pass non IntPtr.Zero parameter to constructor!" );
+
+            if ( m_eventHandlers.Contains ( handler ) ) return;
 
             m_eventHandlers.Add ( handler );
-            m_basicApi.SciterAttachEventHandler ( handler.SubscribedElement, handler.InnerDelegate, 1 );
-
-            return handler.InnerDelegate;
+            if ( !fromFactory ) m_basicApi.SciterAttachEventHandler ( handler.SubscribedElement, handler.InnerDelegate, 1 );
         }
 
         /// <summary>
