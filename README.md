@@ -11,6 +11,10 @@ C# binding and low-level helpers for Sciter library
 * ~~Element(s) selector~~
 * ~~Get/Set Element Text/Html~~
 * ~~Event Handler as class with overrided methods~~
+* Helpers for Sciter Node API
+* Get/Set Element Attributes
+* Get/Set Variables
+* Helpers for Scriter Value API
 * Binding for Graphics API
 * Binding for Request API
 * Support SOM mapping
