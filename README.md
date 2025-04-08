@@ -12,7 +12,7 @@ You can check out more about Sciter [here](https://sciter.com/).
 * ~~Element(s) selector~~
 * ~~Get/Set Element Text/Html~~
 * ~~Event Handler as class with overrided methods~~
-* Get/Set Element Attributes
+* ~~Get/Set Element Attributes~~
 * Helpers for Sciter Node API
 * Get/Set Variables
 * Helpers for Scriter Value API
