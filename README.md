@@ -1,5 +1,5 @@
 # SciterAPI
-C# binding and low-level helpers for Sciter HTML/CSS/JS rendering library.
+C# binding and low-level helpers for Sciter HTML/CSS/JS rendering library.  
 You can check out more about Sciter [here](https://sciter.com/).
 
 ### Roadmap
