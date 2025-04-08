@@ -274,6 +274,135 @@ namespace EmptyFlow.SciterAPI.Tests {
             Assert.True ( handlerFired );
         }
 
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_GetElementAttribute_Exists () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow (300, 300);
+            host.Callbacks.AddProtocolHandler (
+                "embedded://",
+                (
+                    path => {
+                        return Encoding.UTF8.GetBytes (
+""""
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
+    <body>
+        <span id="world">Hello world!!!</span>
+    </body>
+</html>
+
+""""
+                        );
+                    }
+                )
+            );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( "embedded://test.html" );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var element = host.MakeCssSelector ( "#world" ).Single ();
+                var id = host.GetElementAttribute ( element, "id" );
+                Assert.Equal ( "world", id );
+                host.CloseMainWindow ();
+            }
+        }
+
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_GetElementAttribute_NotExists () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow ( 300, 300 );
+            host.Callbacks.AddProtocolHandler (
+                "embedded://",
+                (
+                    path => {
+                        return Encoding.UTF8.GetBytes (
+""""
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
+    <body>
+        <span id="world">Hello world!!!</span>
+    </body>
+</html>
+
+""""
+                        );
+                    }
+                )
+            );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( "embedded://test.html" );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var element = host.MakeCssSelector ( "#world" ).Single ();
+                var value = host.GetElementAttribute ( element, "notexists" );
+                Assert.Empty ( value );
+                host.CloseMainWindow ();
+            }
+        }
+
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_SetElementAttribute () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow ( 300, 300 );
+            host.Callbacks.AddProtocolHandler (
+                "embedded://",
+                (
+                    path => {
+                        return Encoding.UTF8.GetBytes (
+""""
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
+    <body>
+        <span id="world" test="bruher">Hello world!!!</span>
+    </body>
+</html>
+
+""""
+                        );
+                    }
+                )
+            );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( "embedded://test.html" );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var element = host.MakeCssSelector ( "#world" ).Single ();
+                var value = host.GetElementAttribute ( element, "test" );
+                Assert.Equal ( "bruher", value );
+                host.SetElementAttribute ( element, "test", "muher" );
+                var newValue = host.GetElementAttribute ( element, "test" );
+                Assert.Equal ( "muher", newValue );
+                host.CloseMainWindow ();
+            }
+        }
+
     }
 
     public class DocumentReadyHandler : SciterEventHandler {
