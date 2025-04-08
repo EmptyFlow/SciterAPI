@@ -31,11 +31,8 @@ namespace EmptyFlow.SciterAPI {
             m_notificationPostedAction = EmptyNotificationPostedAction;
             m_attachBehaviourAction = DefaultAttachedBahaviourAction;
 
-            m_sciterApiStruct = host.OriginalApi;
             m_host = host;
             m_sciterHostCallback = SciterHostCallback;
-
-            m_sciterApiStruct.SciterSetCallback ( m_host.MainWindow, m_sciterHostCallback, 1 );
         }
 
         public Action<string, uint, uint> LoadedDataAction {
@@ -61,6 +58,11 @@ namespace EmptyFlow.SciterAPI {
         public Func<string, IntPtr, SciterEventHandler?> AttachBehaviourAction {
             get => m_attachBehaviourAction;
             set => m_attachBehaviourAction = value;
+        }
+
+        public void RegisterCallback () {
+            m_sciterApiStruct = m_host.OriginalApi;
+            m_sciterApiStruct.SciterSetCallback ( m_host.MainWindow, m_sciterHostCallback, 1 );
         }
 
         public void AddProtocolHandler ( string protocol, Func<string, byte[]> handlers ) {

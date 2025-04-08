@@ -20,7 +20,11 @@ namespace EmptyFlow.SciterAPI {
 
         private string VersionOfLibrary = "1.0.0.0";
 
-        SciterAPIGlobalCallbacks? m_callbacks = null;
+        readonly SciterAPIGlobalCallbacks m_callbacks;
+
+        public SciterAPIHost () {
+            m_callbacks = new SciterAPIGlobalCallbacks ( this );
+        }
 
         public void LoadAPI () {
             m_apiPointer = SciterAPI ();
@@ -48,7 +52,7 @@ namespace EmptyFlow.SciterAPI {
 
         public SciterApiStruct OriginalApi => m_basicApi;
 
-        public SciterAPIGlobalCallbacks? Callbacks => m_callbacks;
+        public SciterAPIGlobalCallbacks Callbacks => m_callbacks;
 
         public string ClassName => m_className;
 
@@ -63,7 +67,7 @@ namespace EmptyFlow.SciterAPI {
             return 0;
         }
 
-        public void CreateMainWindow ( string htmlPath, int width, int height, bool enableDebug = false, bool enableFeature = false, Action<SciterAPIGlobalCallbacks>? adjustCallbacks = null ) {
+        public void CreateMainWindow ( int width, int height, bool enableDebug = false, bool enableFeature = false ) {
             if ( enableDebug ) m_basicApi.SciterSetOption ( IntPtr.Zero, RtOptions.SCITER_SET_DEBUG_MODE, new IntPtr ( 1 ) );
             if ( enableFeature ) m_basicApi.SciterSetOption ( IntPtr.Zero, RtOptions.SCITER_SET_SCRIPT_RUNTIME_FEATURES, new IntPtr ( (int) DefaultRuntimeFeatures ) );
 
@@ -90,11 +94,7 @@ namespace EmptyFlow.SciterAPI {
                 );
             }
 
-            m_callbacks = new SciterAPIGlobalCallbacks ( this );
-
-            if ( adjustCallbacks != null ) adjustCallbacks.Invoke ( m_callbacks );
-
-            m_basicApi.SciterLoadFile ( m_mainWindow, htmlPath );
+            m_callbacks.RegisterCallback ();
         }
 
         public void LoadFile ( string htmlPath ) {
@@ -177,6 +177,20 @@ namespace EmptyFlow.SciterAPI {
 
         public void SetElementText ( IntPtr element, string text ) {
             m_basicApi.SciterSetElementText ( element, text, (uint) text.Length );
+        }
+
+        public string GetElementAttribute ( IntPtr element, string name ) {
+            var strings = new List<string> ();
+            lpcwstReceiver callback = ( IntPtr bytes, uint num_bytes, IntPtr param ) => {
+                strings.Add ( Marshal.PtrToStringUni ( bytes, Convert.ToInt32 ( num_bytes ) ) );
+            };
+            m_basicApi.SciterGetAttributeByNameCb ( element, name, callback, 1 );
+
+            return string.Join ( "", strings );
+        }
+
+        public void SetElementAttribute ( IntPtr element, string name, string value ) {
+            m_basicApi.SciterSetAttributeByName ( element, name, value );
         }
 
         public void SetElementHtml ( IntPtr element, string text, SetElementHtml insertMode ) {

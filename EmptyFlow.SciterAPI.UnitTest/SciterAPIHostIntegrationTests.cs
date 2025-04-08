@@ -23,7 +23,8 @@ namespace EmptyFlow.SciterAPI.Tests {
             var host = new SciterAPIHost ();
             host.LoadAPI ();
             var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
-            host.CreateMainWindow ( path, 300, 300 );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( path );
             host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
 
             //Act
@@ -44,7 +45,8 @@ namespace EmptyFlow.SciterAPI.Tests {
             var host = new SciterAPIHost ();
             host.LoadAPI ();
             var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelectorFewItems.html" );
-            host.CreateMainWindow ( path, 300, 300 );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( path );
             host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
 
             //Act
@@ -65,7 +67,8 @@ namespace EmptyFlow.SciterAPI.Tests {
             var host = new SciterAPIHost ();
             host.LoadAPI ();
             var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
-            host.CreateMainWindow ( path, 300, 300 );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( path );
             host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
             var result = "";
 
@@ -88,7 +91,8 @@ namespace EmptyFlow.SciterAPI.Tests {
             var host = new SciterAPIHost ();
             host.LoadAPI ();
             var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
-            host.CreateMainWindow ( path, 300, 300 );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( path );
             host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
             var result = "";
 
@@ -112,7 +116,8 @@ namespace EmptyFlow.SciterAPI.Tests {
             var host = new SciterAPIHost ();
             host.LoadAPI ();
             var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
-            host.CreateMainWindow ( path, 300, 300 );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( path );
             host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
 
             //Act
@@ -134,7 +139,8 @@ namespace EmptyFlow.SciterAPI.Tests {
             var host = new SciterAPIHost ();
             host.LoadAPI ();
             var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
-            host.CreateMainWindow ( path, 300, 300 );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( path );
             host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
 
             //Act
@@ -156,7 +162,8 @@ namespace EmptyFlow.SciterAPI.Tests {
             var host = new SciterAPIHost ();
             host.LoadAPI ();
             var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
-            host.CreateMainWindow ( path, 300, 300 );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( path );
             host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
 
             //Act
@@ -178,15 +185,12 @@ namespace EmptyFlow.SciterAPI.Tests {
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
             host.LoadAPI ();
-            host.CreateMainWindow (
-                "embedded://test.html",
-                300,
-                300,
-                adjustCallbacks: ( callbacks ) => {
-                    callbacks.AddProtocolHandler (
-                        "embedded://",
-                        ( path ) => {
-                            return Encoding.UTF8.GetBytes (
+            host.CreateMainWindow (300, 300);
+            host.Callbacks.AddProtocolHandler (
+                "embedded://",
+                (
+                    path => {
+                        return Encoding.UTF8.GetBytes (
 """"
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -196,11 +200,13 @@ namespace EmptyFlow.SciterAPI.Tests {
     </body>
 </html>
 
-"""" );
-                        }
-                    );
-                }
+""""
+                        );
+                    }
+                )
             );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( "embedded://test.html" );
             host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
 
             //Act
@@ -231,15 +237,11 @@ namespace EmptyFlow.SciterAPI.Tests {
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
             host.LoadAPI ();
-            host.CreateMainWindow (
-                "embedded://test.html",
-                300,
-                300,
-                adjustCallbacks: ( callbacks ) => {
-                    callbacks.AddProtocolHandler (
-                        "embedded://",
-                        ( path ) => {
-                            return Encoding.UTF8.GetBytes (
+            host.CreateMainWindow ( 300, 300 );
+            host.Callbacks.AddProtocolHandler (
+                "embedded://",
+                ( path ) => {
+                    return Encoding.UTF8.GetBytes (
 """"
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -252,16 +254,15 @@ namespace EmptyFlow.SciterAPI.Tests {
 """" );
                         }
                     );
-                    callbacks.AttachBehaviourAction = ( name, element ) => {
-                        newSciterEventHandler = new SciterAPIHost_Completed_Callbacks_AttachCustomBehaviorHit ( element, host );
-                        newSciterEventHandler.AfterRegisterEventFired = () => {
-                            handlerFired = true;
-                            host.CloseMainWindow ();
-                        };
-                        return newSciterEventHandler;
-                    };
-                }
-            );
+            host.Callbacks.AttachBehaviourAction = ( name, element ) => {
+                newSciterEventHandler = new SciterAPIHost_Completed_Callbacks_AttachCustomBehaviorHit ( element, host );
+                newSciterEventHandler.AfterRegisterEventFired = () => {
+                    handlerFired = true;
+                    host.CloseMainWindow ();
+                };
+                return newSciterEventHandler;
+            };
+            host.LoadFile ( "embedded://test.html" );
 
             //Act
             host.Process ();

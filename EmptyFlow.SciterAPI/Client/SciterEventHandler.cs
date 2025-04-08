@@ -95,7 +95,6 @@ namespace EmptyFlow.SciterAPI {
                     break;
                 case EventBehaviourGroups.HANDLE_BEHAVIOR_EVENT:
                     var behaviourArguments = Marshal.PtrToStructure<BehaviourEventsParameters> ( parameters );
-                    Console.WriteLine ( "Bahaviour" + behaviourArguments.cmd.ToString () );
                     BehaviourEvent (
                         behaviourArguments.cmd,
                         behaviourArguments.heTarget,

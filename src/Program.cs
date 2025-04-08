@@ -8,8 +8,9 @@ var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.2/samples/vue/hello-vue.ht
 //var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.1/samples.sciter/audio/test-basic.htm";
 //var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.0.4/samples.webgl/basic/1-cube-lights/index.htm";
 //var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.0.4/samples.webgl/threejs/1-hello-world.htm";
-host.CreateMainWindow ( path, 300, 300, enableDebug: true, enableFeature: true );
+host.CreateMainWindow ( 300, 300, enableDebug: true, enableFeature: true );
 host.AddWindowEventHandler ( new MyWindowEventHandler ( host ) );
+host.LoadFile ( path );
 host.Process ();
 
 
@@ -23,6 +24,12 @@ public class MyWindowEventHandler : SciterEventHandler {
             var elements = Host.MakeCssSelector ( "#app" );
             var appDiv = elements.First ();
             Host.SetElementHtml ( appDiv, "<b>Bold Text!!!!!!!!!!!!!!</b>", SetElementHtml.SIH_REPLACE_CONTENT );
+        }
+    }
+
+    public override void MouseEvent ( MouseEvents command, SciterPoint elementRelated, SciterPoint ViewRelated, KeyboardStates keyboardStates, DraggingType draggingMode, CursorType cursorType, nint target, nint dragging, bool is_on_icon, uint button_state ) {
+        if (command == MouseEvents.MOUSE_CLICK) {
+            Console.WriteLine ( "Mouse Event!!!!" );
         }
     }
 
