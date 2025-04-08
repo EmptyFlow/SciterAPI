@@ -1,5 +1,6 @@
 # SciterAPI
-C# binding and low-level helpers for Sciter library
+C# binding and low-level helpers for Sciter HTML/CSS/JS rendering library.
+You can check out more about Sciter [here](https://sciter.com/).
 
 ### Roadmap
 
@@ -11,8 +12,8 @@ C# binding and low-level helpers for Sciter library
 * ~~Element(s) selector~~
 * ~~Get/Set Element Text/Html~~
 * ~~Event Handler as class with overrided methods~~
-* Helpers for Sciter Node API
 * Get/Set Element Attributes
+* Helpers for Sciter Node API
 * Get/Set Variables
 * Helpers for Scriter Value API
 * Binding for Graphics API
