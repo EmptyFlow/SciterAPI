@@ -403,6 +403,54 @@ namespace EmptyFlow.SciterAPI.Tests {
             }
         }
 
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_GetElementAttributeNames () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow ( 300, 300 );
+            host.Callbacks.AddProtocolHandler (
+                "embedded://",
+                (
+                    path => {
+                        return Encoding.UTF8.GetBytes (
+""""
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
+    <body>
+        <span id="world" attribute1 attribute2="2" attribute3 attribute4="4" attribute5>Hello world!!!</span>
+    </body>
+</html>
+
+""""
+                        );
+                    }
+                )
+            );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( "embedded://test.html" );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var element = host.MakeCssSelector ( "#world" ).Single ();
+                var names = host.GetElementAttributeNames ( element );
+                host.CloseMainWindow ();
+                Assert.Equal ( 6, names.Count () );
+                Assert.Equal ( "id", names.ElementAt ( 0 ) );
+                Assert.Equal ( "attribute1", names.ElementAt ( 1 ) );
+                Assert.Equal ( "attribute2", names.ElementAt ( 2 ) );
+                Assert.Equal ( "attribute3", names.ElementAt ( 3 ) );
+                Assert.Equal ( "attribute4", names.ElementAt ( 4 ) );
+                Assert.Equal ( "attribute5", names.ElementAt ( 5 ) );
+            }
+        }
+
     }
 
     public class DocumentReadyHandler : SciterEventHandler {

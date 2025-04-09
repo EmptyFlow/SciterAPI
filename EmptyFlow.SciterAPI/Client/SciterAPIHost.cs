@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using EmptyFlow.SciterAPI.Structs;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace EmptyFlow.SciterAPI {
@@ -183,6 +184,23 @@ namespace EmptyFlow.SciterAPI {
             m_basicApi.SciterGetAttributeByNameCb ( element, name, callback, 1 );
 
             return string.Join ( "", strings );
+        }
+
+        public IEnumerable<string> GetElementAttributeNames ( IntPtr element ) {
+            m_basicApi.SciterGetAttributeCount ( element, out var count );
+
+            if ( count <= 0 ) return Enumerable.Empty<string> ();
+
+            var result = new List<string> ();
+
+            for ( uint i = 0; i < count; i++ ) {
+                var receiver = new LPCStrReceiverCallback ();
+                m_basicApi.SciterGetNthAttributeNameCb ( element, i, receiver.Callback, 1 );
+
+                result.Add ( receiver.Result.ToString () );
+            }
+
+            return result;
         }
 
         public void SetElementAttribute ( IntPtr element, string name, string value ) {
