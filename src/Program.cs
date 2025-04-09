@@ -16,7 +16,7 @@ host.Process ();
 
 public class MyWindowEventHandler : SciterEventHandler {
 
-    public MyWindowEventHandler ( SciterAPIHost host ) : base ( IntPtr.Zero, host ) {
+    public MyWindowEventHandler ( SciterAPIHost host ) : base ( host.MainWindow, host, SciterEventHandlerMode.Window ) {
     }
 
     public override void BehaviourEvent ( BehaviourEvents cmd, nint heTarget, nint he, nint reason, SciterValue data, string name ) {
@@ -28,7 +28,7 @@ public class MyWindowEventHandler : SciterEventHandler {
     }
 
     public override void MouseEvent ( MouseEvents command, SciterPoint elementRelated, SciterPoint ViewRelated, KeyboardStates keyboardStates, DraggingType draggingMode, CursorType cursorType, nint target, nint dragging, bool is_on_icon, uint button_state ) {
-        if (command == MouseEvents.MOUSE_CLICK) {
+        if ( command == MouseEvents.MOUSE_CLICK ) {
             Console.WriteLine ( "Mouse Event!!!!" );
         }
     }

@@ -7,6 +7,8 @@ namespace EmptyFlow.SciterAPI {
 
         private IntPtr m_subscribedElement = IntPtr.Zero;
 
+        private SciterEventHandlerMode m_mode = SciterEventHandlerMode.Element;
+
         private SciterAPIHost m_host;
 
         protected ElementEventProc m_innerDelegate;
@@ -15,12 +17,15 @@ namespace EmptyFlow.SciterAPI {
 
         public IntPtr SubscribedElement => m_subscribedElement;
 
+        public SciterEventHandlerMode Mode => m_mode;
+
         public ElementEventProc InnerDelegate => m_innerDelegate;
 
-        public SciterEventHandler ( IntPtr element, SciterAPIHost host ) {
-            m_subscribedElement = element;
+        public SciterEventHandler ( IntPtr relatedThing, SciterAPIHost host, SciterEventHandlerMode mode ) {
+            m_subscribedElement = relatedThing;
             m_host = host ?? throw new ArgumentNullException ( nameof ( host ) );
             m_innerDelegate = SciterHandleEvent;
+            m_mode = mode;
         }
 
         private bool SciterHandleEvent ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) {
@@ -115,7 +120,7 @@ namespace EmptyFlow.SciterAPI {
                         scriptValues.Add ( Marshal.PtrToStructure<SciterValue> ( ptr ) );
                     }
 
-                    var resultValue = ScriptMethodCall ( Marshal.PtrToStringAnsi ( scriptArguments.name ), scriptValues );
+                    var resultValue = ScriptMethodCall ( Marshal.PtrToStringAnsi ( scriptArguments.name ) ?? "", scriptValues );
                     var resultValuePtr = IntPtr.Add ( parameters, resultOffset.ToInt32 () );
                     Marshal.StructureToPtr ( resultValue, resultValuePtr, false );
                     break;
@@ -126,6 +131,11 @@ namespace EmptyFlow.SciterAPI {
                 case EventBehaviourGroups.HANDLE_INITIALIZATION:
                     var initializationArguments = Marshal.PtrToStructure<InitializationParameters> ( parameters );
                     HandleInitializationEvent ( initializationArguments.cmd );
+
+                    if ( initializationArguments.cmd == InitializationEvents.BEHAVIOR_DETACH ) {
+                        //we need to handle behaviour detaching and remove event handler from attached list in host
+                        m_host.RemoveEventHandler ( this );
+                    }
                     return true;
             }
 
@@ -193,16 +203,12 @@ namespace EmptyFlow.SciterAPI {
 
         }
 
-        public virtual SciterValue ScriptMethodCall ( string? v, IEnumerable<SciterValue> arguments ) {
+        public virtual SciterValue ScriptMethodCall ( string name, IEnumerable<SciterValue> arguments ) {
             var value = new SciterValue ();
             return value;
         }
 
         public virtual void HandleInitializationEvent ( InitializationEvents cmd ) {
-            if ( cmd == InitializationEvents.BEHAVIOR_DETACH ) {
-                //we need to handle behaviour detaching and remove event handler from attached list in host
-                m_host.RemoveEventHandler ( this );
-            }
         }
 
     }

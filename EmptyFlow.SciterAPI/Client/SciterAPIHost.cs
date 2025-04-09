@@ -16,6 +16,8 @@ namespace EmptyFlow.SciterAPI {
 
         private IntPtr m_mainWindow = IntPtr.Zero;
 
+        private List<SciterEventHandler> m_eventHandlers = new List<SciterEventHandler> ();
+
         SciterApiStruct m_basicApi;
 
         private string VersionOfLibrary = "1.0.0.0";
@@ -113,12 +115,6 @@ namespace EmptyFlow.SciterAPI {
             // run loop for waiting close all windows
             var code = m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_LOOP, IntPtr.Zero, IntPtr.Zero );
 
-            // detach window handler
-            if ( m_windowHandlers.ContainsKey ( m_mainWindow ) ) {
-                m_basicApi.SciterWindowDetachEventHandler ( m_mainWindow, m_windowHandlers[m_mainWindow].InnerDelegate, 1 );
-                m_windowHandlers.Remove ( m_mainWindow );
-            }
-
             // remove event handlers
             if ( m_eventHandlers.Any () ) m_eventHandlers.Clear ();
 
@@ -198,14 +194,14 @@ namespace EmptyFlow.SciterAPI {
             m_basicApi.SciterSetElementHtml ( element, bytes, (uint) bytes.Length, insertMode );
         }
 
-        private List<SciterEventHandler> m_eventHandlers = new List<SciterEventHandler> ();
-
-        private Dictionary<nint, SciterEventHandler> m_windowHandlers = new Dictionary<nint, SciterEventHandler> ();
-
+        /// <summary>
+        /// Add <see cref="EventHandler"/> related with window.
+        /// All events from all elements will be fired in this event handler.
+        /// </summary>
+        /// <param name="handler">Event Handler.</param>
+        /// <exception cref="ArgumentException">Event handler must be with mode <see cref="SciterEventHandlerMode.Window"/>.</exception>
         public void AddWindowEventHandler ( SciterEventHandler handler ) {
-            if ( handler.SubscribedElement != IntPtr.Zero ) throw new ArgumentException ( "Passed element inside property SubscribedElement must be not IntPtr.Zero!" );
-
-            m_windowHandlers.Add ( m_mainWindow, handler );
+            if ( handler.Mode != SciterEventHandlerMode.Window ) throw new ArgumentException ( "Passed EventHandler must be with mode = SciterEventHandlerMode.Window!" );
 
             m_basicApi.SciterWindowAttachEventHandler ( m_mainWindow, handler.InnerDelegate, 1, (uint) EventBehaviourGroups.HandleAll );
         }
@@ -217,7 +213,7 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="fromFactory">If parameter is true which mean </param>
         /// <exception cref="ArgumentException"></exception>
         public void AddEventHandler ( SciterEventHandler handler, bool fromFactory = false ) {
-            if ( handler.SubscribedElement == IntPtr.Zero ) throw new ArgumentException ( "Passed event handler with non attached element, you need to pass non IntPtr.Zero parameter to constructor!" );
+            if ( handler.Mode != SciterEventHandlerMode.Element ) throw new ArgumentException ( "Passed EventHandler must be with mode = SciterEventHandlerMode.Element!" );
 
             if ( m_eventHandlers.Contains ( handler ) ) return;
 

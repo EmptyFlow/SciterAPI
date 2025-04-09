@@ -185,7 +185,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
             host.LoadAPI ();
-            host.CreateMainWindow (300, 300);
+            host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
                 (
@@ -219,8 +219,8 @@ namespace EmptyFlow.SciterAPI.Tests {
             }
         }
 
-        public class SciterAPIHost_Completed_Callbacks_AttachCustomBehaviorHit ( IntPtr element, SciterAPIHost host ) : SciterEventHandler(element, host) {
-            
+        public class SciterAPIHost_Completed_Callbacks_AttachCustomBehaviorHit ( IntPtr element, SciterAPIHost host ) : SciterEventHandler ( element, host, SciterEventHandlerMode.Element ) {
+
             public Action? AfterRegisterEventFired { get; set; }
 
             public override void AfterRegisterEvent () {
@@ -252,7 +252,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 </html>
 
 """" );
-                        }
+                }
                     );
             host.Callbacks.AttachBehaviourAction = ( name, element ) => {
                 newSciterEventHandler = new SciterAPIHost_Completed_Callbacks_AttachCustomBehaviorHit ( element, host );
@@ -280,7 +280,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
             host.LoadAPI ();
-            host.CreateMainWindow (300, 300);
+            host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
                 (
@@ -409,7 +409,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 
         private Action m_handler;
 
-        public DocumentReadyHandler ( Action handler, SciterAPIHost host ) : base ( IntPtr.Zero, host ) {
+        public DocumentReadyHandler ( Action handler, SciterAPIHost host ) : base ( IntPtr.Zero, host, SciterEventHandlerMode.Window ) {
             m_handler = handler;
         }
 
