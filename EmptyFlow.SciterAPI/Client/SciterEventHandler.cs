@@ -7,11 +7,15 @@ namespace EmptyFlow.SciterAPI {
 
         private IntPtr m_subscribedElement = IntPtr.Zero;
 
+        private IntPtr m_processedElement = IntPtr.Zero;
+
         private SciterEventHandlerMode m_mode = SciterEventHandlerMode.Element;
 
         private SciterAPIHost m_host;
 
-        protected ElementEventProc m_innerDelegate;
+        private ElementEventProc m_innerDelegate;
+
+        protected IntPtr ProcessedElement => m_processedElement;
 
         public SciterAPIHost Host => m_host;
 
@@ -29,6 +33,8 @@ namespace EmptyFlow.SciterAPI {
         }
 
         private bool SciterHandleEvent ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) {
+            if ( m_mode == SciterEventHandlerMode.Window ) m_processedElement = he; // for a window it is necessary to understand from which element the event was received
+
             var parameters = prms;
 
             switch ( (EventBehaviourGroups) evtg ) {

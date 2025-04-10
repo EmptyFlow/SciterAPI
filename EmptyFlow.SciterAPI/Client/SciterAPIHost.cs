@@ -1,4 +1,5 @@
-﻿using EmptyFlow.SciterAPI.Structs;
+﻿using EmptyFlow.SciterAPI.Enums;
+using EmptyFlow.SciterAPI.Structs;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -203,6 +204,24 @@ namespace EmptyFlow.SciterAPI {
             return result;
         }
 
+        public bool GetElementHasAttribute ( IntPtr element, string name, CaseInsensitiveMode caseSensitiveMode = CaseInsensitiveMode.CaseInsensitive ) {
+            m_basicApi.SciterGetAttributeCount ( element, out var count );
+
+            if ( count <= 0 ) return false;
+
+            for ( uint i = 0; i < count; i++ ) {
+                var receiver = new LPCStrReceiverCallback ();
+                m_basicApi.SciterGetNthAttributeNameCb ( element, i, receiver.Callback, 1 );
+
+                var attributeName = receiver.Result.ToString ();
+                if ( caseSensitiveMode == CaseInsensitiveMode.CaseInsensitive ) attributeName = attributeName.ToLowerInvariant ();
+
+                if ( attributeName == name ) return true;
+            }
+
+            return false;
+        }
+
         public IDictionary<string, string> GetElementAttributes ( IntPtr element ) {
             m_basicApi.SciterGetAttributeCount ( element, out var count );
 
@@ -220,7 +239,7 @@ namespace EmptyFlow.SciterAPI {
                 m_basicApi.SciterGetNthAttributeNameCb ( element, i, nameReceiver.Callback, 1 );
                 m_basicApi.SciterGetNthAttributeValueCb ( element, i, valueReceiver.Callback, 1 );
 
-                result.Add ( nameReceiver.Result.ToString (), valueReceiver.Result.ToString() );
+                result.Add ( nameReceiver.Result.ToString (), valueReceiver.Result.ToString () );
             }
 
             return result;

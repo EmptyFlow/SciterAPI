@@ -510,6 +510,90 @@ namespace EmptyFlow.SciterAPI.Tests {
             }
         }
 
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_GetElementHasAttribute_Founded () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow ( 300, 300 );
+            host.Callbacks.AddProtocolHandler (
+                "embedded://",
+                (
+                    path => {
+                        return Encoding.UTF8.GetBytes (
+""""
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
+    <body>
+        <span id="world" attribute1>Hello world!!!</span>
+    </body>
+</html>
+
+""""
+                        );
+                    }
+                )
+            );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( "embedded://test.html" );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var element = host.MakeCssSelector ( "#world" ).Single ();
+                var result = host.GetElementHasAttribute ( element, "attribute1" );
+                host.CloseMainWindow ();
+                Assert.True ( result );
+            }
+        }
+
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_GetElementHasAttribute_NotFounded () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow ( 300, 300 );
+            host.Callbacks.AddProtocolHandler (
+                "embedded://",
+                (
+                    path => {
+                        return Encoding.UTF8.GetBytes (
+""""
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
+    <body>
+        <span id="world" attribute2>Hello world!!!</span>
+    </body>
+</html>
+
+""""
+                        );
+                    }
+                )
+            );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( "embedded://test.html" );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var element = host.MakeCssSelector ( "#world" ).Single ();
+                var result = host.GetElementHasAttribute ( element, "attribute1" );
+                host.CloseMainWindow ();
+                Assert.False ( result );
+            }
+        }
+
     }
 
     public class DocumentReadyHandler : SciterEventHandler {
