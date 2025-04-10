@@ -203,6 +203,29 @@ namespace EmptyFlow.SciterAPI {
             return result;
         }
 
+        public IDictionary<string, string> GetElementAttributes ( IntPtr element ) {
+            m_basicApi.SciterGetAttributeCount ( element, out var count );
+
+            if ( count <= 0 ) return new Dictionary<string, string> ();
+
+            var result = new Dictionary<string, string> ();
+
+            var nameReceiver = new LPCStrReceiverCallback ();
+            var valueReceiver = new LPCWStrReceiverCallback ();
+
+            for ( uint i = 0; i < count; i++ ) {
+                nameReceiver.Clear ();
+                valueReceiver.Clear ();
+
+                m_basicApi.SciterGetNthAttributeNameCb ( element, i, nameReceiver.Callback, 1 );
+                m_basicApi.SciterGetNthAttributeValueCb ( element, i, valueReceiver.Callback, 1 );
+
+                result.Add ( nameReceiver.Result.ToString (), valueReceiver.Result.ToString() );
+            }
+
+            return result;
+        }
+
         public void SetElementAttribute ( IntPtr element, string name, string value ) {
             m_basicApi.SciterSetAttributeByName ( element, name, value );
         }

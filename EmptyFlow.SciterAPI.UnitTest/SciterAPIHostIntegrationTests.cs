@@ -451,6 +451,65 @@ namespace EmptyFlow.SciterAPI.Tests {
             }
         }
 
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_GetElementAttributes () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow ( 300, 300 );
+            host.Callbacks.AddProtocolHandler (
+                "embedded://",
+                (
+                    path => {
+                        return Encoding.UTF8.GetBytes (
+""""
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
+    <body>
+        <span id="world" attribute1 attribute2="2" attribute3 attribute4="4" attribute5>Hello world!!!</span>
+    </body>
+</html>
+
+""""
+                        );
+                    }
+                )
+            );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( "embedded://test.html" );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var element = host.MakeCssSelector ( "#world" ).Single ();
+                var attributes = host.GetElementAttributes ( element );
+                host.CloseMainWindow ();
+                Assert.Equal ( 6, attributes.Count () );
+                Assert.Equal ( "id", attributes.ElementAt ( 0 ).Key );
+                Assert.Equal ( "world", attributes.ElementAt ( 0 ).Value );
+
+                Assert.Equal ( "attribute1", attributes.ElementAt ( 1 ).Key );
+                Assert.Equal ( "", attributes.ElementAt ( 1 ).Value );
+
+                Assert.Equal ( "attribute2", attributes.ElementAt ( 2 ).Key );
+                Assert.Equal ( "2", attributes.ElementAt ( 2 ).Value );
+
+                Assert.Equal ( "attribute3", attributes.ElementAt ( 3 ).Key );
+                Assert.Equal ( "", attributes.ElementAt ( 3 ).Value );
+
+                Assert.Equal ( "attribute4", attributes.ElementAt ( 4 ).Key );
+                Assert.Equal ( "4", attributes.ElementAt ( 4 ).Value );
+
+                Assert.Equal ( "attribute5", attributes.ElementAt ( 5 ).Key );
+                Assert.Equal ( "", attributes.ElementAt ( 5 ).Value );
+            }
+        }
+
     }
 
     public class DocumentReadyHandler : SciterEventHandler {

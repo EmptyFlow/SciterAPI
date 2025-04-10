@@ -3,12 +3,12 @@ using System.Text;
 
 namespace EmptyFlow.SciterAPI.Structs {
 
-    internal record LPCStrReceiverCallback {
+    internal record LPCWStrReceiverCallback {
 
         public StringBuilder Result = new StringBuilder ();
 
         public void Callback ( IntPtr byteArrayPointer, uint countBytes, IntPtr parameter ) {
-            Result.Append ( Marshal.PtrToStringUTF8 ( byteArrayPointer, Convert.ToInt32 ( countBytes ) ) );
+            Result.Append ( Marshal.PtrToStringUni ( byteArrayPointer, Convert.ToInt32 ( countBytes ) ) );
         }
 
         public void Clear() {
