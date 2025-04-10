@@ -1,6 +1,6 @@
 # SciterAPI
-C# cross platform binding and low-level helpers for Sciter HTML/CSS/JS rendering library.  
-You can check out more about Sciter [here](https://sciter.com/).
+C# cross platform binding and low-level helpers for Sciter HTML/CSS/JS rendering library. You can check out more about Sciter [here](https://sciter.com/).  
+Library support net8+, also trimming and compilation to NativeAot.
 
 ### Getting started
 
