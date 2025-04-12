@@ -11,6 +11,8 @@ Install-Package EmptyFlow.SciterAPI
 ```
 To download sciter you need to open [gitlab](https://gitlab.com/sciter-engine/sciter-js-sdk/-/releases)
 
+Important! Don't forget to select specific build and debug architecture, `Any CPU` is not allowed in this case. Also you need to select the corresponding sciter library, and it should be of the same architecture as in your project (if you select x64, it means you need to load sciter library from x64 folder).
+
 ### Getting started
 
 ```csharp
