@@ -107,17 +107,11 @@ namespace EmptyFlow.SciterAPI {
                     return 0;
                 case SciterCallbackNotificationCode.SC_POSTED_NOTIFICATION:
                     var notificationStructure = Marshal.PtrToStructure<SciterCallbackNotificationPosted> ( pns );
-                    m_notificationPostedAction ( notificationStructure.wparam, notificationStructure.lparam, notificationStructure.lparam );
+                    m_notificationPostedAction ( notificationStructure.wparam, notificationStructure.lparam, notificationStructure.lreturn );
                     return 0;
                 case SciterCallbackNotificationCode.SC_GRAPHICS_CRITICAL_FAILURE:
                     m_graphicalFailureAction ();
                     return 0;
-                /*case SciterCallbackNotificationCode.SC_KEYBOARD_REQUEST:
-                    break;
-                case SciterCallbackNotificationCode.SC_INVALIDATE_RECT:
-                    break;
-                case SciterCallbackNotificationCode.SC_SET_CURSOR:
-                    break;*/
                 default: return 0;
             }
         }
@@ -129,6 +123,8 @@ namespace EmptyFlow.SciterAPI {
                 if ( !loadDataStruct.uri.StartsWith ( m_protocolHandler.Key ) ) continue;
 
                 byte[] array = m_protocolHandler.Value ( loadDataStruct.uri );
+                if ( array.Length == 0 ) continue; // if an empty array is returned, it also means that it was not processed (can be useful in cases where you only need to override a part of the files in some protocol)
+
                 m_sciterApiStruct.SciterDataReady ( m_host.MainWindow, loadDataStruct.uri, array, (uint) array.Length );
                 return (uint) LoadDataReturnCode.LOAD_DISCARD; // in this case we override standart loading functions
             }
