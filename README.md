@@ -4,6 +4,13 @@
 C# cross platform binding and low-level helpers for Sciter HTML/CSS/JS rendering library. You can check out more about Sciter [here](https://sciter.com/). 
 Library support net8+, also trimming and compilation to NativeAot.
 
+### Install instruction
+
+```shell
+Install-Package EmptyFlow.SciterAPI
+```
+To download sciter you need to open [gitlab](https://gitlab.com/sciter-engine/sciter-js-sdk/-/releases)
+
 ### Getting started
 
 ```csharp
