@@ -23,7 +23,7 @@ public class MyWindowEventHandler : SciterEventHandler {
         if ( cmd == BehaviourEvents.DOCUMENT_READY ) {
             var elements = Host.MakeCssSelector ( "#app" );
             var appDiv = elements.First ();
-            Host.SetElementHtml ( appDiv, "<b>Bold Text!!!!!!!!!!!!!!</b>", SetElementHtml.SIH_REPLACE_CONTENT );
+            Host.SetElementHtml ( appDiv, "<b>Bold Text!!!!!!!!!!!!!!</b>", SetElementHtml.ReplaceContent );
         }
     }
 

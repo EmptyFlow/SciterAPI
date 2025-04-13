@@ -172,7 +172,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Assert
             void ProcessCompleted () {
                 var element = host.MakeCssSelector ( "#textspan" ).First ();
-                host.SetElementHtml ( element, "<b>Bold</b><i>Italic</i>", SetElementHtml.SIH_REPLACE_CONTENT );
+                host.SetElementHtml ( element, "<b>Bold</b><i>Italic</i>", SetElementHtml.ReplaceContent );
                 var html = host.GetElementHtml ( element, false );
                 host.CloseMainWindow ();
                 Assert.Equal ( "<b>Bold</b><i>Italic</i>", html );

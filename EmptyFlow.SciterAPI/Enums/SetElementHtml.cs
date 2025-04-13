@@ -1,38 +1,40 @@
 ﻿namespace EmptyFlow.SciterAPI {
+
     public enum SetElementHtml : uint {
 
         /// <summary>
-        /// Replace content of the element.
+        /// Replace content of the element. Original name SIH_REPLACE_CONTENT
         /// </summary>
-        SIH_REPLACE_CONTENT = 0,
+        ReplaceContent = 0,
 
         /// <summary>
-        /// Insert html before first child of the element.
+        /// Insert html before first child of the element. Original name SIH_INSERT_AT_START.
         /// </summary>
-        SIH_INSERT_AT_START = 1,
+        InsertAtStart = 1,
 
         /// <summary>
-        /// Insert html after last child of the element.
+        /// Insert html after last child of the element. Original name SIH_APPEND_AFTER_LAST.
         /// </summary>
-        SIH_APPEND_AFTER_LAST = 2,
+        AppendAfterStart = 2,
 
         /// <summary>
-        /// Replace element by html, a.k.a. element.outerHtml = "something".
+        /// Replace element by html, a.k.a. element.outerHtml = "something". Original name SOH_REPLACE.
         /// </summary>
         /// <remarks>operations do not work for inline elements like SPAN.</remarks>
-        SOH_REPLACE = 3,
+        Replace = 3,
 
         /// <summary>
-        /// Insert html before the element
+        /// Insert html before the element. Original name SOH_INSERT_BEFORE.
         /// </summary>
         /// <remarks>operations do not work for inline elements like SPAN.</remarks>
-        SOH_INSERT_BEFORE = 4,
+        InsertBefore = 4,
 
         /// <summary>
-        /// Insert html after the element.
+        /// Insert html after the element. Original name SOH_INSERT_AFTER.
         /// </summary>
         /// <remarks>operations do not work for inline elements like SPAN.</remarks>
-        SOH_INSERT_AFTER = 5
+        InsertAfter = 5
+
     }
 
 }
