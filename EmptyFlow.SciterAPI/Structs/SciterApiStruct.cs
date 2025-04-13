@@ -153,11 +153,11 @@ public delegate ValueResult ValueTypeDelegate ( ref SciterValue pval, out uint p
 public delegate ValueResult ValueStringData ( ref SciterValue pval, out IntPtr pChars, out uint pNumChars );
 public delegate ValueResult ValueStringDataSet ( ref SciterValue pval, [MarshalAs ( UnmanagedType.LPWStr )] string chars, uint numChars, uint units );
 public delegate ValueResult ValueIntData ( ref SciterValue pval, out int pData );
-public delegate ValueResult ValueIntDataSet ( ref SciterValue pval, int data, uint type, uint units );
+public delegate ValueResult ValueIntDataSet ( ref SciterValue pval, int data, ValueType type, uint units );
 public delegate ValueResult ValueInt64Data ( ref SciterValue pval, out long pData );
-public delegate ValueResult ValueInt64DataSet ( ref SciterValue pval, long data, uint type, uint units );
+public delegate ValueResult ValueInt64DataSet ( ref SciterValue pval, long data, ValueType type, uint units );
 public delegate ValueResult ValueFloatData ( ref SciterValue pval, out double pData );
-public delegate ValueResult ValueFloatDataSet ( ref SciterValue pval, double data, uint type, uint units );
+public delegate ValueResult ValueFloatDataSet ( ref SciterValue pval, double data, ValueType type, uint units );
 public delegate ValueResult ValueBinaryData ( ref SciterValue pval, out IntPtr pBytes, out uint pnBytes );
 public delegate ValueResult ValueBinaryDataSet ( ref SciterValue pval, [MarshalAs ( UnmanagedType.LPArray )] byte[] pBytes, uint nBytes, uint type, uint units );
 public delegate ValueResult ValueElementsCount ( ref SciterValue pval, out int pn );

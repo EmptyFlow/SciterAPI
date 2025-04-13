@@ -1,4 +1,5 @@
 ﻿namespace EmptyFlow.SciterAPI {
+
     public enum ValueType : uint { // Original name VALUE_TYPE
         T_UNDEFINED = 0,
         T_NULL = 1,

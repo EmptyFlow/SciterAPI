@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EmptyFlow.SciterAPI {
 
-    public class SciterAPIHost {
+    public partial class SciterAPIHost {
 
         [DllImport ( SciterLoader.SciterLibrary, EntryPoint = "SciterAPI" )]
         private static extern IntPtr SciterAPI ();
