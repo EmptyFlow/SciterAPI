@@ -34,14 +34,19 @@ namespace EmptyFlow.SciterAPI {
                     m_basicApi.ValueStringDataSet ( ref sciterValue, stringValue, Convert.ToUInt32 ( stringValue.Length ), 0 );
                     break;
                 case IEnumerable<SciterValue> enumerableValues:
+                    m_basicApi.ValueIntDataSet ( ref sciterValue, enumerableValues.Count (), ValueType.T_ARRAY, 0 ); // create empty array
+
                     for ( int i = 0; i < enumerableValues.Count (); i++ ) {
                         var indexValue = enumerableValues.ElementAt ( i );
                         SetArrayItem ( ref sciterValue, i, ref indexValue );
                     }
                     break;
                 case IDictionary<string, SciterValue> dictionaryValues:
-                    foreach ( var dictionaryItem in dictionaryValues ) {
+                    m_basicApi.ValueIntDataSet ( ref sciterValue, 0, ValueType.T_MAP, 0 ); // create empty map
 
+                    foreach ( var dictionaryItem in dictionaryValues ) {
+                        var mapValue = dictionaryItem.Value;
+                        SetMapItem ( ref sciterValue, dictionaryItem.Key, ref mapValue );
                     }
                     break;
                 default: throw new NotSupportedException ( $"Create value from type {value.GetType ().Name}" );
@@ -155,6 +160,18 @@ namespace EmptyFlow.SciterAPI {
         public void SetMapItem ( ref SciterValue map, string key, ref SciterValue value ) {
             var stringKey = CreateValue ( key );
             m_basicApi.ValueSetValueToKey ( ref map, ref stringKey, ref value );
+        }
+
+        public IDictionary<string, SciterValue> GetMapItems ( ref SciterValue array ) {
+            var result = new Dictionary<string, SciterValue> ();
+            KeyValueCallback callback = ( IntPtr param, ref SciterValue key, ref SciterValue pval ) => {
+                var name = GetValueString ( ref key );
+                result.Add ( name, pval );
+                return true;
+            };
+            m_basicApi.ValueEnumElements ( ref array, callback, 1 );
+
+            return result;
         }
 
         public int GetValueInt32 ( ref SciterValue value ) {

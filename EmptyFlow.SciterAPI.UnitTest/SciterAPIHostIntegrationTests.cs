@@ -809,6 +809,61 @@ namespace EmptyFlow.SciterAPI.Tests {
             }
         }
 
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_CreateValue_Array () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow ( 300, 300 );
+            host.Callbacks.AddProtocolHandler (
+                "embedded://",
+                (
+                    path => {
+                        return Encoding.UTF8.GetBytes (
+""""
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
+    <body>
+        <span id="world">Hello world!!!</span>
+    </body>
+</html>
+
+""""
+                        );
+                    }
+                )
+            );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( "embedded://test.html" );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var array = new List<SciterValue> ();
+                array.Add ( host.CreateValue ( "First Item" ) );
+                array.Add ( host.CreateValue ( "Second Item" ) );
+                array.Add ( host.CreateValue ( "Third Item" ) );
+                var valueArray = host.CreateValue ( array );
+
+                var resultString = new List<string> ();
+                for ( var i = 0; i < 3; i++ ) {
+                    var arrayItem = host.GetArrayItem ( ref valueArray, i );
+                    resultString.Add ( host.GetValueString ( ref arrayItem ) );
+                }
+                host.CloseMainWindow ();
+                var exceptedArray = new List<string> {
+                    "First Item",
+                    "Second Item",
+                    "Third Item"
+                };
+                Assert.Equal ( resultString, exceptedArray );
+            }
+        }
 
     }
 
