@@ -1,5 +1,4 @@
-﻿
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace EmptyFlow.SciterAPI {
 
@@ -33,7 +32,7 @@ namespace EmptyFlow.SciterAPI {
         }
 
         private bool SciterHandleEvent ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) {
-            if ( m_mode == SciterEventHandlerMode.Window ) m_processedElement = he; // for a window it is necessary to understand from which element the event was received
+            m_processedElement = he;
 
             var parameters = prms;
 
@@ -117,7 +116,7 @@ namespace EmptyFlow.SciterAPI {
                     break;
                 case EventBehaviourGroups.HANDLE_SCRIPTING_METHOD_CALL:
                     var scriptArguments = Marshal.PtrToStructure<ScriptingMethodParameters> ( parameters );
-                    var resultOffset = Marshal.OffsetOf ( typeof ( ScriptingMethodParameters ), nameof ( ScriptingMethodParameters.result ) );
+                    var methodName = Marshal.PtrToStringAnsi ( scriptArguments.name ) ?? "";
 
                     var scriptValues = new List<SciterValue> ( Convert.ToInt32 ( scriptArguments.argc ) );
                     for ( var i = 0; i < scriptArguments.argc; i++ ) {
@@ -126,10 +125,10 @@ namespace EmptyFlow.SciterAPI {
                         scriptValues.Add ( Marshal.PtrToStructure<SciterValue> ( ptr ) );
                     }
 
-                    var resultValue = ScriptMethodCall ( Marshal.PtrToStringAnsi ( scriptArguments.name ) ?? "", scriptValues );
-                    var resultValuePtr = IntPtr.Add ( parameters, resultOffset.ToInt32 () );
-                    Marshal.StructureToPtr ( resultValue, resultValuePtr, false );
-                    break;
+                    var (resultValue, handled) = ScriptMethodCall ( methodName, scriptValues );
+                    if ( handled && resultValue.HasValue ) scriptArguments.result = resultValue.Value;
+                    Marshal.StructureToPtr ( scriptArguments, parameters, true );
+                    return handled;
                 case EventBehaviourGroups.HANDLE_SOM:
                     var somArguments = Marshal.PtrToStructure<SOMParameters> ( parameters );
                     SOMEvent ( somArguments.cmd, somArguments.data );
@@ -145,6 +144,8 @@ namespace EmptyFlow.SciterAPI {
                     return true;
             }
 
+            m_processedElement = nint.Zero;
+
             return false;
         }
 
@@ -152,7 +153,7 @@ namespace EmptyFlow.SciterAPI {
 
         }
 
-        public virtual void MouseEvent ( MouseEvents command, SciterPoint elementRelated, SciterPoint ViewRelated, KeyboardStates keyboardStates, DraggingType draggingMode, CursorType cursorType, IntPtr target, IntPtr dragging, bool is_on_icon, uint button_state ) {
+        public virtual void MouseEvent ( MouseEvents command, SciterPoint elementRelated, SciterPoint ViewRelated, KeyboardStates keyboardStates, DraggingType draggingMode, CursorType cursorType, IntPtr target, IntPtr dragging, bool isOnIcon, uint buttonState ) {
 
         }
 
@@ -164,7 +165,7 @@ namespace EmptyFlow.SciterAPI {
 
         }
 
-        public virtual void ScrollEvent ( ScrollEvents cmd, nint target, int pos, bool vertical, ScrollSource source, uint reason ) {
+        public virtual void ScrollEvent ( ScrollEvents cmd, nint target, int position, bool vertical, ScrollSource source, uint reason ) {
 
         }
 
@@ -188,7 +189,7 @@ namespace EmptyFlow.SciterAPI {
 
         }
 
-        public virtual void ExchangeParameters ( uint cmd, nint target, nint source, SciterPoint pos, SciterPoint pos_view, uint mode, SciterValue data ) {
+        public virtual void ExchangeParameters ( uint command, nint target, nint source, SciterPoint position, SciterPoint pos_view, uint mode, SciterValue data ) {
         }
 
         public virtual void MethodCall ( BehaviourMethodIdentifiers methodID ) {
@@ -205,16 +206,18 @@ namespace EmptyFlow.SciterAPI {
             }
         }
 
-        public virtual void BehaviourEvent ( BehaviourEvents cmd, nint heTarget, nint he, nint reason, SciterValue data, string name ) {
-
+        public virtual void BehaviourEvent ( BehaviourEvents command, nint targetElement, nint element, nint reason, SciterValue data, string name ) {
         }
 
-        public virtual SciterValue ScriptMethodCall ( string name, IEnumerable<SciterValue> arguments ) {
-            var value = new SciterValue ();
-            return value;
-        }
+        /// <summary>
+        /// Handling element.xcall(name, param1, param2, param3)
+        /// </summary>
+        /// <param name="name">Name.</param>
+        /// <param name="arguments">Arguments.</param>
+        /// <returns>Two cases - if method founded (value, true) or if method not found (null, false).</returns>
+        public virtual (SciterValue? value, bool handled) ScriptMethodCall ( string name, IEnumerable<SciterValue> arguments ) => (null, false);
 
-        public virtual void HandleInitializationEvent ( InitializationEvents cmd ) {
+        public virtual void HandleInitializationEvent ( InitializationEvents command ) {
         }
 
     }
