@@ -174,6 +174,11 @@ namespace EmptyFlow.SciterAPI {
             return result;
         }
 
+        public SciterValue GetValueMapKey ( ref SciterValue value, int index ) {
+            m_basicApi.ValueNthElementKey ( ref value, index, out var result );
+            return result;
+        }
+
         public int GetValueInt32 ( ref SciterValue value ) {
             m_basicApi.ValueIntData ( ref value, out var result );
             return result;
@@ -193,55 +198,19 @@ namespace EmptyFlow.SciterAPI {
             m_basicApi.ValueStringData ( ref value, out var stringPointer, out var length );
             return Marshal.PtrToStringUni ( stringPointer, (int) length ) ?? "";
         }
-        /*
-               // enum
-      void enum_elements(enum_cb& cb) const
-      {
-        ValueEnumElements(const_cast<value*>(this), &enum_cb::_callback, &cb);
-      }
 
-#ifdef CPP11
-      // calls cbf for each key/value pair found in T_OBJECT or T_MAP
-      void each_key_value(key_value_cb cbf) const
-      {
-        ValueEnumElements(const_cast<value*>(this), &enum_cb::lambda_callback, &cbf);
-      }
-#endif
+        public void IsolateValue ( ref SciterValue value ) => m_basicApi.ValueIsolate ( ref value );
 
-      value key(int n) const
-      {
-        value r;
-        ValueNthElementKey( this, n, &r);
-        return r;
-      }
-         */
+        public void ValueInvoke ( ref SciterValue value, SciterValue? context = default, params SciterValue[] parameters ) {
+            var contextPointer = nint.Zero;
+            if ( context.HasValue ) {
+                contextPointer = Marshal.AllocHGlobal ( Marshal.SizeOf ( context.Value ) );
+                Marshal.StructureToPtr ( context.Value, contextPointer, false );
+            }
+            m_basicApi.ValueInvoke ( ref value, contextPointer, (uint) parameters.Count (), parameters, out var result, IntPtr.Zero );
 
-        /*
-               // T_OBJECT/UT_OBJECT_FUNCTION only, call TS function
-      // 'self' here is what will be known as 'this' inside the function, can be undefined for invocations of global functions
-      value call( int argc, const value* argv, value self = value(), const WCHAR* url_or_script_name = 0) const
-      {
-        value rv;
-        ValueInvoke(const_cast<value*>(this),&self,argc,argv,&rv,LPCWSTR(url_or_script_name));
-        return rv;
-      }
-
-      value call() const {  return call(0,0);  }
-      value call( const value& p1 ) const {  return call(1,&p1); }
-      value call( const value& p1, const value& p2 )  const { value args[2] = { p1,p2 };  return call(2,args); }
-      value call( const value& p1, const value& p2, const value& p3 ) const { value args[3] = { p1,p2,p3 };  return call(3,args); }
-      value call( const value& p1, const value& p2, const value& p3, const value& p4 )  const { value args[4] = { p1,p2,p3,p4 };  return call(4,args); }
-
-      value call_this(const value& _this) const { return call(0, 0, _this); }
-      value call_this(const value& _this, const value& p1) const { return call(1, &p1, _this); }
-      value call_this(const value& _this, const value& p1, const value& p2)  const { value args[2] = { p1,p2 };  return call(2, args, _this); }
-      value call_this(const value& _this, const value& p1, const value& p2, const value& p3) const { value args[3] = { p1,p2,p3 };  return call(3, args, _this); }
-      value call_this(const value& _this, const value& p1, const value& p2, const value& p3, const value& p4)  const { value args[4] = { p1,p2,p3,p4 };  return call(4, args, _this); }
-
-        void isolate () {
-            ValueIsolate ( this );
+            if (contextPointer != nint.Zero) Marshal.FreeHGlobal ( contextPointer );
         }
-         */
 
     }
 

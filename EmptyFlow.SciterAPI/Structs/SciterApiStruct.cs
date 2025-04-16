@@ -169,7 +169,7 @@ public delegate ValueResult ValueSetValueToKey ( ref SciterValue pval, ref Scite
 public delegate ValueResult ValueGetValueOfKey ( ref SciterValue pval, ref SciterValue pkey, out SciterValue pretval );
 public delegate ValueResult ValueToString ( ref SciterValue pval, ValueStringCvtType how );
 public delegate ValueResult ValueFromString ( ref SciterValue pval, [MarshalAs ( UnmanagedType.LPWStr )] string str, uint strLength, uint how );
-public delegate ValueResult ValueInvoke ( ref SciterValue pval, ref SciterValue pthis, uint argc, SciterValue[] argv, out SciterValue pretval, [MarshalAs ( UnmanagedType.LPWStr )] string url );
+public delegate ValueResult ValueInvoke ( ref SciterValue pval, IntPtr pthis, uint argc, SciterValue[] argv, out SciterValue pretval, IntPtr url );
 public delegate ValueResult ValueNativeFunctorSet ( ref SciterValue pval, NativeFunctorInvoke pinvoke, NativeFunctorRelease prelease, IntPtr tag );
 public delegate ValueResult ValueIsNativeFunctor ( ref SciterValue pval );
 

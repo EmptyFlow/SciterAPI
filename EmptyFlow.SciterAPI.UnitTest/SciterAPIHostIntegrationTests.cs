@@ -865,6 +865,65 @@ namespace EmptyFlow.SciterAPI.Tests {
             }
         }
 
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_CreateValue_Map () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow ( 300, 300 );
+            host.Callbacks.AddProtocolHandler (
+                "embedded://",
+                (
+                    path => {
+                        return Encoding.UTF8.GetBytes (
+""""
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
+    <body>
+        <span id="world">Hello world!!!</span>
+    </body>
+</html>
+
+""""
+                        );
+                    }
+                )
+            );
+            host.CreateMainWindow ( 300, 300 );
+            host.LoadFile ( "embedded://test.html" );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var map = new Dictionary<string, SciterValue> ();
+                map.Add ( "first", host.CreateValue ( "First Item" ) );
+                map.Add ( "second", host.CreateValue ( "Second Item" ) );
+                map.Add ( "third", host.CreateValue ( "Third Item" ) );
+                var valueMap = host.CreateValue ( map );
+
+                var secondMapValue = host.GetMapItem ( ref valueMap, "second" );
+                var secondMapValueString = host.GetValueString ( ref secondMapValue);
+                var resultMap = host.GetMapItems ( ref valueMap );
+                var thirdKey = host.GetValueMapKey ( ref valueMap, 2 );
+                var thirdKeyString = host.GetValueString ( ref thirdKey );
+                var resultMapValues = resultMap.Values
+                    .Select(a => host.GetValueString(ref a))
+                    .ToList();
+
+                host.CloseMainWindow ();
+                Assert.Equal ( "Second Item", secondMapValueString );
+                Assert.Equal ( "third", thirdKeyString );
+                Assert.Equal ( new List<string> { "first", "second", "third" }, resultMap.Keys );
+                Assert.Equal ( new List<string> { "First Item", "Second Item", "Third Item" }, resultMapValues );
+            }
+        }
+
+
     }
 
     public class DocumentReadyHandler : SciterEventHandler {
