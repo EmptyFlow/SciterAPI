@@ -907,13 +907,13 @@ namespace EmptyFlow.SciterAPI.Tests {
                 var valueMap = host.CreateValue ( map );
 
                 var secondMapValue = host.GetMapItem ( ref valueMap, "second" );
-                var secondMapValueString = host.GetValueString ( ref secondMapValue);
+                var secondMapValueString = host.GetValueString ( ref secondMapValue );
                 var resultMap = host.GetMapItems ( ref valueMap );
                 var thirdKey = host.GetValueMapKey ( ref valueMap, 2 );
                 var thirdKeyString = host.GetValueString ( ref thirdKey );
                 var resultMapValues = resultMap.Values
-                    .Select(a => host.GetValueString(ref a))
-                    .ToList();
+                    .Select ( a => host.GetValueString ( ref a ) )
+                    .ToList ();
 
                 host.CloseMainWindow ();
                 Assert.Equal ( "Second Item", secondMapValueString );
@@ -923,6 +923,61 @@ namespace EmptyFlow.SciterAPI.Tests {
             }
         }
 
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_ValueInvoke () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow ( 300, 300 );
+            host.Callbacks.AddProtocolHandler (
+                "embedded://",
+                (
+                    path => {
+                        return Encoding.UTF8.GetBytes (
+""""
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
+    <head>
+        <script>
+            function testFunc() {
+                console.log('pidorashka');
+                return 4568;
+            }
+
+            setTimeout(() => {
+                Window.this.xcall("luher", testFunc);
+            },200);
+        </script>
+    </head>
+    <body>
+        <span id="world">Hello world!!!</span>
+    </body>
+</html>
+
+""""
+                        );
+                    }
+                )
+            );
+            host.CreateMainWindow ( 300, 300, enableDebug: true );
+            host.LoadFile ( "embedded://test.html" );
+            host.AddWindowEventHandler ( new DocumentXCallHandler ( MethodHandled, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void MethodHandled ( string name, IEnumerable<SciterValue> arguments ) {
+                var function = arguments.FirstOrDefault ();
+                var functionResult = host.ValueInvoke ( ref function, null, Enumerable.Empty<SciterValue> () );
+                var functionResultValue = host.GetValueInt32 ( ref functionResult );
+                host.CloseMainWindow ();
+                Assert.Equal ( "luher", name );
+                Assert.Equal ( 4568, functionResultValue );
+            }
+        }
 
     }
 
@@ -938,6 +993,24 @@ namespace EmptyFlow.SciterAPI.Tests {
             if ( cmd == BehaviourEvents.DOCUMENT_READY ) {
                 m_handler ();
             }
+        }
+
+    }
+
+    public class DocumentXCallHandler : SciterEventHandler {
+
+        private Action<string, IEnumerable<SciterValue>> m_handler;
+
+        public DocumentXCallHandler ( Action<string, IEnumerable<SciterValue>> handler, SciterAPIHost host ) : base ( IntPtr.Zero, host, SciterEventHandlerMode.Window ) {
+            m_handler = handler;
+        }
+
+        public override (SciterValue? value, bool handled) ScriptMethodCall ( string name, IEnumerable<SciterValue> arguments ) {
+            var result = Host.CreateValue ( true );
+
+            m_handler ( name, arguments );
+
+            return (result, true);
         }
 
     }

@@ -201,15 +201,18 @@ namespace EmptyFlow.SciterAPI {
 
         public void IsolateValue ( ref SciterValue value ) => m_basicApi.ValueIsolate ( ref value );
 
-        public void ValueInvoke ( ref SciterValue value, SciterValue? context = default, params SciterValue[] parameters ) {
-            var contextPointer = nint.Zero;
+        public SciterValue ValueInvoke ( ref SciterValue value, SciterValue? context, IEnumerable<SciterValue> parameters ) {
+            SciterValue functionContext;
             if ( context.HasValue ) {
-                contextPointer = Marshal.AllocHGlobal ( Marshal.SizeOf ( context.Value ) );
-                Marshal.StructureToPtr ( context.Value, contextPointer, false );
+                functionContext = context.Value;
+            } else {
+                SciterValue sciterValue;
+                m_basicApi.ValueInit ( out sciterValue );
+                functionContext = sciterValue;
             }
-            m_basicApi.ValueInvoke ( ref value, contextPointer, (uint) parameters.Count (), parameters, out var result, IntPtr.Zero );
+            m_basicApi.ValueInvoke ( ref value, ref functionContext, (uint) parameters.Count (), parameters.ToArray(), out var result, IntPtr.Zero );
 
-            if (contextPointer != nint.Zero) Marshal.FreeHGlobal ( contextPointer );
+            return result;
         }
 
     }
