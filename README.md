@@ -55,9 +55,9 @@ Now in progress and will be shortly
 * ~~Get/Set Element Text/Html~~
 * ~~Event Handler as class with overrided methods~~
 * ~~Get/Set Element Attributes~~
+* ~~Helpers for Scriter Value API~~
 * Helpers for Sciter Node API
 * Get/Set Variables
-* Helpers for Scriter Value API
 * Binding for Graphics API
 * Binding for Request API
 * Support SOM mapping

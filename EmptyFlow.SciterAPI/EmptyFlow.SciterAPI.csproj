@@ -9,14 +9,14 @@
 		<PublishTrimmed>true</PublishTrimmed>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>C# Binding for Sciter HTML engine</Title>
-		<Description>API for working with Sciter HTML engine from C#</Description>
+		<Description>API for working with Sciter HTML engine from C#. Supported Sciter version 6.0.0.0+, trimming and compiling to NativeAot.</Description>
 		<Copyright>Copyright (c) Roman Vladimirov</Copyright>
 		<PackageProjectUrl>https://github.com/EmptyFlow/SciterAPI</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/EmptyFlow/SciterAPI</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>html;html-engine;htmlengine;sciter;binding</PackageTags>
-		<Version>1.0.0.0</Version>
+		<Version>1.0.1.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 	</PropertyGroup>
 
