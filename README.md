@@ -42,7 +42,7 @@ public class MyWindowEventHandler : SciterEventHandler {
 
 ### Documentation
 
-Now in progress and will be shortly
+Latest version documentation can be found [there](https://emptyflow.github.io/SciterAPIDocs/).
 
 ### Roadmap
 
