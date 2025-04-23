@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using EmptyFlow.SciterAPI.Structs;
+using System.Runtime.InteropServices;
 
 namespace EmptyFlow.SciterAPI {
 

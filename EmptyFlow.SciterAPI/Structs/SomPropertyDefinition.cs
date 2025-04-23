@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace EmptyFlow.SciterAPI {
+namespace EmptyFlow.SciterAPI.Structs {
     [StructLayout ( LayoutKind.Sequential )]
     public struct SomPropertyDefinition { // Original name som_property_def_t
         SomPropertyType type;

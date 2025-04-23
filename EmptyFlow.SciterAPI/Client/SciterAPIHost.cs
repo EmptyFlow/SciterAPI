@@ -22,6 +22,8 @@ namespace EmptyFlow.SciterAPI {
 
         SciterApiStruct m_basicApi;
 
+        GraphicsApiStruct m_graphicsApi;
+
         private string VersionOfLibrary = "1.0.0.0";
 
         readonly SciterAPIGlobalCallbacks m_callbacks;
@@ -61,6 +63,8 @@ namespace EmptyFlow.SciterAPI {
         public string ClassName => m_className;
 
         public Version Version => m_version;
+
+        public GraphicsApiStruct Graphics => m_graphicsApi;
 
         public const SciterRuntimeFeatures DefaultRuntimeFeatures = SciterRuntimeFeatures.ALLOW_EVAL | SciterRuntimeFeatures.ALLOW_FILE_IO | SciterRuntimeFeatures.ALLOW_SOCKET_IO | SciterRuntimeFeatures.ALLOW_SYSINFO;
 
@@ -105,6 +109,11 @@ namespace EmptyFlow.SciterAPI {
             if ( m_mainWindow == IntPtr.Zero ) return;
 
             m_basicApi.SciterLoadFile ( m_mainWindow, htmlPath );
+        }
+
+        public void PrepareGraphicsApi () {
+            var pointer = m_basicApi.GetSciterGraphicsApi ();
+            m_graphicsApi = Marshal.PtrToStructure<GraphicsApiStruct> ( pointer );
         }
 
         public int Process () {

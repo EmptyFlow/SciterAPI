@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace EmptyFlow.SciterAPI {
+namespace EmptyFlow.SciterAPI.Structs {
     [StructLayout ( LayoutKind.Sequential )]
     public struct SomPassport { // Original name  som_passport_t
         ulong flags;

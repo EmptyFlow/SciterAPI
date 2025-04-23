@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace EmptyFlow.SciterAPI {
+namespace EmptyFlow.SciterAPI.Structs {
     [StructLayout ( LayoutKind.Sequential )]
     public struct SomAssetClass { // Original name som_asset_class_t
         AssetAddOrReleasesDelegate asset_add_ref;

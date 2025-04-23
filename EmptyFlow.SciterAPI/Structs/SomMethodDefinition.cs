@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace EmptyFlow.SciterAPI {
+namespace EmptyFlow.SciterAPI.Structs {
     [StructLayout ( LayoutKind.Sequential )]
     public struct SomMethodDefinition { // Original name som_method_def_t
         IntPtr reserved;

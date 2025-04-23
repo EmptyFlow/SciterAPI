@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace EmptyFlow.SciterAPI {
+namespace EmptyFlow.SciterAPI.Structs {
 
 // Common API
 
