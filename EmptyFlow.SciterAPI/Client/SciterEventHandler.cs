@@ -5,24 +5,41 @@ namespace EmptyFlow.SciterAPI {
 
     public class SciterEventHandler {
 
-        private IntPtr m_subscribedElement = IntPtr.Zero;
-
         private IntPtr m_processedElement = IntPtr.Zero;
 
-        private SciterEventHandlerMode m_mode = SciterEventHandlerMode.Element;
+        private readonly IntPtr m_subscribedElement = IntPtr.Zero;
 
-        private SciterAPIHost m_host;
+        private readonly SciterEventHandlerMode m_mode = SciterEventHandlerMode.Element;
 
-        private ElementEventProc m_innerDelegate;
+        private readonly SciterAPIHost m_host;
 
+        private readonly ElementEventProc m_innerDelegate;
+
+        private readonly List<EventBehaviourGroups> m_includedEvents = [];
+
+        /// <summary>
+        /// Element which is processed now in handler.
+        /// </summary>
         protected IntPtr ProcessedElement => m_processedElement;
 
+        /// <summary>
+        /// Related Sciter host.
+        /// </summary>
         public SciterAPIHost Host => m_host;
 
+        /// <summary>
+        /// Element on which event subscribed this handler.
+        /// </summary>
         public IntPtr SubscribedElement => m_subscribedElement;
 
+        /// <summary>
+        /// Mode of handler, can be two types Window or Element.
+        /// </summary>
         public SciterEventHandlerMode Mode => m_mode;
 
+        /// <summary>
+        /// Inner delegate which is used in handling events.
+        /// </summary>
         public ElementEventProc InnerDelegate => m_innerDelegate;
 
         public SciterEventHandler ( IntPtr relatedThing, SciterAPIHost host, SciterEventHandlerMode mode ) {
@@ -32,7 +49,14 @@ namespace EmptyFlow.SciterAPI {
             m_mode = mode;
         }
 
+        public void SetActiveBehaviourGroups ( IEnumerable<EventBehaviourGroups> groups ) {
+            m_includedEvents.Clear ();
+            m_includedEvents.AddRange ( groups );
+        }
+
         private bool SciterHandleEvent ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) {
+            if ( m_includedEvents.Any () && !m_includedEvents.Contains ( (EventBehaviourGroups) evtg ) ) return false;
+
             m_processedElement = he;
 
             var parameters = prms;
@@ -151,43 +175,33 @@ namespace EmptyFlow.SciterAPI {
         }
 
         public virtual void AfterRegisterEvent () {
-
         }
 
         public virtual void MouseEvent ( MouseEvents command, SciterPoint elementRelated, SciterPoint ViewRelated, KeyboardStates keyboardStates, DraggingType draggingMode, CursorType cursorType, IntPtr target, IntPtr dragging, bool isOnIcon, uint buttonState ) {
-
         }
 
         public virtual void KeyboardEvent ( KeyEvents command, KeyboardStates keyboardStates ) {
-
         }
 
         public virtual void FocusEvent ( FocusEvents command, bool byMouseClick, bool cancel, nint element ) {
-
         }
 
         public virtual void ScrollEvent ( ScrollEvents cmd, nint target, int position, bool vertical, ScrollSource source, uint reason ) {
-
         }
 
         public virtual void TimerEvent ( nint timerId ) {
-
         }
 
         public virtual void SizeEvent () {
-
         }
 
         public virtual void GestureEvent ( uint command, nint target, SciterPoint positionElement, SciterPoint positionView ) {
-
         }
 
         public virtual void DrawEvent ( DrawEvents command, nint gfx, SciterRectangle area, uint reserved ) {
-
         }
 
         public virtual void DataArrived ( nint initiator, byte[] data, uint dataSize, uint dataType, uint status, string uri ) {
-
         }
 
         public virtual void ExchangeParameters ( uint command, nint target, nint source, SciterPoint position, SciterPoint pos_view, uint mode, SciterValue data ) {
