@@ -54,7 +54,9 @@ namespace EmptyFlow.SciterAPI {
             m_includedEvents.AddRange ( groups );
         }
 
-        private bool SciterHandleEvent ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) {
+        private bool SciterHandleEvent ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) => EventHandler ( tag, he, evtg, prms );
+
+        public virtual bool EventHandler ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) {
             if ( m_includedEvents.Any () && !m_includedEvents.Contains ( (EventBehaviourGroups) evtg ) ) return false;
 
             m_processedElement = he;
