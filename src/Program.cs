@@ -6,6 +6,7 @@ SciterLoader.Initialize ( Environment.CurrentDirectory );
 var host = new SciterAPIHost ();
 host.LoadAPI ();
 host.PrepareGraphicsApi ();
+host.PrepareRequestApi ();
 var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.4/samples/html/details-summary.htm";
 //var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.4/samples/vue/hello-vue.htm";
 //var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.4/samples.sciter/audio/test-basic.htm";

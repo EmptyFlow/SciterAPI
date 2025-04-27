@@ -56,8 +56,9 @@ Latest version documentation can be found [there](https://emptyflow.github.io/Sc
 * ~~Event Handler as class with overrided methods~~
 * ~~Get/Set Element Attributes~~
 * ~~Helpers for Scriter Value API~~
-* Helpers for Sciter Node API
+* ~~Binding for Graphics API~~
+* ~~Binding for Request API~~
 * Get/Set Variables
-* Binding for Graphics API
-* Binding for Request API
+* Helpers for Sciter Node API
+* Helpers for Graphics API
 * Support SOM mapping
