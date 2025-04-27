@@ -26,18 +26,12 @@ namespace EmptyFlow.SciterAPI {
         /// Initialize 
         /// </summary>
         /// <param name="sciterPath">Path to folder where will be located sciter dynamic library file.</param>
-        /// <param name="hideConsoleWindow">Hide console window for release (and restore for debug), it actual for Windows OS.</param>
-        public static void Initialize ( string sciterPath, bool hideConsoleWindow = true ) {
+        public static void Initialize ( string sciterPath ) {
             if ( m_isInitialized ) return;
 
             m_isInitialized = true;
             m_sciterPath = sciterPath;
             NativeLibrary.SetDllImportResolver ( typeof ( SciterAPIHost ).Assembly, ImportResolver );
-#if !DEBUG
-            if ( hideConsoleWindow ) HideConsoleWindow ();
-#else
-            if ( hideConsoleWindow ) ShowConsoleWindow ();
-#endif
         }
 
         /// <summary>
