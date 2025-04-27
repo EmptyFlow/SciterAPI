@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using EmptyFlow.SciterAPI.Client;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace EmptyFlow.SciterAPI {
@@ -21,13 +22,38 @@ namespace EmptyFlow.SciterAPI {
 
         public static bool IsInitialized => m_isInitialized;
 
-        public static void Initialize ( string sciterPath ) {
+        /// <summary>
+        /// Initialize 
+        /// </summary>
+        /// <param name="sciterPath">Path to folder where will be located sciter dynamic library file.</param>
+        /// <param name="hideConsoleWindow">Hide console window for release (and restore for debug), it actual for Windows OS.</param>
+        public static void Initialize ( string sciterPath, bool hideConsoleWindow = true ) {
             if ( m_isInitialized ) return;
 
             m_isInitialized = true;
             m_sciterPath = sciterPath;
             NativeLibrary.SetDllImportResolver ( typeof ( SciterAPIHost ).Assembly, ImportResolver );
+#if !DEBUG
+            if ( hideConsoleWindow ) HideConsoleWindow ();
+#else
+            if ( hideConsoleWindow ) ShowConsoleWindow ();
+#endif
         }
+
+        /// <summary>
+        /// Hide console window for Windows OS.
+        /// </summary>
+        public static void HideConsoleWindow () {
+            if ( RuntimeInformation.IsOSPlatform ( OSPlatform.Windows ) ) WindowsExtras.HideConsoleWindow ();
+        }
+
+        /// <summary>
+        /// Show console window for Windows OS.
+        /// </summary>
+        public static void ShowConsoleWindow () {
+            if ( RuntimeInformation.IsOSPlatform ( OSPlatform.Windows ) ) WindowsExtras.ShowConsoleWindow ();
+        }
+
 
         private static bool TryLoadLibrary () {
             var libraryName = "";
@@ -46,7 +72,7 @@ namespace EmptyFlow.SciterAPI {
         }
 
         private static IntPtr ImportResolver ( string libraryName, Assembly assembly, DllImportSearchPath? searchPath ) {
-            if ( libraryName == SciterLibrary) {
+            if ( libraryName == SciterLibrary ) {
                 if ( m_sciterLoadedHandle != IntPtr.Zero ) return m_sciterLoadedHandle;
 
                 if ( TryLoadLibrary () ) return m_sciterLoadedHandle;
