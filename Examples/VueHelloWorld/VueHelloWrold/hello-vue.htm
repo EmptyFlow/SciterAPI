@@ -1,0 +1,42 @@
+<html>
+<head>
+    <style>
+        .header-container {
+            flow: vertical;
+        }
+
+        .body-container {
+            flow: vertical;
+            padding-top: 10px;
+        }
+    </style>
+    <script type="module">
+        import { createApp, ref } from "./vue-esm.js";
+
+        createApp({
+            setup() {
+                const message = ref('Hello Vue!');
+                const newmessage = ref('');
+
+                function setNewMessage() {
+                    message.value = newmessage.value;
+                }
+
+                return { message, newmessage, setNewMessage }
+            }
+        }).mount('#app');
+    </script>
+</head>
+<body>
+    <div id="app">
+        <div class="header-container">
+            <span>Header</span>
+            <span>{{ message }}</span>
+        </div>
+        <div class="body-container">
+            <input type="text" v-model="newmessage" />
+            <button @click="setNewMessage()">Change header</button>
+        </div>
+    </div>
+</body>
+</html>

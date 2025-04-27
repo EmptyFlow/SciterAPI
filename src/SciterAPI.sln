@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyFlow.SciterAPI", "..\E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyFlow.SciterAPI.Tests", "..\EmptyFlow.SciterAPI.UnitTest\EmptyFlow.SciterAPI.Tests.csproj", "{472298FC-FFBA-4FA0-9A73-FE56EAEF2940}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VueHelloWorld", "..\Examples\VueHelloWorld\VueHelloWrold\VueHelloWorld.csproj", "{BFAE0151-970A-45BE-8943-52B82D4C1F38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,14 @@ Global
 		{472298FC-FFBA-4FA0-9A73-FE56EAEF2940}.Release|Any CPU.Build.0 = Release|Any CPU
 		{472298FC-FFBA-4FA0-9A73-FE56EAEF2940}.Release|x64.ActiveCfg = Release|Any CPU
 		{472298FC-FFBA-4FA0-9A73-FE56EAEF2940}.Release|x64.Build.0 = Release|Any CPU
+		{BFAE0151-970A-45BE-8943-52B82D4C1F38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFAE0151-970A-45BE-8943-52B82D4C1F38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFAE0151-970A-45BE-8943-52B82D4C1F38}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BFAE0151-970A-45BE-8943-52B82D4C1F38}.Debug|x64.Build.0 = Debug|Any CPU
+		{BFAE0151-970A-45BE-8943-52B82D4C1F38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFAE0151-970A-45BE-8943-52B82D4C1F38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFAE0151-970A-45BE-8943-52B82D4C1F38}.Release|x64.ActiveCfg = Release|Any CPU
+		{BFAE0151-970A-45BE-8943-52B82D4C1F38}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
