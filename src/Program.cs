@@ -30,7 +30,7 @@ public class MyWindowEventHandler : WindowEventHandler {
 
             var elements = Host.MakeCssSelector ( "#test" );
             var appDiv = elements.First ();
-            Host.OriginalApi.SciterUpdateElement ( appDiv, true );
+            Host.ForceRenderElement ( appDiv );
             /*
             Host.SetElementHtml ( appDiv, "<b>Bold Text!!!!!!!!!!!!!!</b>", SetElementHtml.ReplaceContent );*/
         }
