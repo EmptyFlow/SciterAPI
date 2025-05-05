@@ -979,6 +979,59 @@ namespace EmptyFlow.SciterAPI.Tests {
             }
         }
 
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_SetSharedVariable () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow ( 300, 300 );
+            host.Callbacks.AddProtocolHandler (
+                "embedded://",
+                (
+                    path => {
+                        return Encoding.UTF8.GetBytes (
+""""
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
+    <head>
+        <script>
+            setTimeout(() => {
+                Window.this.xcall("luher", globalThis.globalVariable);
+            },200);
+        </script>
+    </head>
+    <body>
+        <span id="world">Hello world!!!</span>
+    </body>
+</html>
+
+""""
+                        );
+                    }
+                )
+            );
+            host.CreateMainWindow ( 300, 300, enableDebug: true );
+            var value = host.CreateValue ( "testvalue" );
+            host.SetSharedVariable ( "globalVariable", value );
+            host.LoadFile ( "embedded://test.html" );
+            host.AddWindowEventHandler ( new DocumentXCallHandler ( MethodHandled, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void MethodHandled ( string name, IEnumerable<SciterValue> arguments ) {
+                var globalVariable = arguments.FirstOrDefault ();
+                var testValue = host.GetValueString ( ref globalVariable );
+                host.CloseMainWindow ();
+                Assert.Equal ( "luher", name );
+                Assert.True ( globalVariable.IsString );
+                Assert.Equal ( "testvalue", testValue );
+            }
+        }
+
     }
 
     public class DocumentReadyHandler : SciterEventHandler {

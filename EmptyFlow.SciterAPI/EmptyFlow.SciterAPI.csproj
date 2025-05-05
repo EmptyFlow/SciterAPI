@@ -18,6 +18,14 @@
 		<PackageTags>html;html-engine;htmlengine;sciter;binding</PackageTags>
 		<Version>1.0.2.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageReleaseNotes>
+			Added SciterAPIHost.LoadHtml for load HTML page as string
+			Added SciterAPIHost.GetElementChildrensCount for get count of childrens for specified element
+			Added SciterAPIHost.ClearAttributes for clear all element attributes
+			Added SciterAPIHost.ElementFromValue for get element from value
+			Added SciterAPIHost.ElementToValue wrap element reference into value
+			Added SciterAPIHost.SetSharedVariable for set global variable  in all or one window
+		</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">

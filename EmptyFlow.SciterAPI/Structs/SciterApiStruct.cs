@@ -12,7 +12,7 @@ public delegate IntPtr SciterProc ( IntPtr hwnd, uint msg, IntPtr wParam, IntPtr
 public delegate IntPtr SciterProcNd ( IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, ref bool pbHandled );
 public delegate bool SciterLoadFile ( IntPtr hwnd, [MarshalAs ( UnmanagedType.LPWStr )] string filename );
 public delegate bool SciterLoadHtml ( IntPtr hwnd, byte[] html, uint htmlSize, [MarshalAs ( UnmanagedType.LPWStr )] string baseUrl );
-public delegate void SciterSetCallback ( IntPtr hwnd, MulticastDelegate cb /*SciterHostCallback*/, IntPtr param );
+public delegate void SciterSetCallback ( IntPtr hwnd, MulticastDelegate cb, IntPtr param );
 public delegate bool SciterSetMasterCss ( byte[] utf8, uint numBytes );
 public delegate bool SciterAppendMasterCss ( byte[] utf8, uint numBytes );
 public delegate bool SciterSetCss ( IntPtr hwnd, byte[] utf8, uint numBytes, [MarshalAs ( UnmanagedType.LPWStr )] string baseUrl, [MarshalAs ( UnmanagedType.LPWStr )] string mediaType );
@@ -196,10 +196,10 @@ public delegate bool SciterAtomNameCB ( ulong atomv, lpcstrReceiver rcv, IntPtr 
 public delegate bool SciterSetGlobalAsset ( SomAsset pass );
 public delegate DomResult SciterGetElementAsset ( IntPtr el, ulong nameAtom, IntPtr ppass /* som_asset_t** */ );
 
-public delegate uint SciterSetVariable ( IntPtr hwndOrNull, [MarshalAs ( UnmanagedType.LPStr )] string name, IntPtr pvalToSet /* const VALUE* */ );
+public delegate uint SciterSetVariable ( IntPtr hwndOrNull, [MarshalAs ( UnmanagedType.LPStr )] string name, SciterValue pvalToSet );
 public delegate uint SciterGetVariable ( IntPtr hwndOrNull, [MarshalAs ( UnmanagedType.LPStr )] string name, IntPtr pvalToGet /* VALUE* */ );
-public delegate uint SciterElementUnwrap ( IntPtr pval /*const VALUE* */, IntPtr ppElement /* HELEMENT* */ );
-public delegate uint SciterElementWrap ( IntPtr pval /* VALUE* */, IntPtr pElement /* HELEMENT */ );
+public delegate uint SciterElementUnwrap ( SciterValue pval, IntPtr ppElement );
+public delegate uint SciterElementWrap ( SciterValue pval, IntPtr pElement );
 
 public delegate uint SciterNodeUnwrap ( IntPtr pval /* const VALUE* */, IntPtr ppNode /* HNODE* */ );
 public delegate uint SciterNodeWrap ( IntPtr pval /* VALUE* */, IntPtr pNode /* HNODE */ );

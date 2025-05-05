@@ -115,6 +115,12 @@ namespace EmptyFlow.SciterAPI {
             m_basicApi.SciterLoadFile ( m_mainWindow, htmlPath );
         }
 
+        public void LoadHtml ( string html ) {
+            if ( m_mainWindow == IntPtr.Zero ) return;
+            var bytes = Encoding.UTF8.GetBytes ( html );
+            m_basicApi.SciterLoadHtml ( m_mainWindow, bytes, (uint) bytes.Length, "" );
+        }
+
         public void PrepareGraphicsApi () {
             var pointer = m_basicApi.GetSciterGraphicsApi ();
             m_graphicsApi = Marshal.PtrToStructure<GraphicsApiStruct> ( pointer );
@@ -171,6 +177,11 @@ namespace EmptyFlow.SciterAPI {
             return elements;
         }
 
+        public int GetElementChildrensCount ( IntPtr element ) {
+            m_basicApi.SciterGetChildrenCount ( element, out var count );
+            return (int) count;
+        }
+
         public string GetElementHtml ( IntPtr element, bool outer ) {
             var strings = new List<string> ();
             lpcbyteReceiver callback = ( IntPtr bytes, uint num_bytes, IntPtr param ) => {
@@ -204,6 +215,8 @@ namespace EmptyFlow.SciterAPI {
 
             return string.Join ( "", strings );
         }
+
+        public void ClearAttributes ( nint element ) => m_basicApi.SciterClearAttributes ( element );
 
         public IEnumerable<string> GetElementAttributeNames ( IntPtr element ) {
             m_basicApi.SciterGetAttributeCount ( element, out var count );
@@ -308,6 +321,20 @@ namespace EmptyFlow.SciterAPI {
             if ( !m_eventHandlers.Contains ( handler ) ) return;
 
             m_eventHandlers.Remove ( handler );
+        }
+
+        /// <summary>
+        /// Sets variable that will be available in each document loaded after this call.
+        /// </summary>
+        public void SetSharedVariable(string name, SciterValue value) {
+            m_basicApi.SciterSetVariable ( nint.Zero, name, value );
+        }
+
+        /// <summary>
+        /// Sets variable that will be available in root document of main window, call it in or after DOCUMENT_CREATED event.
+        /// </summary>
+        public void SetMainWindowVariable ( string name, SciterValue value ) {
+            m_basicApi.SciterSetVariable ( m_mainWindow, name, value );
         }
 
     }
