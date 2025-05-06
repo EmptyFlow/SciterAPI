@@ -1012,9 +1012,9 @@ namespace EmptyFlow.SciterAPI.Tests {
                     }
                 )
             );
-            host.CreateMainWindow ( 300, 300, enableDebug: true );
             var value = host.CreateValue ( "testvalue" );
             host.SetSharedVariable ( "globalVariable", value );
+            host.CreateMainWindow ( 300, 300, enableDebug: true );
             host.LoadFile ( "embedded://test.html" );
             host.AddWindowEventHandler ( new DocumentXCallHandler ( MethodHandled, host ) );
 
@@ -1029,6 +1029,30 @@ namespace EmptyFlow.SciterAPI.Tests {
                 Assert.Equal ( "luher", name );
                 Assert.True ( globalVariable.IsString );
                 Assert.Equal ( "testvalue", testValue );
+            }
+        }
+
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_SetMainWindowVariable () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow ( 300, 300, enableDebug: true );
+            host.LoadHtml ( "<html><body></body></html>" );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+            var value = host.CreateValue ( "testvalue" );
+            host.SetMainWindowVariable ( "globalVariable", value );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var result = host.GetMainWindowVariable ( "globalVariable" );
+                var resultString = host.GetValueString ( ref result );
+                host.CloseMainWindow ();
+                Assert.Equal ( "testvalue", resultString );
             }
         }
 

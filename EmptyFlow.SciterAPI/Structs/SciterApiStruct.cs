@@ -197,7 +197,7 @@ public delegate bool SciterSetGlobalAsset ( SomAsset pass );
 public delegate DomResult SciterGetElementAsset ( IntPtr el, ulong nameAtom, IntPtr ppass /* som_asset_t** */ );
 
 public delegate uint SciterSetVariable ( IntPtr hwndOrNull, [MarshalAs ( UnmanagedType.LPStr )] string name, SciterValue pvalToSet );
-public delegate uint SciterGetVariable ( IntPtr hwndOrNull, [MarshalAs ( UnmanagedType.LPStr )] string name, IntPtr pvalToGet /* VALUE* */ );
+public delegate uint SciterGetVariable ( IntPtr hwndOrNull, [MarshalAs ( UnmanagedType.LPStr )] string name, ref SciterValue pvalToGet );
 public delegate uint SciterElementUnwrap ( SciterValue pval, IntPtr ppElement );
 public delegate uint SciterElementWrap ( SciterValue pval, IntPtr pElement );
 
