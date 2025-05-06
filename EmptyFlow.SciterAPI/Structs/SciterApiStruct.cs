@@ -198,8 +198,8 @@ public delegate DomResult SciterGetElementAsset ( IntPtr el, ulong nameAtom, Int
 
 public delegate uint SciterSetVariable ( IntPtr hwndOrNull, [MarshalAs ( UnmanagedType.LPStr )] string name, SciterValue pvalToSet );
 public delegate uint SciterGetVariable ( IntPtr hwndOrNull, [MarshalAs ( UnmanagedType.LPStr )] string name, ref SciterValue pvalToGet );
-public delegate uint SciterElementUnwrap ( SciterValue pval, IntPtr ppElement );
-public delegate uint SciterElementWrap ( SciterValue pval, IntPtr pElement );
+public delegate uint SciterElementUnwrap ( SciterValue pval, ref IntPtr ppElement );
+public delegate uint SciterElementWrap ( ref SciterValue pval, IntPtr pElement );
 
 public delegate uint SciterNodeUnwrap ( IntPtr pval /* const VALUE* */, IntPtr ppNode /* HNODE* */ );
 public delegate uint SciterNodeWrap ( IntPtr pval /* VALUE* */, IntPtr pNode /* HNODE */ );

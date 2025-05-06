@@ -16,7 +16,7 @@
 		<RepositoryUrl>https://github.com/EmptyFlow/SciterAPI</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>html;html-engine;htmlengine;sciter;binding</PackageTags>
-		<Version>1.0.2.0</Version>
+		<Version>1.0.3.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
 			Added SciterAPIHost.LoadHtml for load HTML page as string
@@ -24,7 +24,9 @@
 			Added SciterAPIHost.ClearAttributes for clear all element attributes
 			Added SciterAPIHost.ElementFromValue for get element from value
 			Added SciterAPIHost.ElementToValue wrap element reference into value
-			Added SciterAPIHost.SetSharedVariable for set global variable  in all or one window
+			Added SciterAPIHost.SetSharedVariable for set global variable in all or one window
+			Added SciterAPIHost.SetMainWindowVariable for set global variable in main window
+			Added SciterAPIHost.GetMainWindowVariable for get global variable for main window
 		</PackageReleaseNotes>
 	</PropertyGroup>
 

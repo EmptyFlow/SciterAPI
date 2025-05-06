@@ -211,9 +211,37 @@ namespace EmptyFlow.SciterAPI {
                 m_basicApi.ValueInit ( out sciterValue );
                 functionContext = sciterValue;
             }
-            m_basicApi.ValueInvoke ( ref value, ref functionContext, (uint) parameters.Count (), parameters.ToArray(), out var result, IntPtr.Zero );
+            m_basicApi.ValueInvoke ( ref value, ref functionContext, (uint) parameters.Count (), parameters.ToArray (), out var result, IntPtr.Zero );
 
             return result;
+        }
+
+        /// <summary>
+        /// Fetch DOM element reference from SCITER_VALUE envelope.
+        /// </summary>
+        /// <returns>Return element.</returns>
+        /// <exception cref="Exception">If Result will be not zero it will be part of error message.</exception>
+        public nint ElementFromValue ( SciterValue sciterValue ) {
+            var pointer = nint.Zero;
+            var domResult = m_basicApi.SciterElementUnwrap ( sciterValue, ref pointer );
+            if ( domResult != 0 ) throw new Exception ( $"Can't get element from value. DomResult is {domResult}" );
+
+            return pointer;
+        }
+
+        /// <summary>
+        /// Wrap DOM element reference into sciter::value envelope.
+        /// </summary>
+        /// <returns>Value.</returns>
+        /// <exception cref="Exception">If Result will be not zero it will be part of error message.</exception>
+        public SciterValue ElementToValue (nint element) {
+            SciterValue sciterValue;
+            m_basicApi.ValueInit ( out sciterValue );
+
+            var domResult = m_basicApi.SciterElementWrap ( ref sciterValue, element );
+            if ( domResult != 0 ) throw new Exception ( $"Can't wrap value to element. DomResult is {domResult}" );
+
+            return sciterValue;
         }
 
     }
