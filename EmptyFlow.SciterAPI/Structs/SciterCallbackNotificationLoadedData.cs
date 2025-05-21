@@ -10,6 +10,7 @@ namespace EmptyFlow.SciterAPI {
         public uint dataSize; // [in] loaded data size (in bytes).
         public uint dataType; // [in] SciterResourceType
         public uint status; // [in] status = 0 (dataSize == 0) - unknown error. status = 100..505 - http response status, Note: 200 - OK! status > 12000 - wininet error code, see ERROR_INTERNET_*** in wininet.h
+        public uint requestId; // [in] request handle that can be used with sciter-x-request API
     }
 
 }
