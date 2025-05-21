@@ -58,7 +58,7 @@ Latest version documentation can be found [there](https://emptyflow.github.io/Sc
 * ~~Helpers for Scriter Value API~~
 * ~~Binding for Graphics API~~
 * ~~Binding for Request API~~
-* Get/Set Variables
+* ~~Get/Set Variables~~
+* Support SOM mapping
 * Helpers for Sciter Node API
 * Helpers for Graphics API
-* Support SOM mapping
