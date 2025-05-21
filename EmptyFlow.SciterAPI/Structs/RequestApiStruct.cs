@@ -31,6 +31,7 @@ namespace EmptyFlow.SciterAPI.Structs {
     public delegate RequestResult RequestsRequestSetReceivedDataType ( nint rq, /*LPCSTR*/ byte[] type );
     public delegate RequestResult RequestsRequestSetReceivedDataEncoding ( nint rq, /* LPCSTR */ byte[] encoding );
     public delegate RequestResult RequestsRequestGetData ( nint rq, lpcbyteReceiver rcv, uint rcv_param );
+    public delegate RequestResult RequestsRequestGetRequestor ( nint rq, out uint element);
 
     [StructLayout ( LayoutKind.Sequential )]
     public readonly struct RequestApiStruct {
@@ -174,6 +175,11 @@ namespace EmptyFlow.SciterAPI.Structs {
         /// Get received (so far) data.
         /// </summary>
         public readonly RequestsRequestGetData RequestGetData;
+
+        /// <summary>
+        /// Get requestor element or document this request was issued for.
+        /// </summary>
+        public readonly RequestsRequestGetRequestor RequestGetRequestor;
 
     }
 
