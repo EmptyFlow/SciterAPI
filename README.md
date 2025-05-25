@@ -44,6 +44,16 @@ public class MyWindowEventHandler : SciterEventHandler {
 
 Latest version documentation can be found [there](https://emptyflow.github.io/SciterAPIDocs/).
 
+### Table compatibility
+
+In most cases, the old SciterAPI will be compatible with the new Sciter, but the new version of SciterAPI may not be compatible with old Sciter version.
+You can check the table below to see which version of SciterAPI is compatible with Sciter.
+
+| Minimal SciterAPI version | Minimal Sciter version |
+| -------- | ------- |
+| 1.0.4 | 6.0.1.8 |
+| 1.0.0 | 6.0.0.0 |
+
 ### Roadmap
 
 * ~~Binding for core API~~
