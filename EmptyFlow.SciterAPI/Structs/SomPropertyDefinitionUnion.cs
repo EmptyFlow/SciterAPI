@@ -3,7 +3,7 @@
 namespace EmptyFlow.SciterAPI.Structs {
     [StructLayout ( LayoutKind.Sequential )]
     public struct SomPropertyDefinitionUnion {
-        SomPropertyDefinitionUnionDelegates accs;
+        SomPropertyDefinitionAccessors accs;
         int i32;
         long i64;
         double f64;

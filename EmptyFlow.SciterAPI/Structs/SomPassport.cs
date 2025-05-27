@@ -1,24 +1,29 @@
-﻿using System.Runtime.InteropServices;
+﻿using EmptyFlow.SciterAPI.Enums;
+using System.Runtime.InteropServices;
 
 namespace EmptyFlow.SciterAPI.Structs {
+
     [StructLayout ( LayoutKind.Sequential )]
     public struct SomPassport { // Original name  som_passport_t
-        ulong flags;
-        ulong name;
+        public SomPassportFlags flags;
+        public ulong name;
 
-        SomPropertyDefinition properties;
-        SomMethodDefinition methods;
+        public nint Properties;
+        public ulong NumberProperties;
 
-        SomItemGetterOrSetter item_getter;
-        SomItemGetterOrSetter item_setter;
-        SomItemGetterOrSetter item_next;
+        public nint Methods;
+        public ulong NumberMethods;
 
-        SomAnyPropertyGetterOrSetter prop_getter;
-        SomAnyPropertyGetterOrSetter prop_setter;
+        public nint ItemGetter;
+        public nint ItemSetter;
+        public nint ItemNext;
 
-        SomNameResolver name_resolver;
+        public nint PropertyGetter;
+        public nint PropertySetter;
 
-        IntPtr reserved;
+        public nint NameResolver;
+
+        public nint reserved;
     }
 
 }
