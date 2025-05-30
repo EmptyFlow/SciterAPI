@@ -56,6 +56,14 @@ namespace EmptyFlow.SciterAPI {
             return sciterValue;
         }
 
+        public SciterValue CreateNullValue() {
+            SciterValue sciterValue;
+            m_basicApi.ValueInit ( out sciterValue );
+            sciterValue.t = ValueType.T_NULL;
+
+            return sciterValue;
+        }
+
         public SciterValue CreateColorValue ( uint color ) {
             SciterValue sciterValue;
             m_basicApi.ValueInit ( out sciterValue );

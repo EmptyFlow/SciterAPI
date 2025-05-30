@@ -7,7 +7,7 @@ namespace EmptyFlow.SciterAPI {
 
     public partial class SciterAPIHost {
 
-        [DllImport ( SciterLoader.SciterLibrary, EntryPoint = "SciterAPI" )]
+        [DllImport ( SciterLoader.SciterLibrary, EntryPoint = "SciterAPI", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr SciterAPI ();
 
         private IntPtr m_apiPointer = IntPtr.Zero;

@@ -7,11 +7,7 @@ var host = new SciterAPIHost ();
 host.LoadAPI ();
 host.PrepareGraphicsApi ();
 host.PrepareRequestApi ();
-var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.4/samples/html/details-summary.htm";
-//var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.4/samples/vue/hello-vue.htm";
-//var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.4/samples.sciter/audio/test-basic.htm";
-//var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.4/samples.webgl/basic/1-cube-lights/index.htm";
-//var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.4/samples.webgl/threejs/1-hello-world.htm";
+var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.8/samples/html/details-summary.htm";
 host.Callbacks.AddAttachBehaviourFactory ( "testbehaviour", ( element ) => new TestGraphicsEventHandler ( element, host ) );
 host.CreateMainWindow ( 300, 300, enableDebug: true, enableFeature: true );
 host.AddWindowEventHandler ( new MyWindowEventHandler ( host.MainWindow, host ) );
@@ -35,6 +31,10 @@ public class MyWindowEventHandler : WindowEventHandler {
             Host.SetElementHtml ( appDiv, "<b>Bold Text!!!!!!!!!!!!!!</b>", SetElementHtml.ReplaceContent );*/
         }
     }
+
+    /*public override nint SOMEventPassport () {
+        return Host.CreateSomPassport ( "testpass" );
+    }*/
 
 }
 

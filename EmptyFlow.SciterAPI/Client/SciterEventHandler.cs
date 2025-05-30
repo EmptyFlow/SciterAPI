@@ -7,6 +7,10 @@ namespace EmptyFlow.SciterAPI {
 
         private IntPtr m_processedElement = IntPtr.Zero;
 
+        private nint m_relatedPassport = nint.Zero;
+
+        private nint m_relatedAsset = nint.Zero;
+
         private readonly IntPtr m_subscribedElement = IntPtr.Zero;
 
         private readonly SciterEventHandlerMode m_mode = SciterEventHandlerMode.Element;
@@ -42,6 +46,10 @@ namespace EmptyFlow.SciterAPI {
         /// </summary>
         public ElementEventProc InnerDelegate => m_innerDelegate;
 
+        public nint AttachedPassport => m_relatedPassport;
+
+        public nint AttachedAsset => m_relatedAsset;
+
         public SciterEventHandler ( IntPtr relatedThing, SciterAPIHost host, SciterEventHandlerMode mode ) {
             m_subscribedElement = relatedThing;
             m_host = host ?? throw new ArgumentNullException ( nameof ( host ) );
@@ -55,6 +63,61 @@ namespace EmptyFlow.SciterAPI {
         }
 
         private bool SciterHandleEvent ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) => EventHandler ( tag, he, evtg, prms );
+
+        private int m_referenceCounter = 0;
+
+        private AssetAddOrReleasesDelegate? AssetAddRefDelegate;
+        private AssetAddOrReleasesDelegate? AssetReleaseDelegate;
+        private AssetGetInterfaceDelegate? AssetGetInterfaceDelegate;
+        private AssetGetPassportDelegate? AssetGetPassportDelegate;
+
+        public int AssetAddRef ( nint thing ) {
+            m_referenceCounter++;
+            return m_referenceCounter;
+        }
+
+        public int AssetRelease ( nint thing ) {
+            m_referenceCounter--;
+            return m_referenceCounter;
+        }
+
+        public int AssetGetInterface ( nint thing, string name, nint @out ) {
+            //if ( name != "asset.sciter.com" ) return 0;
+            //if ( 0 != strcmp ( name, interface_name () ) ) return false;
+            //if (out) { this->asset_add_ref (); *out = this; }
+            return 1;
+        }
+
+        [UnmanagedCallConv]
+        public nint AssetGetPassport ( IntPtr thing ) => m_relatedPassport;
+
+        private nint GetAsset () {
+            if ( m_relatedAsset != nint.Zero ) return m_relatedAsset;
+
+            AssetAddRefDelegate = new AssetAddOrReleasesDelegate ( AssetAddRef );
+            AssetReleaseDelegate = new AssetAddOrReleasesDelegate ( AssetRelease );
+            AssetGetInterfaceDelegate = new AssetGetInterfaceDelegate ( AssetGetInterface );
+            AssetGetPassportDelegate = new AssetGetPassportDelegate ( AssetGetPassport );
+
+            var assetClass = new SomAssetClass {
+                AssetAddRef = Marshal.GetFunctionPointerForDelegate ( AssetAddRefDelegate ),
+                AssetRelease = Marshal.GetFunctionPointerForDelegate ( AssetReleaseDelegate ),
+                AssetGetInterface = Marshal.GetFunctionPointerForDelegate ( AssetGetInterfaceDelegate ),
+                AssetGetPassport = Marshal.GetFunctionPointerForDelegate ( AssetGetPassportDelegate )
+            };
+
+            var classPointer = Marshal.AllocHGlobal ( Marshal.SizeOf<SomAssetClass> () );
+
+            var asset = new SomAsset {
+                isa = classPointer
+            };
+
+            m_relatedAsset = Marshal.AllocHGlobal ( Marshal.SizeOf<SomAsset> () );
+
+            Marshal.StructureToPtr ( asset, m_relatedAsset, false );
+
+            return m_relatedAsset;
+        }
 
         public virtual bool EventHandler ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) {
             if ( m_includedEvents.Any () && !m_includedEvents.Contains ( (EventBehaviourGroups) evtg ) ) return false;
@@ -157,8 +220,21 @@ namespace EmptyFlow.SciterAPI {
                     Marshal.StructureToPtr ( scriptArguments, parameters, true );
                     return handled;
                 case EventBehaviourGroups.HANDLE_SOM:
-                    var somArguments = Marshal.PtrToStructure<SOMParameters> ( parameters );
-                    SOMEvent ( somArguments.cmd, somArguments.data );
+                    var somCommand = Marshal.PtrToStructure<SOMParameters> ( parameters );
+                    if ( somCommand.Command == SOMEvents.SOM_GET_PASSPORT ) {
+                        var passport = m_relatedPassport != nint.Zero ? m_relatedPassport : SOMEventPassport ();
+                        if ( passport != nint.Zero ) {
+                            m_relatedPassport = passport;
+                            somCommand.Data = passport;
+                            Marshal.StructureToPtr ( somCommand, parameters, true );
+                            return true;
+                        }
+                    }
+                    if ( somCommand.Command == SOMEvents.SOM_GET_ASSET ) {
+                        somCommand.Data = GetAsset ();
+                        Marshal.StructureToPtr ( somCommand, parameters, true );
+                        return true;
+                    }
                     break;
                 case EventBehaviourGroups.HANDLE_INITIALIZATION:
                     var initializationArguments = Marshal.PtrToStructure<InitializationParameters> ( parameters );
@@ -212,15 +288,8 @@ namespace EmptyFlow.SciterAPI {
         public virtual void MethodCall ( BehaviourMethodIdentifiers methodID ) {
         }
 
-        public virtual void SOMEvent ( SOMEvents cmd, nint data ) {
-            if ( cmd == SOMEvents.SOM_GET_PASSPORT ) {
-                //	p->data.passport = pThis->asset_get_passport();
-                return;
-            }
-
-            if ( cmd == SOMEvents.SOM_GET_ASSET ) {
-                //	p->data.asset = static_cast<som_asset_t*>(pThis); // note: no add_ref
-            }
+        public virtual nint SOMEventPassport () {
+            return nint.Zero;
         }
 
         public virtual void BehaviourEvent ( BehaviourEvents command, nint targetElement, nint element, nint reason, SciterValue data, string name ) {

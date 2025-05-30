@@ -225,13 +225,13 @@ namespace EmptyFlow.SciterAPI.Structs {
     public delegate bool KeyValueCallback ( IntPtr param, ref SciterValue pkey, ref SciterValue pval ); // Original name KEY_VALUE_CALLBACK
     public delegate bool NativeFunctorInvoke ( IntPtr tag, uint argc, IntPtr argv, out SciterValue retval ); // Original name NATIVE_FUNCTOR_INVOKE
     public delegate bool NativeFunctorRelease ( IntPtr tag ); // Original name NATIVE_FUNCTOR_RELEASE
-    public delegate long AssetAddOrReleasesDelegate ( IntPtr thing /* SomAsset */ );
-    public delegate long AssetGetInterface ( IntPtr thing, [MarshalAs ( UnmanagedType.LPStr )] string name, IntPtr @out );
-    public delegate SomPassport AssetGetPassport ( IntPtr thing );
+    public delegate int AssetAddOrReleasesDelegate ( IntPtr thing );
+    public delegate int AssetGetInterfaceDelegate ( nint thing, [MarshalAs ( UnmanagedType.LPStr )] string name, nint @out );
+    public delegate nint AssetGetPassportDelegate ( IntPtr thing );
     public delegate bool SomPropertyGetter ( IntPtr thing, out SciterValue p_value );
     public delegate bool SomPropertySetter ( IntPtr thing, ref SciterValue p_value );
-    public delegate bool SomItemGetter ( IntPtr thing, SciterValue p_key, out SciterValue p_value );
-    public delegate bool SomItemSetter ( IntPtr thing, SciterValue p_key, ref SciterValue p_value );
+    public delegate bool SomItemGetter ( IntPtr thing, SciterValue key, out SciterValue value );
+    public delegate bool SomItemSetter ( IntPtr thing, SciterValue key, ref SciterValue value );
     public delegate bool SomItemNext ( IntPtr thing, ref SciterValue p_idx, /*in/out*/ ref SciterValue p_value );
     public delegate bool SomMethod ( IntPtr thing, uint argc, [MarshalAs ( UnmanagedType.LPArray )] SciterValue[] argv, SciterValue p_result ); // original name som_method_t
     public delegate bool SomAnyPropertyGetter ( IntPtr thing, ulong propSymbol, out SciterValue p_value ); // original name som_any_prop_getter_t
