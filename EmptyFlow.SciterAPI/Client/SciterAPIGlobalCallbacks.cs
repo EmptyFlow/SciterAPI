@@ -1,30 +1,42 @@
 ﻿using EmptyFlow.SciterAPI.Structs;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace EmptyFlow.SciterAPI {
 
     public class SciterAPIGlobalCallbacks {
 
+        [DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
         private SciterApiStruct m_sciterApiStruct;
 
+        [DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
         private SciterAPIHost m_host;
 
+        [DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
         private SciterHostCallback m_sciterHostCallback;
 
+        [DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
         private Dictionary<string, Func<string, byte[]>> m_protocolHandlers = new Dictionary<string, Func<string, byte[]>> ();
 
+        [DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
         private Action<string, uint, uint> m_loadedDataAction;
 
+        [DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
         private Action m_engineDestroyedAction;
 
+        [DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
         private Action m_graphicalFailureAction;
 
+        [DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
         private Action<IntPtr, IntPtr, IntPtr> m_notificationPostedAction;
 
+        [DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
         private Func<string, IntPtr, SciterEventHandler?> m_attachBehaviourAction;
 
+        [DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
         protected Dictionary<string, Func<IntPtr, SciterEventHandler>> m_attachBehaviourFactories = new Dictionary<string, Func<IntPtr, SciterEventHandler>> ();
 
+        [DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
         public SciterAPIGlobalCallbacks ( SciterAPIHost host ) {
             m_loadedDataAction = EmptyLoadedDataAction;
             m_engineDestroyedAction = EmptyAction;

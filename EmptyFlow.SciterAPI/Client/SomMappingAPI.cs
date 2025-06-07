@@ -98,32 +98,6 @@ namespace EmptyFlow.SciterAPI {
             }
         }
 
-        /*
-         private static void CallFunction(Player[] players)
-{
-    var allocatedMemory = new List<IntPtr>();
-
-    int intPtrSize = Marshal.SizeOf(typeof(IntPtr));
-    IntPtr nativeArray = Marshal.AllocHGlobal(intPtrSize * players.Length);
-    for (int i = 0; i < players.Length; i++)
-    {
-        IntPtr nativePlayer = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Player)));
-        allocatedMemory.Add(nativePlayer);
-        Marshal.StructureToPtr(players[i], nativePlayer, false);
-
-        Marshal.WriteIntPtr(nativeArray, i * intPtrSize, nativePlayer);
-    }
-
-    my_function(players.Length, nativeArray);
-
-    Marshal.FreeHGlobal(nativeArray);
-
-    foreach (IntPtr ptr in allocatedMemory)
-    {
-        Marshal.FreeHGlobal(ptr);
-   
-         */
-
     }
 
 }
