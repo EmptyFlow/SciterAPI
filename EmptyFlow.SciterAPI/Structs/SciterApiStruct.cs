@@ -37,9 +37,6 @@ namespace EmptyFlow.SciterAPI.Structs {
     public delegate IntPtr SciterCreateWindow ( WindowsFlags creationFlags, ref SciterRectangle frame, IntPtr delegt, IntPtr delegateParam, IntPtr parent );
     public delegate void SciterSetupDebugOutput ( IntPtr hwndOrNull, IntPtr param, DebugOutputProc pfOutput );
 
-    public delegate IntPtr DebugOutputProc ( IntPtr param, uint subsystem, uint severity, IntPtr text_ptr, uint text_length );
-    public delegate uint SciterHostCallback ( IntPtr pns, IntPtr callbackParam );
-
     // DOM API
 
     public delegate DomResult SciterUseElement ( IntPtr he );
@@ -216,28 +213,52 @@ namespace EmptyFlow.SciterAPI.Structs {
 
     // Delegates participiating in API
 
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
+    public delegate IntPtr DebugOutputProc ( IntPtr param, uint subsystem, uint severity, IntPtr text_ptr, uint text_length );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
+    public delegate uint SciterHostCallback ( IntPtr pns, IntPtr callbackParam );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate void lpcbyteReceiver ( IntPtr bytes, uint num_bytes, IntPtr param );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate void lpcwstReceiver ( IntPtr str, uint str_length, IntPtr param );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate void lpcstrReceiver ( IntPtr str, uint str_length, IntPtr param );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool SciterElementCallback ( IntPtr he, IntPtr param );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool ElementComparator ( IntPtr he1, IntPtr he2, IntPtr param );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool ElementEventProc ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool KeyValueCallback ( IntPtr param, ref SciterValue pkey, ref SciterValue pval ); // Original name KEY_VALUE_CALLBACK
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool NativeFunctorInvoke ( IntPtr tag, uint argc, IntPtr argv, out SciterValue retval ); // Original name NATIVE_FUNCTOR_INVOKE
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool NativeFunctorRelease ( IntPtr tag ); // Original name NATIVE_FUNCTOR_RELEASE
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate int AssetAddOrReleasesDelegate ( IntPtr thing );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate int AssetGetInterfaceDelegate ( nint thing, [MarshalAs ( UnmanagedType.LPStr )] string name, nint @out );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate nint AssetGetPassportDelegate ( IntPtr thing );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool SomPropertyGetter ( IntPtr thing, out SciterValue p_value );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool SomPropertySetter ( IntPtr thing, ref SciterValue p_value );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool SomItemGetter ( IntPtr thing, SciterValue key, out SciterValue value );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool SomItemSetter ( IntPtr thing, SciterValue key, ref SciterValue value );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool SomItemNext ( IntPtr thing, ref SciterValue p_idx, /*in/out*/ ref SciterValue p_value );
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool SomMethod ( IntPtr thing, uint argc, [MarshalAs ( UnmanagedType.LPArray )] SciterValue[] argv, SciterValue p_result ); // original name som_method_t
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool SomAnyPropertyGetter ( IntPtr thing, ulong propSymbol, out SciterValue p_value ); // original name som_any_prop_getter_t
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool SomAnyPropertySetter ( IntPtr thing, ulong propSymbol, ref SciterValue p_value ); // original name som_any_prop_setter_t
+    [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool SomNameResolver ( IntPtr thing, ulong propSymbol, uint pIndex, bool pIsMethod ); // original name som_name_resolver_t
-
 
     [StructLayout ( LayoutKind.Sequential )]
     public readonly struct SciterApiStruct {

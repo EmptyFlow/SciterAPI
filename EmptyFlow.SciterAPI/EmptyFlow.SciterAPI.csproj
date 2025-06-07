@@ -18,10 +18,10 @@
 		<RepositoryUrl>https://github.com/EmptyFlow/SciterAPI</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>html;html-engine;htmlengine;sciter;binding</PackageTags>
-		<Version>1.0.5.0</Version>
+		<Version>1.0.6.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
-			Fixes few trimming issues
+			Fixes trimming delegates participating in callbacks
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
