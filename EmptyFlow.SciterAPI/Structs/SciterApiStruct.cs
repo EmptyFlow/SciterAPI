@@ -238,7 +238,7 @@ namespace EmptyFlow.SciterAPI.Structs {
     [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate int AssetAddOrReleasesDelegate ( IntPtr thing );
     [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
-    public delegate int AssetGetInterfaceDelegate ( nint thing, [MarshalAs ( UnmanagedType.LPStr )] string name, nint @out );
+    public delegate int AssetGetInterfaceDelegate ( nint thing, nint name, nint @out );
     [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate nint AssetGetPassportDelegate ( IntPtr thing );
     [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]

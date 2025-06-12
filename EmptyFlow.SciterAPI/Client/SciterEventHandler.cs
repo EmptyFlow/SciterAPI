@@ -64,46 +64,35 @@ namespace EmptyFlow.SciterAPI {
 
         private bool SciterHandleEvent ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) => EventHandler ( tag, he, evtg, prms );
 
-        private int m_referenceCounter = 0;
+        private static int m_referenceCounter = 0;
 
-        private AssetAddOrReleasesDelegate? AssetAddRefDelegate;
-        private AssetAddOrReleasesDelegate? AssetReleaseDelegate;
-        private AssetGetInterfaceDelegate? AssetGetInterfaceDelegate;
-        private AssetGetPassportDelegate? AssetGetPassportDelegate;
-
-        public int AssetAddRef ( nint thing ) {
+        public static int AssetAddRef ( nint thing ) {
             m_referenceCounter++;
             return m_referenceCounter;
         }
 
-        public int AssetRelease ( nint thing ) {
+        public static int AssetRelease ( nint thing ) {
             m_referenceCounter--;
             return m_referenceCounter;
         }
 
-        public int AssetGetInterface ( nint thing, string name, nint @out ) {
+        public static int AssetGetInterface ( nint thing, nint name, nint @out ) {
             //if ( name != "asset.sciter.com" ) return 0;
             //if ( 0 != strcmp ( name, interface_name () ) ) return false;
             //if (out) { this->asset_add_ref (); *out = this; }
             return 1;
         }
 
-        [UnmanagedCallConv]
-        public nint AssetGetPassport ( IntPtr thing ) => m_relatedPassport;
+        public static nint AssetGetPassport ( nint thing ) => IntPtr.Zero;//m_relatedPassport;
 
         private nint GetAsset () {
             if ( m_relatedAsset != nint.Zero ) return m_relatedAsset;
 
-            AssetAddRefDelegate = new AssetAddOrReleasesDelegate ( AssetAddRef );
-            AssetReleaseDelegate = new AssetAddOrReleasesDelegate ( AssetRelease );
-            AssetGetInterfaceDelegate = new AssetGetInterfaceDelegate ( AssetGetInterface );
-            AssetGetPassportDelegate = new AssetGetPassportDelegate ( AssetGetPassport );
-
             var assetClass = new SomAssetClass {
-                AssetAddRef = Marshal.GetFunctionPointerForDelegate ( AssetAddRefDelegate ),
-                AssetRelease = Marshal.GetFunctionPointerForDelegate ( AssetReleaseDelegate ),
-                AssetGetInterface = Marshal.GetFunctionPointerForDelegate ( AssetGetInterfaceDelegate ),
-                AssetGetPassport = Marshal.GetFunctionPointerForDelegate ( AssetGetPassportDelegate )
+                AssetAddRef = Marshal.GetFunctionPointerForDelegate ( new AssetAddOrReleasesDelegate ( AssetAddRef ) ),
+                AssetRelease = Marshal.GetFunctionPointerForDelegate ( new AssetAddOrReleasesDelegate ( AssetRelease ) ),
+                AssetGetInterface = Marshal.GetFunctionPointerForDelegate ( new AssetGetInterfaceDelegate( AssetGetInterface ) ),
+                AssetGetPassport = Marshal.GetFunctionPointerForDelegate ( new AssetGetPassportDelegate( AssetGetPassport ) )
             };
 
             var classPointer = Marshal.AllocHGlobal ( Marshal.SizeOf<SomAssetClass> () );
