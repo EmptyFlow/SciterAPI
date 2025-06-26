@@ -22,6 +22,7 @@
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
 			Refresh KEYBOARD_STATES enum
+			Added method SciterLoader.InitializeFromEmbedded for load library from assembly embedded resource
 		</PackageReleaseNotes>
 	</PropertyGroup>
 

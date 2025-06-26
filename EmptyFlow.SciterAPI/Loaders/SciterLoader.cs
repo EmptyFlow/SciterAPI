@@ -23,11 +23,35 @@ namespace EmptyFlow.SciterAPI {
         public static bool IsInitialized => m_isInitialized;
 
         /// <summary>
-        /// Initialize 
+        /// Try to initialize from folder in file system.
         /// </summary>
         /// <param name="sciterPath">Path to folder where will be located sciter dynamic library file.</param>
         public static void Initialize ( string sciterPath ) {
             if ( m_isInitialized ) return;
+
+            m_isInitialized = true;
+            m_sciterPath = sciterPath;
+            NativeLibrary.SetDllImportResolver ( typeof ( SciterAPIHost ).Assembly, ImportResolver );
+        }
+
+        public static void InitializeFromEmbedded ( string sciterPath, string savePath, Assembly assembly ) {
+            if ( m_isInitialized ) return;
+
+            var libraryName = GetLibraryPlatformName ();
+            var fullSavedPath = Path.Combine ( savePath, libraryName );
+
+            using var stream = assembly.GetManifestResourceStream ( sciterPath + "/" + libraryName );
+            if ( stream == null ) throw new NotSupportedException ( "Not found sciter library in embedded resources!" );
+
+            if ( File.Exists ( fullSavedPath ) ) File.Delete ( fullSavedPath );
+
+            try {
+                using var file = File.OpenWrite ( fullSavedPath );
+                stream.CopyTo ( file );
+                file.Close ();
+            } catch ( Exception e ) {
+                throw new Exception ( $"Can't save sciter library to {fullSavedPath}, check inner exception for details!", e );
+            }
 
             m_isInitialized = true;
             m_sciterPath = sciterPath;
@@ -48,6 +72,16 @@ namespace EmptyFlow.SciterAPI {
             if ( RuntimeInformation.IsOSPlatform ( OSPlatform.Windows ) ) WindowsExtras.ShowConsoleWindow ();
         }
 
+        private static string GetLibraryPlatformName () {
+            var libraryName = "";
+            if ( RuntimeInformation.IsOSPlatform ( OSPlatform.Windows ) ) libraryName = WindowsName;
+            if ( RuntimeInformation.IsOSPlatform ( OSPlatform.Linux ) ) libraryName = LinuxName;
+            if ( RuntimeInformation.IsOSPlatform ( OSPlatform.OSX ) ) libraryName = MacOSName;
+
+            if ( string.IsNullOrEmpty ( libraryName ) ) throw new NotSupportedException ( "You operating system not supported!" );
+
+            return libraryName;
+        }
 
         private static bool TryLoadLibrary () {
             var libraryName = "";
