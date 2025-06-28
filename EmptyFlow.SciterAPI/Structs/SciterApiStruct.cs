@@ -235,12 +235,14 @@ namespace EmptyFlow.SciterAPI.Structs {
     public delegate bool NativeFunctorInvoke ( IntPtr tag, uint argc, IntPtr argv, out SciterValue retval ); // Original name NATIVE_FUNCTOR_INVOKE
     [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool NativeFunctorRelease ( IntPtr tag ); // Original name NATIVE_FUNCTOR_RELEASE
+
     [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate int AssetAddOrReleasesDelegate ( IntPtr thing );
     [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate int AssetGetInterfaceDelegate ( nint thing, nint name, nint @out );
     [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate nint AssetGetPassportDelegate ( IntPtr thing );
+
     [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]
     public delegate bool SomPropertyGetter ( IntPtr thing, out SciterValue p_value );
     [UnmanagedFunctionPointer ( CallingConvention.Cdecl )]

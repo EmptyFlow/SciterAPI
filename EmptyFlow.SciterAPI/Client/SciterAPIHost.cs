@@ -178,8 +178,24 @@ namespace EmptyFlow.SciterAPI {
         }
 
         public int GetElementChildrensCount ( IntPtr element ) {
-            m_basicApi.SciterGetChildrenCount ( element, out var count );
+            var domResult = m_basicApi.SciterGetChildrenCount ( element, out var count );
+            if ( domResult != DomResult.SCDOM_OK ) throw new Exception ( "Can't get childrens count!" );
+
             return (int) count;
+        }
+
+        public IEnumerable<nint> GetElementChildrens ( IntPtr element ) {
+            var domResult = m_basicApi.SciterGetChildrenCount ( element, out var count );
+            if ( domResult != DomResult.SCDOM_OK ) return [];
+
+            var result = new List<nint> ();
+            for ( var i = 0; i < count; i++ ) {
+                var nthChildResult = m_basicApi.SciterGetNthChild ( element, (uint) i, out var nthElement );
+                if ( nthChildResult != DomResult.SCDOM_OK ) continue;
+
+                result.Add ( nthElement );
+            }
+            return result;
         }
 
         public string GetElementHtml ( IntPtr element, bool outer ) {
@@ -326,7 +342,7 @@ namespace EmptyFlow.SciterAPI {
         /// <summary>
         /// Sets variable that will be available in each document loaded after this call.
         /// </summary>
-        public void SetSharedVariable(string name, SciterValue value) {
+        public void SetSharedVariable ( string name, SciterValue value ) {
             var code = m_basicApi.SciterSetVariable ( nint.Zero, name, value );
             if ( code != (uint) DomResult.SCDOM_OK ) throw new Exception ( $"Can't set variable {name}. Error is {code}." );
         }
