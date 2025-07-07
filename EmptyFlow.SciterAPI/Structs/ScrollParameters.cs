@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 
 namespace EmptyFlow.SciterAPI {
+
     [StructLayout ( LayoutKind.Sequential )]
     public struct ScrollParameters { // Original name SCROLL_PARAMS
         public ScrollEvents cmd;

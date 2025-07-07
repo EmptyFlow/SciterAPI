@@ -21,9 +21,8 @@
 		<Version>1.0.7.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
-			Refresh KEYBOARD_STATES enum
-			Added method SciterLoader.InitializeFromEmbedded for load library from assembly embedded resource
-			SciterAPiHost.GetElementChildrens to get all child elements
+			Added values SCITER_APP_LOOP_ITERATION and SCITER_APP_LOOP_HEARTBIT to SCITER_APP_CMD enum
+			Added vertual method BeforeRegisterEvent to EventHandler for handle registering handler and have ability to change attached events
 		</PackageReleaseNotes>
 	</PropertyGroup>
 

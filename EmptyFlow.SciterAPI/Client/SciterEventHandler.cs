@@ -91,8 +91,8 @@ namespace EmptyFlow.SciterAPI {
             var assetClass = new SomAssetClass {
                 AssetAddRef = Marshal.GetFunctionPointerForDelegate ( new AssetAddOrReleasesDelegate ( AssetAddRef ) ),
                 AssetRelease = Marshal.GetFunctionPointerForDelegate ( new AssetAddOrReleasesDelegate ( AssetRelease ) ),
-                AssetGetInterface = Marshal.GetFunctionPointerForDelegate ( new AssetGetInterfaceDelegate( AssetGetInterface ) ),
-                AssetGetPassport = Marshal.GetFunctionPointerForDelegate ( new AssetGetPassportDelegate( AssetGetPassport ) )
+                AssetGetInterface = Marshal.GetFunctionPointerForDelegate ( new AssetGetInterfaceDelegate ( AssetGetInterface ) ),
+                AssetGetPassport = Marshal.GetFunctionPointerForDelegate ( new AssetGetPassportDelegate ( AssetGetPassport ) )
             };
 
             var classPointer = Marshal.AllocHGlobal ( Marshal.SizeOf<SomAssetClass> () );
@@ -117,7 +117,8 @@ namespace EmptyFlow.SciterAPI {
 
             switch ( (EventBehaviourGroups) evtg ) {
                 case EventBehaviourGroups.SUBSCRIPTIONS_REQUEST:
-                    Marshal.WriteInt32 ( parameters, (int) EventBehaviourGroups.HandleAll );
+                    var registeredType = BeforeRegisterEvent ();
+                    Marshal.WriteInt32 ( parameters, (int) registeredType );
                     AfterRegisterEvent ();
                     return true;
                 case EventBehaviourGroups.HANDLE_MOUSE:
@@ -240,6 +241,8 @@ namespace EmptyFlow.SciterAPI {
 
             return false;
         }
+
+        public virtual EventBehaviourGroups BeforeRegisterEvent () => EventBehaviourGroups.HandleAll;
 
         public virtual void AfterRegisterEvent () {
         }

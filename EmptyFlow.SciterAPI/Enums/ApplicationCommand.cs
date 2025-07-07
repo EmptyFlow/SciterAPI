@@ -30,6 +30,18 @@
         /// </summary>
         SCITER_APP_RUN = 4,
 
+        /// <summary>
+        /// does single message pump loop iteration, SCITER_APP_LOOP is essentially this:
+        /// while( SciterExec(SCITER_APP_LOOP_ITERATION,0,0) );
+        /// </summary>
+        SCITER_APP_LOOP_ITERATION = 6,
+
+        /// <summary>
+        /// checks outstanding tasks and timers,
+        /// like SCITER_APP_LOOP_ITERATION but without message processing 
+        /// </summary>
+        SCITER_APP_LOOP_HEARTBIT = 7,
+
     }
 
 }
