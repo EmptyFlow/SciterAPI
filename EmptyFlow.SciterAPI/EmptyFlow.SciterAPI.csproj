@@ -18,11 +18,14 @@
 		<RepositoryUrl>https://github.com/EmptyFlow/SciterAPI</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>html;html-engine;htmlengine;sciter;binding</PackageTags>
-		<Version>1.0.7.0</Version>
+		<Version>1.0.8.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
 			Added values SCITER_APP_LOOP_ITERATION and SCITER_APP_LOOP_HEARTBIT to SCITER_APP_CMD enum
-			Added vertual method BeforeRegisterEvent to EventHandler for handle registering handler and have ability to change attached events
+			Added virtual method BeforeRegisterEvent to EventHandler for handle registering handler and have ability to change attached events
+			Added SciterAPIHost.MakeCssSelector(selector,insideElement) method for perform selector inside specified element
+			Added SciterAPIHost.GetElementStyleProperty method for get style property value
+			Added SciterAPIHost.SetElementStyleProperty method for set style property value
 		</PackageReleaseNotes>
 	</PropertyGroup>
 

@@ -1056,6 +1056,65 @@ namespace EmptyFlow.SciterAPI.Tests {
             }
         }
 
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_SetElementStyleProperty () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow ( 300, 300, enableDebug: true );
+            host.LoadHtml ( "<html><body><div></div></body></html>" );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var divElement = host.MakeCssSelector ( "div" ).First();
+                host.SetElementStyleProperty ( divElement, "color", "#ccccff" );
+                var savedProperty = host.GetElementStyleProperty(divElement, "color" );
+                host.CloseMainWindow ();
+                Assert.Equal ( "rgb(204,204,255)", savedProperty );
+            }
+        }
+
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_MakeCssSelector_InsideElement () {
+            //Arrange
+            SciterLoader.Initialize ( "" );
+            var host = new SciterAPIHost ();
+            host.LoadAPI ();
+            host.CreateMainWindow ( 300, 300, enableDebug: true );
+            host.LoadHtml (
+                """
+                <html>
+                    <body>
+                        <span>First</span>
+                        <div id="insideelement">
+                            <span>Second</span>
+                            <span>Third</span>
+                        </div>
+                    </body>
+                </html>
+                """
+            );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var divElement = host.MakeCssSelector ( "#insideelement" ).First ();
+                var allSpans = host.MakeCssSelector ( "span" ).Count();
+                var insideSpans = host.MakeCssSelector ( "span", divElement ).Count ();
+                host.CloseMainWindow ();
+                Assert.Equal ( 3, allSpans );
+                Assert.Equal ( 2, insideSpans );
+            }
+        }
+
     }
 
     public class DocumentReadyHandler : SciterEventHandler {

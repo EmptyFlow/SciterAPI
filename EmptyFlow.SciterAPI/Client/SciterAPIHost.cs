@@ -177,6 +177,18 @@ namespace EmptyFlow.SciterAPI {
             return elements;
         }
 
+        public IEnumerable<IntPtr> MakeCssSelector ( string cssSelector, nint insideElement ) {
+            var elements = new List<IntPtr> ();
+            SciterElementCallback callback = ( IntPtr he, IntPtr param ) => {
+                elements.Add ( he );
+                return false;
+            };
+            var domResult = m_basicApi.SciterSelectElementsW ( insideElement, cssSelector, callback, 1 );
+            if ( domResult != DomResult.SCDOM_OK ) return Enumerable.Empty<IntPtr> ();
+
+            return elements;
+        }
+
         public int GetElementChildrensCount ( IntPtr element ) {
             var domResult = m_basicApi.SciterGetChildrenCount ( element, out var count );
             if ( domResult != DomResult.SCDOM_OK ) throw new Exception ( "Can't get childrens count!" );
@@ -299,6 +311,18 @@ namespace EmptyFlow.SciterAPI {
         public void SetElementHtml ( IntPtr element, string text, SetElementHtml insertMode ) {
             var bytes = Encoding.UTF8.GetBytes ( text );
             m_basicApi.SciterSetElementHtml ( element, bytes, (uint) bytes.Length, insertMode );
+        }
+
+        public string GetElementStyleProperty ( IntPtr element, string name ) {
+            var valueReceiver = new LPCWStrReceiverCallback ();
+
+            m_basicApi.SciterGetStyleAttributeCb ( element, name, valueReceiver.Callback, 0 );
+
+            return valueReceiver.Value ();
+        }
+
+        public void SetElementStyleProperty ( IntPtr element, string name, string value ) {
+            m_basicApi.SciterSetStyleAttribute ( element, name, value );
         }
 
         /// <summary>

@@ -5,7 +5,7 @@ namespace EmptyFlow.SciterAPI.Structs {
 
     internal record LPCWStrReceiverCallback {
 
-        public StringBuilder Result = new StringBuilder ();
+        public StringBuilder Result = new();
 
         public void Callback ( IntPtr byteArrayPointer, uint countBytes, IntPtr parameter ) {
             Result.Append ( Marshal.PtrToStringUni ( byteArrayPointer, Convert.ToInt32 ( countBytes ) ) );
@@ -16,6 +16,8 @@ namespace EmptyFlow.SciterAPI.Structs {
 
             Result.Clear ();
         }
+
+        public string Value() => Result.ToString ();
 
     }
 
