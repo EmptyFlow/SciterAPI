@@ -7,7 +7,7 @@ var host = new SciterAPIHost ();
 host.LoadAPI ();
 host.PrepareGraphicsApi ();
 host.PrepareRequestApi ();
-var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.1.8/samples/html/details-summary.htm";
+var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.2.1/samples/html/details-summary.htm";
 host.Callbacks.AddAttachBehaviourFactory ( "testbehaviour", ( element ) => new TestGraphicsEventHandler ( element, host ) );
 host.CreateMainWindow ( 300, 300, enableDebug: true, enableFeature: true );
 host.AddWindowEventHandler ( new MyWindowEventHandler ( host.MainWindow, host ) );
@@ -22,13 +22,12 @@ public class MyWindowEventHandler : WindowEventHandler {
 
     public override void BehaviourEvent ( BehaviourEvents cmd, nint heTarget, nint he, nint reason, SciterValue data, string name ) {
         if ( cmd == BehaviourEvents.DOCUMENT_READY ) {
-            //var pizdaColor = Host.Graphics.RGBA ( 0, 0, 0, 255 );
+            var body = Host.MakeCssSelector ( "body" );
+            var firstElement = body.First ();
+            var childrens = Host.GetElementChildrens ( firstElement );
+            if ( childrens.Any () ) {
 
-            var elements = Host.MakeCssSelector ( "#test" );
-            var appDiv = elements.First ();
-            Host.ForceRenderElement ( appDiv );
-            /*
-            Host.SetElementHtml ( appDiv, "<b>Bold Text!!!!!!!!!!!!!!</b>", SetElementHtml.ReplaceContent );*/
+            }
         }
     }
 

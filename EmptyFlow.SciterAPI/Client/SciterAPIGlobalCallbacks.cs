@@ -111,7 +111,7 @@ namespace EmptyFlow.SciterAPI {
                         behaviourStructure.elementProc = Marshal.GetFunctionPointerForDelegate ( eventHandler.InnerDelegate );
                         behaviourStructure.elementTag = 1; // Is need customization???
                         Marshal.StructureToPtr ( behaviourStructure, pns, true );
-                        m_host.AddEventHandler ( eventHandler, fromFactory: true );
+                        m_host.AddEventHandlerWithoutAttaching ( eventHandler );
                         return 1;
                     }
                     return 0;

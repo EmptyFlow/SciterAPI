@@ -10,6 +10,10 @@ namespace EmptyFlow.SciterAPI {
         [DllImport ( SciterLoader.SciterLibrary, EntryPoint = "SciterAPI", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr SciterAPI ();
 
+        private readonly Dictionary<nint, SciterEventHandler> m_eventHandlerMap = [];
+
+        private readonly Dictionary<string, nint> m_eventHandlerUniqueMap = [];
+
         private IntPtr m_apiPointer = IntPtr.Zero;
 
         private string m_className = "";
@@ -17,8 +21,6 @@ namespace EmptyFlow.SciterAPI {
         private Version m_version = new Version ( 0, 0, 0, 0 );
 
         private IntPtr m_mainWindow = IntPtr.Zero;
-
-        private List<SciterEventHandler> m_eventHandlers = new List<SciterEventHandler> ();
 
         SciterApiStruct m_basicApi;
 
@@ -142,7 +144,8 @@ namespace EmptyFlow.SciterAPI {
             var code = m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_LOOP, IntPtr.Zero, IntPtr.Zero );
 
             // remove event handlers
-            if ( m_eventHandlers.Any () ) m_eventHandlers.Clear ();
+            if ( m_eventHandlerMap.Any () ) m_eventHandlerMap.Clear ();
+            if ( m_eventHandlerUniqueMap.Any () ) m_eventHandlerUniqueMap.Clear ();
 
             // deinitialize engine
             m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_SHUTDOWN, IntPtr.Zero, IntPtr.Zero );
@@ -337,19 +340,41 @@ namespace EmptyFlow.SciterAPI {
             m_basicApi.SciterWindowAttachEventHandler ( m_mainWindow, handler.InnerDelegate, 1, (uint) EventBehaviourGroups.HandleAll );
         }
 
+        private bool AddToEventHandlers ( SciterEventHandler handler ) {
+            m_eventHandlerMap.Add ( handler.SubscribedElement, handler );
+            var unique = handler.GetUnique ();
+            if ( string.IsNullOrEmpty ( unique ) ) return false;
+            if ( m_eventHandlerUniqueMap.ContainsKey ( unique ) ) {
+                Console.WriteLine ( $"EventHandler with unique value: {unique} is already registered! It is not without reason that this is called a UNIQUE value." );
+                return false;
+            }
+            m_eventHandlerUniqueMap.Add ( unique, handler.SubscribedElement );
+
+            return true;
+        }
+
         /// <summary>
         /// Add event handler and optionally attach to element.
         /// </summary>
         /// <param name="handler">Handler that will be attached to element.</param>
         /// <param name="fromFactory">If parameter is true which mean </param>
         /// <exception cref="ArgumentException"></exception>
-        public void AddEventHandler ( SciterEventHandler handler, bool fromFactory = false ) {
+        public void AddEventHandlerWithoutAttaching ( SciterEventHandler handler ) {
             if ( handler.Mode != SciterEventHandlerMode.Element ) throw new ArgumentException ( "Passed EventHandler must be with mode = SciterEventHandlerMode.Element!" );
 
-            if ( m_eventHandlers.Contains ( handler ) ) return;
+            AddToEventHandlers ( handler );
+        }
 
-            m_eventHandlers.Add ( handler );
-            if ( !fromFactory ) m_basicApi.SciterAttachEventHandler ( handler.SubscribedElement, handler.InnerDelegate, 1 );
+        /// <summary>
+        /// Add event handler and optionally attach to element.
+        /// </summary>
+        /// <param name="handler">Handler that will be attached to element.</param>
+        /// <param name="fromFactory">If parameter is true which mean </param>
+        /// <exception cref="ArgumentException"></exception>
+        public void AddEventHandler ( SciterEventHandler handler ) {
+            if ( handler.Mode != SciterEventHandlerMode.Element ) throw new ArgumentException ( "Passed EventHandler must be with mode = SciterEventHandlerMode.Element!" );
+
+            if ( AddToEventHandlers ( handler ) ) m_basicApi.SciterAttachEventHandler ( handler.SubscribedElement, handler.InnerDelegate, 1 );
         }
 
         /// <summary>
@@ -358,41 +383,41 @@ namespace EmptyFlow.SciterAPI {
         /// </summary>
         /// <param name="handler">The handler to be removed.</param>
         public void RemoveEventHandler ( SciterEventHandler handler ) {
-            if ( !m_eventHandlers.Contains ( handler ) ) return;
+            var key = m_eventHandlerMap
+                .Where ( a => a.Value == handler )
+                .Select ( a => a.Key )
+                .FirstOrDefault ();
+            if ( key == default ) return;
+            m_eventHandlerMap.Remove ( key );
 
-            m_eventHandlers.Remove ( handler );
+            var keyUnique = m_eventHandlerUniqueMap
+                .Where ( a => a.Value == key )
+                .Select ( a => a.Key )
+                .FirstOrDefault ();
+            if ( keyUnique == default ) return;
+            m_eventHandlerUniqueMap.Remove ( keyUnique );
         }
 
         /// <summary>
-        /// Sets variable that will be available in each document loaded after this call.
+        /// Get registered event handler which have unique passed in parameter.
+        /// Unique for event handler must be defined as override GetUnique method and return some value.
+        /// If it will be two or more event handlers with same unique value you get first and order is not guaranteed.
         /// </summary>
-        public void SetSharedVariable ( string name, SciterValue value ) {
-            var code = m_basicApi.SciterSetVariable ( nint.Zero, name, value );
-            if ( code != (uint) DomResult.SCDOM_OK ) throw new Exception ( $"Can't set variable {name}. Error is {code}." );
+        /// <param name="unique">Event handler with unique value.</param>
+        public SciterEventHandler? GetEventHandlerByUnique ( string unique ) {
+            if ( m_eventHandlerUniqueMap.ContainsKey ( unique ) ) return null;
+
+            return GetEventHandlerByPointer ( m_eventHandlerUniqueMap[unique] );
         }
 
         /// <summary>
-        /// Sets variable that will be available in root document of main window, call it in or after DOCUMENT_CREATED event.
+        /// Get a registered event handler whose SubscribedElement is equal to the passed pointer parameter.
         /// </summary>
-        public void SetMainWindowVariable ( string name, SciterValue value ) {
-            var code = m_basicApi.SciterSetVariable ( m_mainWindow, name, value );
-            if ( code != (uint) DomResult.SCDOM_OK ) throw new Exception ( $"Can't set variable {name}. Error is {code}." );
-        }
+        /// <param name="pointer">The pointer for which to find the event handler.</param>
+        public SciterEventHandler? GetEventHandlerByPointer ( nint pointer ) {
+            if ( !m_eventHandlerMap.ContainsKey ( pointer ) ) return null;
 
-        /// <summary>
-        /// Get main window global variable.
-        /// </summary>
-        /// <param name="name">Name of variable.</param>
-        /// <returns>Value containing in global variable.</returns>
-        /// <exception cref="Exception">If we get error from Sciter, what code you can </exception>
-        public SciterValue GetMainWindowVariable ( string name ) {
-            SciterValue sciterValue;
-            m_basicApi.ValueInit ( out sciterValue );
-
-            var code = m_basicApi.SciterGetVariable ( m_mainWindow, name, ref sciterValue );
-            if ( code == (uint) DomResult.SCDOM_OK ) return sciterValue;
-
-            throw new Exception ( $"Can't get variable {name}. Error is {code}." );
+            return m_eventHandlerMap[pointer];
         }
 
     }

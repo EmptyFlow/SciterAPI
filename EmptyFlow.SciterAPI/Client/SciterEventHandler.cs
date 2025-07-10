@@ -235,6 +235,13 @@ namespace EmptyFlow.SciterAPI {
                         m_host.RemoveEventHandler ( this );
                     }
                     return true;
+                case EventBehaviourGroups.HANDLE_ATTRIBUTE_CHANGE:
+                    var attributeChanged = Marshal.PtrToStructure<AttributeChangeParameters> ( parameters );
+                    AttributeChanged ( attributeChanged.Element, attributeChanged.Name, attributeChanged.Value );
+                    return true;
+                case EventBehaviourGroups.HANDLE_STYLE_CHANGE:
+                    StyleChanged ( he );
+                    return true;
             }
 
             m_processedElement = nint.Zero;
@@ -277,6 +284,12 @@ namespace EmptyFlow.SciterAPI {
         public virtual void ExchangeParameters ( uint command, nint target, nint source, SciterPoint position, SciterPoint pos_view, uint mode, SciterValue data ) {
         }
 
+        public virtual void AttributeChanged ( nint element, string name, string value ) {
+        }
+
+        public virtual void StyleChanged ( nint element ) {
+        }
+
         public virtual void MethodCall ( BehaviourMethodIdentifiers methodID ) {
         }
 
@@ -296,6 +309,10 @@ namespace EmptyFlow.SciterAPI {
         public virtual (SciterValue? value, bool handled) ScriptMethodCall ( string name, IEnumerable<SciterValue> arguments ) => (null, false);
 
         public virtual void HandleInitializationEvent ( InitializationEvents command ) {
+        }
+
+        public virtual string GetUnique() {
+            return "";
         }
 
     }

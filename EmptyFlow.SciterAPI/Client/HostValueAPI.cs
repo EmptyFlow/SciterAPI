@@ -252,6 +252,38 @@ namespace EmptyFlow.SciterAPI {
             return sciterValue;
         }
 
+        /// <summary>
+        /// Sets variable that will be available in each document loaded after this call.
+        /// </summary>
+        public void SetSharedVariable ( string name, SciterValue value ) {
+            var code = m_basicApi.SciterSetVariable ( nint.Zero, name, value );
+            if ( code != (uint) DomResult.SCDOM_OK ) throw new Exception ( $"Can't set variable {name}. Error is {code}." );
+        }
+
+        /// <summary>
+        /// Sets variable that will be available in root document of main window, call it in or after DOCUMENT_CREATED event.
+        /// </summary>
+        public void SetMainWindowVariable ( string name, SciterValue value ) {
+            var code = m_basicApi.SciterSetVariable ( m_mainWindow, name, value );
+            if ( code != (uint) DomResult.SCDOM_OK ) throw new Exception ( $"Can't set variable {name}. Error is {code}." );
+        }
+
+        /// <summary>
+        /// Get main window global variable.
+        /// </summary>
+        /// <param name="name">Name of variable.</param>
+        /// <returns>Value containing in global variable.</returns>
+        /// <exception cref="Exception">If we get error from Sciter, what code you can </exception>
+        public SciterValue GetMainWindowVariable ( string name ) {
+            SciterValue sciterValue;
+            m_basicApi.ValueInit ( out sciterValue );
+
+            var code = m_basicApi.SciterGetVariable ( m_mainWindow, name, ref sciterValue );
+            if ( code == (uint) DomResult.SCDOM_OK ) return sciterValue;
+
+            throw new Exception ( $"Can't get variable {name}. Error is {code}." );
+        }
+
     }
 
 }
