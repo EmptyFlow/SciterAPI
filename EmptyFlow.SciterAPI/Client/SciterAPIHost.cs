@@ -359,7 +359,7 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="handler">Handler that will be attached to element.</param>
         /// <param name="fromFactory">If parameter is true which mean </param>
         /// <exception cref="ArgumentException"></exception>
-        public void AddEventHandlerWithoutAttaching ( SciterEventHandler handler ) {
+        internal void AddEventHandlerWithoutAttaching ( SciterEventHandler handler ) {
             if ( handler.Mode != SciterEventHandlerMode.Element ) throw new ArgumentException ( "Passed EventHandler must be with mode = SciterEventHandlerMode.Element!" );
 
             AddToEventHandlers ( handler );
