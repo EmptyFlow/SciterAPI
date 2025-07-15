@@ -18,16 +18,10 @@
 		<RepositoryUrl>https://github.com/EmptyFlow/SciterAPI</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>html;html-engine;htmlengine;sciter;binding</PackageTags>
-		<Version>1.0.9.0</Version>
+		<Version>1.0.10.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
-			Added EventBehaviourGroups.HANDLE_STYLE_CHANGE and EventBehaviourGroups.HANDLE_ATTRIBUTE_CHANGE
-			Added SciterEventHandler.AttributeChanged override method for handled attribute changed event
-			Added SciterEventHandler.StyleChanged override method for handled style changed event
-			Changed signature for SciterAPIHost.AddEventHandler and removed fromFactory parameter
-			Added SciterEventHandler.GetUnique for get event handler global unique value
-			Added SciterAPIHost.GetEventHandlerByUnique for get event handler by Unique
-			Added SciterAPIHost.GetEventHandlerByPointer for get event handler by pointer
+			Fix SciterHostAPI.GetEventHandlerByUnique condition
 		</PackageReleaseNotes>
 	</PropertyGroup>
 

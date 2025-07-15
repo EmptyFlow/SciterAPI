@@ -405,7 +405,7 @@ namespace EmptyFlow.SciterAPI {
         /// </summary>
         /// <param name="unique">Event handler with unique value.</param>
         public SciterEventHandler? GetEventHandlerByUnique ( string unique ) {
-            if ( m_eventHandlerUniqueMap.ContainsKey ( unique ) ) return null;
+            if ( !m_eventHandlerUniqueMap.ContainsKey ( unique ) ) return null;
 
             return GetEventHandlerByPointer ( m_eventHandlerUniqueMap[unique] );
         }
