@@ -22,6 +22,7 @@
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
 			Fix SciterHostAPI.GetEventHandlerByUnique condition
+			Added SciterHostAPI.GetEventHandlerByUniquePrefix for return all handler by prefix inside unique value
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
