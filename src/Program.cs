@@ -7,7 +7,7 @@ var host = new SciterAPIHost ();
 host.LoadAPI ();
 host.PrepareGraphicsApi ();
 host.PrepareRequestApi ();
-var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.2.1/samples/html/details-summary.htm";
+var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.2.17/samples/html/details-summary.htm";
 host.Callbacks.AddAttachBehaviourFactory ( "testbehaviour", ( element ) => new TestGraphicsEventHandler ( element, host ) );
 host.CreateMainWindow ( 300, 300, enableDebug: true, enableFeature: true );
 host.AddWindowEventHandler ( new MyWindowEventHandler ( host.MainWindow, host ) );

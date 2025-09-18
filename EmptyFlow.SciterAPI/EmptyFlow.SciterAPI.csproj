@@ -18,11 +18,13 @@
 		<RepositoryUrl>https://github.com/EmptyFlow/SciterAPI</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>html;html-engine;htmlengine;sciter;binding</PackageTags>
-		<Version>1.0.10.0</Version>
+		<Version>1.0.11.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
-			Fix SciterHostAPI.GetEventHandlerByUnique condition
-			Added SciterHostAPI.GetEventHandlerByUniquePrefix for return all handler by prefix inside unique value
+			SciterAPIHost.GraphicsSaveState for save graphics state
+			SciterAPIHost.GraphicsRestoreState for restore graphics state
+			SciterAPIHost.GraphicsSetLineColor for set line color
+			SciterAPIHost.GraphicsDrawLine for set draw the line
 		</PackageReleaseNotes>
 	</PropertyGroup>
 

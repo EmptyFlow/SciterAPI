@@ -25,6 +25,8 @@ namespace EmptyFlow.SciterAPI {
 
         GraphicsApiStruct m_graphicsApi;
 
+        bool m_graphicsApiLoaded = false;
+
         RequestApiStruct m_requestApi;
 
         private string VersionOfLibrary = "1.0.0.0";
@@ -125,6 +127,7 @@ namespace EmptyFlow.SciterAPI {
         public void PrepareGraphicsApi () {
             var pointer = m_basicApi.GetSciterGraphicsApi ();
             m_graphicsApi = Marshal.PtrToStructure<GraphicsApiStruct> ( pointer );
+            m_graphicsApiLoaded = true;
         }
 
         public void PrepareRequestApi () {
