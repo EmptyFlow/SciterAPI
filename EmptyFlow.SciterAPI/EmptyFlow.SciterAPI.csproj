@@ -25,6 +25,11 @@
 			SciterAPIHost.GraphicsRestoreState for restore graphics state
 			SciterAPIHost.GraphicsSetLineColor for set line color
 			SciterAPIHost.GraphicsDrawLine for set draw the line
+			SciterAPIHost.GraphicsGetColor for get color from separate channel components.
+			SciterAPIHost.GraphicsSetFillColor for set color for filling.
+			SciterAPIHost.GraphicsDrawEllipse for draw ellipse
+			SciterAPIHost.GraphicsDrawRectangle for draw rectangle
+			SciterAPIHost.GraphicsDrawRoundedRectangle for draw rounded rectangle
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
