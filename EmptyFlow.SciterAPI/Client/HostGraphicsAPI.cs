@@ -42,14 +42,70 @@ namespace EmptyFlow.SciterAPI {
         /// </summary>
         /// <param name="hgfx">Pointer on graphics surface.</param>
         /// <param name="color">Line color. You need to get color from GraphicsGetColor method.</param>
-        public void GraphicsSetLineColor ( nint hgfx, uint color ) => TryToExecuteGraphics ( ( api ) => api.gLineColor ( hgfx, color ) );
+        public void GraphicsLineColor ( nint hgfx, uint color ) => TryToExecuteGraphics ( ( api ) => api.gLineColor ( hgfx, color ) );
+
+        /// <summary>
+        /// Setup parameters of linear gradient of lines.
+        /// </summary>
+        /// <param name="hgfx">Pointer on graphics surface.</param>
+        /// <param name="x1">X1 coordinate.</param>
+        /// <param name="y1">Y1 coordinate.</param>
+        /// <param name="x2">X2 coordinate.</param>
+        /// <param name="y2">Y2 coordinate.</param>
+        /// <param name="stops">Color stops.</param>
+        /// <param name="nstops">No idea what is it.</param>
+        public void GraphicsLineGradientLinear ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
+            TryToExecuteGraphics ( ( api ) => api.gLineGradientLinear ( hgfx, x1, y1, x2, y2 ,stops, nstops ) );
+        }
+
+        /// <summary>
+        /// Setup parameters of linear gradient of lines.
+        /// </summary>
+        /// <param name="hgfx">Pointer on graphics surface.</param>
+        /// <param name="x1">X1 coordinate.</param>
+        /// <param name="y1">Y1 coordinate.</param>
+        /// <param name="x2">X2 coordinate.</param>
+        /// <param name="y2">Y2 coordinate.</param>
+        /// <param name="stops">Color stops.</param>
+        /// <param name="nstops">No idea what is it.</param>
+        public void GraphicsLineGradientRadial ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
+            TryToExecuteGraphics ( ( api ) => api.gLineGradientRadial ( hgfx, x1, y1, x2, y2, stops, nstops ) );
+        }
 
         /// <summary>
         /// Graphics set color for further line.
         /// </summary>
         /// <param name="hgfx">Pointer on graphics surface.</param>
         /// <param name="color">Line color. You need to get color from GraphicsGetColor method.</param>
-        public void GraphicsSetFillColor ( nint hgfx, uint color ) => TryToExecuteGraphics ( ( api ) => api.gFillColor ( hgfx, color ) );
+        public void GraphicsFillColor ( nint hgfx, uint color ) => TryToExecuteGraphics ( ( api ) => api.gFillColor ( hgfx, color ) );
+
+        /// <summary>
+        /// Setup parameters of linear gradient of fills.
+        /// </summary>
+        /// <param name="hgfx">Pointer on graphics surface.</param>
+        /// <param name="x1">X1 coordinate.</param>
+        /// <param name="y1">Y1 coordinate.</param>
+        /// <param name="x2">X2 coordinate.</param>
+        /// <param name="y2">Y2 coordinate.</param>
+        /// <param name="stops">Color stops.</param>
+        /// <param name="nstops">No idea what is it.</param>
+        public void GraphicsFillGradientLinear ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
+            TryToExecuteGraphics ( ( api ) => api.gFillGradientLinear ( hgfx, x1, y1, x2, y2, stops, nstops ) );
+        }
+
+        /// <summary>
+        /// Setup parameters of gradient radial fills.
+        /// </summary>
+        /// <param name="hgfx">Pointer on graphics surface.</param>
+        /// <param name="x1">X1 coordinate.</param>
+        /// <param name="y1">Y1 coordinate.</param>
+        /// <param name="x2">X2 coordinate.</param>
+        /// <param name="y2">Y2 coordinate.</param>
+        /// <param name="stops">Color stops.</param>
+        /// <param name="nstops">No idea what is it.</param>
+        public void GraphicsFillGradientRadial ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
+            TryToExecuteGraphics ( ( api ) => api.gFillGradientRadial ( hgfx, x1, y1, x2, y2, stops, nstops ) );
+        }
 
         /// <summary>
         /// Set line width.
@@ -59,7 +115,7 @@ namespace EmptyFlow.SciterAPI {
         public void GraphicsSetLineWidth ( nint hgfx, float width ) => TryToExecuteGraphics ( ( api ) => api.gLineWidth ( hgfx, width ) );
 
         /// <summary>
-        /// Draw line.
+        /// Draws line from x1,y1 to x2,y2 using current GraphicsSetLineColor and lineGradient.
         /// </summary>
         /// <param name="hgfx">Pointer on graphics surface.</param>
         /// <param name="x1">X1 coordinate.</param>
@@ -79,7 +135,7 @@ namespace EmptyFlow.SciterAPI {
         public void GraphicsDrawEllipse ( nint hgfx, float x1, float y1, float rx, float ry ) => TryToExecuteGraphics ( ( api ) => api.gEllipse ( hgfx, x1, y1, rx, ry ) );
 
         /// <summary>
-        /// Draw rectangle.
+        /// Draws rectangle using current GraphicsSetLineColor/lineGradient and GraphicsSetFillColor/fillGradient with (optional) rounded corners.
         /// </summary>
         /// <param name="hgfx">Pointer on graphics surface.</param>
         /// <param name="x1">X1 coordinate.</param>

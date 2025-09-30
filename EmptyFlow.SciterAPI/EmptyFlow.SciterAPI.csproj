@@ -23,10 +23,14 @@
 		<PackageReleaseNotes>
 			SciterAPIHost.GraphicsSaveState for save graphics state
 			SciterAPIHost.GraphicsRestoreState for restore graphics state
-			SciterAPIHost.GraphicsSetLineColor for set line color
+			SciterAPIHost.GraphicsLineColor for set line color
 			SciterAPIHost.GraphicsDrawLine for set draw the line
 			SciterAPIHost.GraphicsGetColor for get color from separate channel components.
-			SciterAPIHost.GraphicsSetFillColor for set color for filling.
+			SciterAPIHost.GraphicsFillColor for set color for filling.
+			SciterAPIHost.GraphicsLineGradientLinear for set linear line gradient.
+			SciterAPIHost.GraphicsLineGradientRadial for set radial line gradient.
+			SciterAPIHost.GraphicsFillGradientLinear for set linear gradient color for filling.
+			SciterAPIHost.GraphicsFillGradientRadial for set radial gradient color for filling.
 			SciterAPIHost.GraphicsDrawEllipse for draw ellipse
 			SciterAPIHost.GraphicsDrawRectangle for draw rectangle
 			SciterAPIHost.GraphicsDrawRoundedRectangle for draw rounded rectangle
