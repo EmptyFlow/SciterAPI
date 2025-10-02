@@ -34,6 +34,7 @@
 			SciterAPIHost.GraphicsDrawEllipse for draw ellipse
 			SciterAPIHost.GraphicsDrawRectangle for draw rectangle
 			SciterAPIHost.GraphicsDrawRoundedRectangle for draw rounded rectangle
+			SciterAPIHost.GraphicsDrawText for draw text
 		</PackageReleaseNotes>
 	</PropertyGroup>
 

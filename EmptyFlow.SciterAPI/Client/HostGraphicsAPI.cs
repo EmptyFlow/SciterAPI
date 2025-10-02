@@ -1,4 +1,5 @@
 ﻿using EmptyFlow.SciterAPI.Structs;
+using System.Runtime.InteropServices;
 
 namespace EmptyFlow.SciterAPI {
 
@@ -55,7 +56,7 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="stops">Color stops.</param>
         /// <param name="nstops">No idea what is it.</param>
         public void GraphicsLineGradientLinear ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
-            TryToExecuteGraphics ( ( api ) => api.gLineGradientLinear ( hgfx, x1, y1, x2, y2 ,stops, nstops ) );
+            TryToExecuteGraphics ( ( api ) => api.gLineGradientLinear ( hgfx, x1, y1, x2, y2, stops, nstops ) );
         }
 
         /// <summary>
@@ -154,6 +155,20 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="y2">Y2 coordinate.</param>
         /// <param name="radii8">8 pair array.</param>
         public void GraphicsDrawRoundedRectangle ( nint hgfx, float x1, float y1, float x2, float y2, float[] radii8 ) => TryToExecuteGraphics ( ( api ) => api.gRoundedRectangle ( hgfx, x1, y1, x2, y2, radii8 ) );
+
+        /// <summary>
+        /// Draw rectangle.
+        /// </summary>
+        /// <param name="hgfx">Pointer on graphics surface.</param>
+        /// <param name="text">Text for draw.</param>
+        /// <param name="x">X coordinate.</param>
+        /// <param name="y">Y coordinate.</param>
+        /// <param name="position">Position (1..9).</param>
+        public void GraphicsDrawText ( nint hgfx, string text, float x, float y, uint position ) {
+            var textPointer = Marshal.StringToHGlobalUni ( text );
+            TryToExecuteGraphics ( ( api ) => api.gDrawText ( hgfx, textPointer, x, y, position ) );
+            Marshal.FreeHGlobal ( textPointer );
+        }
 
         /// <summary>
         /// Graphics get color from different channel components.
