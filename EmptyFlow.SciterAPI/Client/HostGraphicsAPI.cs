@@ -170,6 +170,10 @@ namespace EmptyFlow.SciterAPI {
             Marshal.FreeHGlobal ( textPointer );
         }
 
+        public void GraphicsDrawImage ( nint hgfx, nint image, float x, float y, float w, float h, uint ix, uint iy, uint iw, uint ih, float opacity ) {
+            TryToExecuteGraphics ( ( api ) => api.gDrawImage ( hgfx, image, x, y, w, h, ix, iy,iw, ih, opacity) );
+        }
+
         /// <summary>
         /// Graphics get color from different channel components.
         /// </summary>
