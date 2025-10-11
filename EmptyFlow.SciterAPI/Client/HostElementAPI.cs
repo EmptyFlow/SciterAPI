@@ -79,6 +79,11 @@ namespace EmptyFlow.SciterAPI {
             m_basicApi.SciterSetElementText ( element, text, (uint) text.Length );
         }
 
+        public void SetElementHtml ( IntPtr element, string text, SetElementHtml insertMode ) {
+            var bytes = Encoding.UTF8.GetBytes ( text );
+            m_basicApi.SciterSetElementHtml ( element, bytes, (uint) bytes.Length, insertMode );
+        }
+
         public string GetElementAttribute ( IntPtr element, string name ) {
             var strings = new List<string> ();
             lpcwstReceiver callback = ( IntPtr bytes, uint num_bytes, IntPtr param ) => {
@@ -151,11 +156,6 @@ namespace EmptyFlow.SciterAPI {
 
         public void SetElementAttribute ( IntPtr element, string name, string value ) {
             m_basicApi.SciterSetAttributeByName ( element, name, value );
-        }
-
-        public void SetElementHtml ( IntPtr element, string text, SetElementHtml insertMode ) {
-            var bytes = Encoding.UTF8.GetBytes ( text );
-            m_basicApi.SciterSetElementHtml ( element, bytes, (uint) bytes.Length, insertMode );
         }
 
         public string GetElementStyleProperty ( IntPtr element, string name ) {
