@@ -126,6 +126,24 @@ namespace EmptyFlow.SciterAPI {
         public void GraphicsDrawLine ( nint hgfx, float x1, float y1, float x2, float y2 ) => TryToExecuteGraphics ( ( api ) => api.gLine ( hgfx, x1, y1, x2, y2 ) );
 
         /// <summary>
+        /// Draws line from x1,y1 to x2,y2 with width and color.
+        /// </summary>
+        /// <param name="hgfx">Pointer on graphics surface.</param>
+        /// <param name="x1">X1 coordinate.</param>
+        /// <param name="y1">Y1 coordinate.</param>
+        /// <param name="x2">X2 coordinate.</param>
+        /// <param name="y2">Y2 coordinate.</param>
+        public void GraphicsDrawLine ( nint hgfx, float x1, float y1, float x2, float y2, uint color, float width ) {
+            TryToExecuteGraphics (
+                ( api ) => {
+                    api.gLineColor ( hgfx, color );
+                    api.gLineWidth ( hgfx, width );
+                    api.gLine ( hgfx, x1, y1, x2, y2 );
+                }
+            );
+        }
+
+        /// <summary>
         /// Draw ellipse.
         /// </summary>
         /// <param name="hgfx">Pointer on graphics surface.</param>
@@ -171,7 +189,7 @@ namespace EmptyFlow.SciterAPI {
         }
 
         public void GraphicsDrawImage ( nint hgfx, nint image, float x, float y, float w, float h, uint ix, uint iy, uint iw, uint ih, float opacity ) {
-            TryToExecuteGraphics ( ( api ) => api.gDrawImage ( hgfx, image, x, y, w, h, ix, iy,iw, ih, opacity) );
+            TryToExecuteGraphics ( ( api ) => api.gDrawImage ( hgfx, image, x, y, w, h, ix, iy, iw, ih, opacity ) );
         }
 
         /// <summary>

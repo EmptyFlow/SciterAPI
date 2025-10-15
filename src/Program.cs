@@ -44,13 +44,13 @@ public class TestGraphicsEventHandler : ElementEventHandler {
 
     public override void DrawEvent ( DrawEvents command, nint gfx, SciterRectangle area, uint reserved ) {
         var color = Host.Graphics.RGBA ( 0, 204, 0, 255 );
-        if ( command == DrawEvents.DRAW_BACKGROUND ) {
-            Host.Graphics.gFillColor ( gfx, color );
-            Host.Graphics.gRectangle ( gfx, area.Left, area.Top, area.Width, area.Height );
-            /*
-             ctx.fillStyle = "blue";
-ctx.fillRect(10, 10, 100, 100);
-             */
+        var blue = Host.Graphics.RGBA ( 0, 0, 255, 255 );
+        if ( command == DrawEvents.DRAW_CONTENT ) {
+            Host.GraphicsSaveState ( gfx );
+            Host.GraphicsFillColor ( gfx, color );
+            Host.GraphicsDrawRectangle ( gfx, area.Left, area.Top, area.Width, area.Height );
+            Host.GraphicsDrawLine ( gfx, 10, 10, 100, 100, blue, 10 );
+            Host.GraphicsRestoreState ( gfx );
         }
     }
 
