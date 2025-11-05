@@ -1,4 +1,5 @@
  [![nugeticon](https://img.shields.io/badge/nuget-available-blue)](https://www.nuget.org/packages/EmptyFlow.SciterAPI)
+ [![nugeticon](https://img.shields.io/nuget/dt/emptyflow.sciterapi)](https://www.nuget.org/packages/EmptyFlow.SciterAPI)
 
 # SciterAPI
 C# cross platform binding and low-level helpers for Sciter HTML/CSS/JS rendering library. You can check out more about Sciter [here](https://sciter.com/). 
