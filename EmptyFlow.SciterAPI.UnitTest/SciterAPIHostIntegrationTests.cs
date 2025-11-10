@@ -13,7 +13,6 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Act and Assert
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
         }
 
         [Fact, Trait ( "Category", "Integration" )]
@@ -21,7 +20,6 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
             var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
             host.CreateMainWindow ( 300, 300 );
             host.LoadFile ( path );
@@ -43,7 +41,6 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
             var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelectorFewItems.html" );
             host.CreateMainWindow ( 300, 300 );
             host.LoadFile ( path );
@@ -65,7 +62,6 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
             var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
             host.CreateMainWindow ( 300, 300 );
             host.LoadFile ( path );
@@ -89,7 +85,6 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
             var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
             host.CreateMainWindow ( 300, 300 );
             host.LoadFile ( path );
@@ -114,7 +109,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
             host.CreateMainWindow ( 300, 300 );
             host.LoadFile ( path );
@@ -137,7 +132,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
             host.CreateMainWindow ( 300, 300 );
             host.LoadFile ( path );
@@ -160,7 +155,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             var path = Path.Combine ( Environment.CurrentDirectory, "SciterAPIHost_Completed_MakeCssSelector.html" );
             host.CreateMainWindow ( 300, 300 );
             host.LoadFile ( path );
@@ -184,7 +179,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -236,7 +231,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             SciterAPIHost_Completed_Callbacks_AttachCustomBehaviorHit newSciterEventHandler;
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -279,7 +274,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -321,7 +316,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -363,7 +358,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -408,7 +403,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -456,7 +451,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -515,7 +510,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -557,7 +552,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -599,7 +594,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -641,7 +636,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -685,7 +680,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -728,7 +723,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -771,7 +766,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -814,7 +809,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -870,7 +865,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -928,7 +923,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -984,7 +979,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300 );
             host.Callbacks.AddProtocolHandler (
                 "embedded://",
@@ -1037,7 +1032,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300, enableDebug: true );
             host.LoadHtml ( "<html><body></body></html>" );
             host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
@@ -1061,7 +1056,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300, enableDebug: true );
             host.LoadHtml ( "<html><body><div></div></body></html>" );
             host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
@@ -1084,7 +1079,7 @@ namespace EmptyFlow.SciterAPI.Tests {
             //Arrange
             SciterLoader.Initialize ( "" );
             var host = new SciterAPIHost ();
-            host.LoadAPI ();
+            
             host.CreateMainWindow ( 300, 300, enableDebug: true );
             host.LoadHtml (
                 """

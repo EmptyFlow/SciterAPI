@@ -33,11 +33,22 @@ namespace EmptyFlow.SciterAPI {
 
         readonly SciterAPIGlobalCallbacks m_callbacks;
 
-        public SciterAPIHost () {
+        public SciterAPIHost ( string pathToLibrary, bool enableGraphicsApi = false, bool enableRequestApi = false ) {
+            SciterLoader.Initialize ( pathToLibrary );
+
             m_callbacks = new SciterAPIGlobalCallbacks ( this );
+            InnerLoadAPI ();
+
+            if ( enableGraphicsApi ) PrepareGraphicsApi ();
+            if ( enableRequestApi ) PrepareRequestApi ();
         }
 
-        public void LoadAPI () {
+        public SciterAPIHost () {
+            m_callbacks = new SciterAPIGlobalCallbacks ( this );
+            InnerLoadAPI ();
+        }
+
+        private void InnerLoadAPI () {
             m_apiPointer = SciterAPI ();
             if ( m_apiPointer == IntPtr.Zero ) return;
 
@@ -57,6 +68,14 @@ namespace EmptyFlow.SciterAPI {
             Console.WriteLine ( $"SciterAPI version: {VersionOfLibrary}" );
 
             m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_INIT, IntPtr.Zero, IntPtr.Zero );
+        }
+
+        /// <summary>
+        /// Please don't use these method, appropriate methods already called in constructor.
+        /// These method stay for backward compatibility.
+        /// </summary>
+        [Obsolete]
+        public void LoadAPI () {
         }
 
         public IntPtr MainWindow => m_mainWindow;

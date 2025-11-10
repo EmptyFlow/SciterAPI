@@ -18,9 +18,8 @@ Important! Don't forget to select specific build and debug architecture, `Any CP
 ```csharp
 using EmptyFlow.SciterAPI;
 
-SciterLoader.Initialize ( Environment.CurrentDirectory ); // you need specify folder where will be located sciter library file (sciter.dll/libsciter.so/libsciter.dylib)
-var host = new SciterAPIHost (); // create host
-host.LoadAPI (); // load sciter API and make adjustments for further work
+var sciterFolder = Environment.CurrentDirectory; // you need specify folder where will be located sciter library file (sciter.dll/libsciter.so/libsciter.dylib)
+var host = new SciterAPIHost ( sciterFolder ); // create host and load API
 host.CreateMainWindow ( 300, 300, enableDebug: true, enableFeature: true ); // create main window and enable debug mode and sciter features (like access to system in JavaScript)
 host.AddWindowEventHandler ( new MyWindowEventHandler ( host ) ); // create and register window Event Handler (via event handler you can handle events from windows or elements)
 host.LoadFile ( "file://path/my.html" ); // load HTML page, path specified in first argument

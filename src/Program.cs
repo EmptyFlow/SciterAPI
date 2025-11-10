@@ -2,11 +2,7 @@
 using EmptyFlow.SciterAPI;
 using EmptyFlow.SciterAPI.Client;
 
-SciterLoader.Initialize ( Environment.CurrentDirectory );
-var host = new SciterAPIHost ();
-host.LoadAPI ();
-host.PrepareGraphicsApi ();
-host.PrepareRequestApi ();
+var host = new SciterAPIHost ( Environment.CurrentDirectory, true, true );
 var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.2.17/samples/html/details-summary.htm";
 host.Callbacks.AddAttachBehaviourFactory ( "testbehaviour", ( element ) => new TestGraphicsEventHandler ( element, host ) );
 host.CreateMainWindow ( 300, 300, enableDebug: true, enableFeature: true );
