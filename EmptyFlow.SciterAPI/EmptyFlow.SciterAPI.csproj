@@ -24,6 +24,7 @@
 			SciterAPIHost(pathToFolder, prepareGrophics, prepareRequest) more generalized constructor, instead manually call SciterLoader.Initialize (...) and .PrepareXApi(s) methods
 			SciterAPIHost.LoadHost() now redundant, you don't need to call it manually anymore.
 		</PackageReleaseNotes>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">

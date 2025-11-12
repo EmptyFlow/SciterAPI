@@ -1,6 +1,5 @@
 ﻿using EmptyFlow.SciterAPI.Enums;
 using EmptyFlow.SciterAPI.Structs;
-using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace EmptyFlow.SciterAPI {
