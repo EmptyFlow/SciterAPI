@@ -17,33 +17,55 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="element">Element.</param>
         public void ForceRenderElement ( nint element ) => m_basicApi.SciterUpdateElement ( element, true );
 
-        private void TryToExecuteGraphics ( Action<GraphicsApiStruct> callback ) {
+        private bool CheckGraphics () {
             if ( !m_graphicsApiLoaded ) {
                 Console.WriteLine ( "Try to using graphics API but graphics API not loaded! You need to load graphics API by call host.PrepareGraphicsApi() method!" );
-                return;
+                return false;
             }
 
-            callback ( m_graphicsApi );
+            return true;
         }
 
         /// <summary>
         /// Graphics save state.
         /// </summary>
         /// <param name="hgfx">Pointer on graphics surface.</param>
-        public void GraphicsSaveState ( nint hgfx ) => TryToExecuteGraphics ( ( api ) => api.gStateSave ( hgfx ) );
+        public void GraphicsSaveState ( nint hgfx ) {
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gStateSave ( hgfx );
+        }
 
         /// <summary>
         /// Graphics resore state.
         /// </summary>
         /// <param name="hgfx">Pointer on graphics surface.</param>
-        public void GraphicsRestoreState ( nint hgfx ) => TryToExecuteGraphics ( ( api ) => api.gStateRestore ( hgfx ) );
+        public void GraphicsRestoreState ( nint hgfx ) {
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gStateRestore ( hgfx );
+        }
+
+        public void GraphicsPerformInState ( nint hgfx, Action callback ) {
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gStateSave ( hgfx );
+
+            callback ();
+
+            m_graphicsApi.gStateRestore ( hgfx );
+        }
 
         /// <summary>
         /// Graphics set color for further line.
         /// </summary>
         /// <param name="hgfx">Pointer on graphics surface.</param>
         /// <param name="color">Line color. You need to get color from GraphicsGetColor method.</param>
-        public void GraphicsLineColor ( nint hgfx, uint color ) => TryToExecuteGraphics ( ( api ) => api.gLineColor ( hgfx, color ) );
+        public void GraphicsLineColor ( nint hgfx, uint color ) {
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gLineColor ( hgfx, color );
+        }
 
         /// <summary>
         /// Setup parameters of linear gradient of lines.
@@ -56,7 +78,9 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="stops">Color stops.</param>
         /// <param name="nstops">No idea what is it.</param>
         public void GraphicsLineGradientLinear ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
-            TryToExecuteGraphics ( ( api ) => api.gLineGradientLinear ( hgfx, x1, y1, x2, y2, stops, nstops ) );
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gLineGradientLinear ( hgfx, x1, y1, x2, y2, stops, nstops );
         }
 
         /// <summary>
@@ -70,7 +94,9 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="stops">Color stops.</param>
         /// <param name="nstops">No idea what is it.</param>
         public void GraphicsLineGradientRadial ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
-            TryToExecuteGraphics ( ( api ) => api.gLineGradientRadial ( hgfx, x1, y1, x2, y2, stops, nstops ) );
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gLineGradientRadial ( hgfx, x1, y1, x2, y2, stops, nstops );
         }
 
         /// <summary>
@@ -78,7 +104,11 @@ namespace EmptyFlow.SciterAPI {
         /// </summary>
         /// <param name="hgfx">Pointer on graphics surface.</param>
         /// <param name="color">Line color. You need to get color from GraphicsGetColor method.</param>
-        public void GraphicsFillColor ( nint hgfx, uint color ) => TryToExecuteGraphics ( ( api ) => api.gFillColor ( hgfx, color ) );
+        public void GraphicsFillColor ( nint hgfx, uint color ) {
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gFillColor ( hgfx, color );
+        }
 
         /// <summary>
         /// Setup parameters of linear gradient of fills.
@@ -91,7 +121,9 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="stops">Color stops.</param>
         /// <param name="nstops">No idea what is it.</param>
         public void GraphicsFillGradientLinear ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
-            TryToExecuteGraphics ( ( api ) => api.gFillGradientLinear ( hgfx, x1, y1, x2, y2, stops, nstops ) );
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gFillGradientLinear ( hgfx, x1, y1, x2, y2, stops, nstops );
         }
 
         /// <summary>
@@ -105,7 +137,9 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="stops">Color stops.</param>
         /// <param name="nstops">No idea what is it.</param>
         public void GraphicsFillGradientRadial ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
-            TryToExecuteGraphics ( ( api ) => api.gFillGradientRadial ( hgfx, x1, y1, x2, y2, stops, nstops ) );
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gFillGradientRadial ( hgfx, x1, y1, x2, y2, stops, nstops );
         }
 
         /// <summary>
@@ -113,7 +147,11 @@ namespace EmptyFlow.SciterAPI {
         /// </summary>
         /// <param name="hgfx">Pointer on graphics surface.</param>
         /// <param name="width">New width for the line.</param>
-        public void GraphicsSetLineWidth ( nint hgfx, float width ) => TryToExecuteGraphics ( ( api ) => api.gLineWidth ( hgfx, width ) );
+        public void GraphicsSetLineWidth ( nint hgfx, float width ) {
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gLineWidth ( hgfx, width );
+        }
 
         /// <summary>
         /// Draws line from x1,y1 to x2,y2 using current GraphicsSetLineColor and lineGradient.
@@ -123,7 +161,11 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="y1">Y1 coordinate.</param>
         /// <param name="x2">X2 coordinate.</param>
         /// <param name="y2">Y2 coordinate.</param>
-        public void GraphicsDrawLine ( nint hgfx, float x1, float y1, float x2, float y2 ) => TryToExecuteGraphics ( ( api ) => api.gLine ( hgfx, x1, y1, x2, y2 ) );
+        public void GraphicsDrawLine ( nint hgfx, float x1, float y1, float x2, float y2 ) {
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gLine ( hgfx, x1, y1, x2, y2 );
+        }
 
         /// <summary>
         /// Draws line from x1,y1 to x2,y2 with width and color.
@@ -134,13 +176,11 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="x2">X2 coordinate.</param>
         /// <param name="y2">Y2 coordinate.</param>
         public void GraphicsDrawLine ( nint hgfx, float x1, float y1, float x2, float y2, uint color, float width ) {
-            TryToExecuteGraphics (
-                ( api ) => {
-                    api.gLineColor ( hgfx, color );
-                    api.gLineWidth ( hgfx, width );
-                    api.gLine ( hgfx, x1, y1, x2, y2 );
-                }
-            );
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gLineColor ( hgfx, color );
+            m_graphicsApi.gLineWidth ( hgfx, width );
+            m_graphicsApi.gLine ( hgfx, x1, y1, x2, y2 );
         }
 
         /// <summary>
@@ -151,7 +191,11 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="y1">Y1 coordinate.</param>
         /// <param name="rx">Radius X.</param>
         /// <param name="ry">Radius Y.</param>
-        public void GraphicsDrawEllipse ( nint hgfx, float x1, float y1, float rx, float ry ) => TryToExecuteGraphics ( ( api ) => api.gEllipse ( hgfx, x1, y1, rx, ry ) );
+        public void GraphicsDrawEllipse ( nint hgfx, float x1, float y1, float rx, float ry ) {
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gEllipse ( hgfx, x1, y1, rx, ry );
+        }
 
         /// <summary>
         /// Draws rectangle using current GraphicsSetLineColor/lineGradient and GraphicsSetFillColor/fillGradient with (optional) rounded corners.
@@ -161,7 +205,11 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="y1">Y1 coordinate.</param>
         /// <param name="x2">X2 coordinate.</param>
         /// <param name="y2">Y2 coordinate.</param>
-        public void GraphicsDrawRectangle ( nint hgfx, float x1, float y1, float x2, float y2 ) => TryToExecuteGraphics ( ( api ) => api.gRectangle ( hgfx, x1, y1, x2, y2 ) );
+        public void GraphicsDrawRectangle ( nint hgfx, float x1, float y1, float x2, float y2 ) {
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gRectangle ( hgfx, x1, y1, x2, y2 );
+        }
 
         /// <summary>
         /// Draw rectangle.
@@ -172,7 +220,11 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="x2">X2 coordinate.</param>
         /// <param name="y2">Y2 coordinate.</param>
         /// <param name="radii8">8 pair array.</param>
-        public void GraphicsDrawRoundedRectangle ( nint hgfx, float x1, float y1, float x2, float y2, float[] radii8 ) => TryToExecuteGraphics ( ( api ) => api.gRoundedRectangle ( hgfx, x1, y1, x2, y2, radii8 ) );
+        public void GraphicsDrawRoundedRectangle ( nint hgfx, float x1, float y1, float x2, float y2, float[] radii8 ) {
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gRoundedRectangle ( hgfx, x1, y1, x2, y2, radii8 );
+        }
 
         /// <summary>
         /// Draw rectangle.
@@ -183,13 +235,17 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="y">Y coordinate.</param>
         /// <param name="position">Position (1..9).</param>
         public void GraphicsDrawText ( nint hgfx, string text, float x, float y, uint position ) {
+            if ( !CheckGraphics () ) return;
+
             var textPointer = Marshal.StringToHGlobalUni ( text );
-            TryToExecuteGraphics ( ( api ) => api.gDrawText ( hgfx, textPointer, x, y, position ) );
+            m_graphicsApi.gDrawText ( hgfx, textPointer, x, y, position );
             Marshal.FreeHGlobal ( textPointer );
         }
 
         public void GraphicsDrawImage ( nint hgfx, nint image, float x, float y, float w, float h, uint ix, uint iy, uint iw, uint ih, float opacity ) {
-            TryToExecuteGraphics ( ( api ) => api.gDrawImage ( hgfx, image, x, y, w, h, ix, iy, iw, ih, opacity ) );
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gDrawImage ( hgfx, image, x, y, w, h, ix, iy, iw, ih, opacity );
         }
 
         /// <summary>
@@ -200,9 +256,9 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="b">Blue.</param>
         /// <param name="a">Alpha.</param>
         public uint GraphicsGetColor ( uint r, uint g, uint b, uint a ) {
-            uint result = 0;
-            TryToExecuteGraphics ( ( api ) => { result = api.RGBA ( r, g, b, a ); } );
-            return result;
+            if ( CheckGraphics () ) return m_graphicsApi.RGBA ( r, g, b, a );
+
+            return 0;
         }
 
     }
