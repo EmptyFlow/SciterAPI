@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Numerics;
+using System.Runtime.InteropServices;
 
 namespace EmptyFlow.SciterAPI {
 
@@ -23,6 +24,11 @@ namespace EmptyFlow.SciterAPI {
         public int Width => Right - Left;
 
         public int Height => Bottom - Top;
+
+        public Vector2 LeftTopCorner => new Vector2 ( Left, Top );
+
+        public Vector2 RightBottomCorner => new Vector2 ( Right, Bottom );
+
     }
 
 }

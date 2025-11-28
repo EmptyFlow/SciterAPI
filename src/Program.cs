@@ -3,7 +3,7 @@ using EmptyFlow.SciterAPI;
 using EmptyFlow.SciterAPI.Client;
 
 var host = new SciterAPIHost ( Environment.CurrentDirectory, true, true );
-var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.2.17/samples/html/details-summary.htm";
+var path = "file://C:/IDEs/sciter/sciter-js-sdk-6.0.2.30/samples/html/details-summary.htm";
 host.Callbacks.AddAttachBehaviourFactory ( "testbehaviour", ( element ) => new TestGraphicsEventHandler ( element, host ) );
 host.CreateMainWindow ( 300, 300, enableDebug: true, enableFeature: true );
 host.AddWindowEventHandler ( new MyWindowEventHandler ( host.MainWindow, host ) );
@@ -45,7 +45,7 @@ public class TestGraphicsEventHandler : ElementEventHandler {
             Host.GraphicsSaveState ( gfx );
             Host.GraphicsFillColor ( gfx, color );
             Host.GraphicsDrawRectangle ( gfx, area.Left, area.Top, area.Width, area.Height );
-            Host.GraphicsDrawLine ( gfx, 10, 10, 100, 100, blue, 10 );
+            Host.GraphicsDrawLine ( gfx, area.LeftTopCorner, area.RightBottomCorner, blue, 10 );
             Host.GraphicsRestoreState ( gfx );
         }
     }

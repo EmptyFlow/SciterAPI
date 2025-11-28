@@ -1,4 +1,5 @@
 ﻿using EmptyFlow.SciterAPI.Structs;
+using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace EmptyFlow.SciterAPI {
@@ -175,12 +176,12 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="y1">Y1 coordinate.</param>
         /// <param name="x2">X2 coordinate.</param>
         /// <param name="y2">Y2 coordinate.</param>
-        public void GraphicsDrawLine ( nint hgfx, float x1, float y1, float x2, float y2, uint color, float width ) {
+        public void GraphicsDrawLine ( nint hgfx, Vector2 start, Vector2 end, uint color, float width ) {
             if ( !CheckGraphics () ) return;
 
             m_graphicsApi.gLineColor ( hgfx, color );
             m_graphicsApi.gLineWidth ( hgfx, width );
-            m_graphicsApi.gLine ( hgfx, x1, y1, x2, y2 );
+            m_graphicsApi.gLine ( hgfx, start.X, start.Y, end.X, end.Y );
         }
 
         /// <summary>

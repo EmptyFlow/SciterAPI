@@ -18,11 +18,15 @@
 		<RepositoryUrl>https://github.com/EmptyFlow/SciterAPI</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>html;html-engine;htmlengine;sciter;binding</PackageTags>
-		<Version>1.0.12.0</Version>
+		<Version>1.1.0.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
 			SciterAPIHost(pathToFolder, prepareGrophics, prepareRequest) more generalized constructor, instead manually call SciterLoader.Initialize (...) and .PrepareXApi(s) methods
 			SciterAPIHost.LoadHost() now redundant, you don't need to call it manually anymore.
+			Refactor GraphicsAPI helpers
+			GraphicsDrawLine change signature and now it have Vector2 parameters
+			SciterRectangle.LeftTopCorner get left and top values in Vector2
+			SciterRectangle.RightBottomCorner get right and bottom values in Vector2
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>

@@ -40,6 +40,13 @@ public class MyWindowEventHandler : SciterEventHandler {
 }
 ```
 
+### Migration from 1.0.11 to 1.1.0
+
+Check out refreshed example above, below details of breaking changes:  
+* Don't need call `SciterLoader.Initialize ( pathToLibrary );` separately, now it will be call inside `SciterAPIHost(pathToLibrary)` constructor
+* Method `SciterAPIHost.LoadAPI` now obsolete because it also called inside constructor
+
+
 ### Documentation
 
 Latest version documentation can be found [there](https://emptyflow.github.io/SciterAPIDocs/).
