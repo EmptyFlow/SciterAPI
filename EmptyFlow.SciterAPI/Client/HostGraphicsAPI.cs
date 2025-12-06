@@ -1,4 +1,5 @@
-﻿using EmptyFlow.SciterAPI.Structs;
+﻿using EmptyFlow.SciterAPI.Client.Models;
+using EmptyFlow.SciterAPI.Structs;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
@@ -227,26 +228,47 @@ namespace EmptyFlow.SciterAPI {
             m_graphicsApi.gRoundedRectangle ( hgfx, x1, y1, x2, y2, radii8 );
         }
 
+        public GraphicsTextModel GraphicsCreateTextForElement ( nint hgfx, nint he, string text, string className ) {
+            if ( !CheckGraphics () ) return new GraphicsTextModel { Element = nint.Zero, Id = nint.Zero };
+
+            var textPointer = Marshal.AllocHGlobal ( Marshal.SizeOf<int> () );
+            var result = new GraphicsTextModel { Id = textPointer, Element = he };
+            m_graphicsApi.textCreateForElement ( textPointer, text, (uint) text.Length, he, className );
+
+            return result;
+        }
+
+        public void GraphicsReleaseText( GraphicsTextModel text) {
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.textRelease ( text.Id );
+            Marshal.FreeHGlobal ( text.Id );
+        }
+
         /// <summary>
-        /// Draw rectangle.
+        /// Draw text.
         /// </summary>
         /// <param name="hgfx">Pointer on graphics surface.</param>
         /// <param name="text">Text for draw.</param>
         /// <param name="x">X coordinate.</param>
         /// <param name="y">Y coordinate.</param>
-        /// <param name="position">Position (1..9).</param>
-        public void GraphicsDrawText ( nint hgfx, string text, float x, float y, uint position ) {
+        /// <param name="coordinates">Position (1..9).</param>
+        public void GraphicsDrawText ( nint hgfx, GraphicsTextModel text, Vector2 coordinates, uint position ) {
             if ( !CheckGraphics () ) return;
 
-            var textPointer = Marshal.StringToHGlobalUni ( text );
-            m_graphicsApi.gDrawText ( hgfx, textPointer, x, y, position );
-            Marshal.FreeHGlobal ( textPointer );
+            m_graphicsApi.gDrawText ( hgfx, text.Id, coordinates.X, coordinates.Y, position );
         }
 
         public void GraphicsDrawImage ( nint hgfx, nint image, float x, float y, float w, float h, uint ix, uint iy, uint iw, uint ih, float opacity ) {
             if ( !CheckGraphics () ) return;
 
             m_graphicsApi.gDrawImage ( hgfx, image, x, y, w, h, ix, iy, iw, ih, opacity );
+        }
+
+        public void GraphicsDrawImage ( nint hgfx, nint image, Vector2 position, Vector2 size, uint ix, uint iy, uint iw, uint ih, float opacity ) {
+            if ( !CheckGraphics () ) return;
+
+            m_graphicsApi.gDrawImage ( hgfx, image, position.X, position.Y, position.X, position.Y, ix, iy, iw, ih, opacity );
         }
 
         /// <summary>
