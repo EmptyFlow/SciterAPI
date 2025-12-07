@@ -232,11 +232,22 @@ namespace EmptyFlow.SciterAPI {
         public GraphicsTextModel GraphicsCreateTextForElement ( nint hgfx, nint he, string text, string className ) {
             if ( !CheckGraphics () ) return new GraphicsTextModel { Element = nint.Zero, Id = nint.Zero };
 
-            var pointer = Marshal.StringToHGlobalUni ( text );
             nint textPointer;
-            var graphResult = m_graphicsApi.textCreateForElement ( out textPointer, pointer, (uint) text.Length, he, className );
+            var graphResult = m_graphicsApi.textCreateForElement ( out textPointer, text, (uint) text.Length, he, className );
             if ( graphResult != GraphInResult.Ok ) {
                 Console.WriteLine ( "GraphicsCreateTextForElement resulted with error, actual result - " + graphResult );
+                return new GraphicsTextModel { Id = nint.Zero, Element = nint.Zero };
+            }
+            return new GraphicsTextModel { Id = textPointer, Element = he };
+        }
+
+        public GraphicsTextModel GraphicsCreateTextForElementWithStyle ( nint hgfx, nint he, string text, string style ) {
+            if ( !CheckGraphics () ) return new GraphicsTextModel { Element = nint.Zero, Id = nint.Zero };
+
+            nint textPointer;
+            var graphResult = m_graphicsApi.textCreateForElementAndStyle ( out textPointer, text, (uint) text.Length, he, style, (uint) style.Length );
+            if ( graphResult != GraphInResult.Ok ) {
+                Console.WriteLine ( "GraphicsCreateTextForElementWithStyle resulted with error, actual result - " + graphResult );
                 return new GraphicsTextModel { Id = nint.Zero, Element = nint.Zero };
             }
             return new GraphicsTextModel { Id = textPointer, Element = he };
@@ -257,10 +268,10 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="x">X coordinate.</param>
         /// <param name="y">Y coordinate.</param>
         /// <param name="coordinates">Position (1..9).</param>
-        public void GraphicsDrawText ( nint hgfx, GraphicsTextModel text, Vector2 coordinates, uint position ) {
+        public void GraphicsDrawText ( nint hgfx, GraphicsTextModel text, Vector2 coordinates, SciterTextPosition position ) {
             if ( !CheckGraphics () ) return;
 
-            m_graphicsApi.gDrawText ( hgfx, text.Id, coordinates.X, coordinates.Y, position );
+            m_graphicsApi.gDrawText ( hgfx, text.Id, coordinates.X, coordinates.Y, (uint) position );
         }
 
         public void GraphicsDrawImage ( nint hgfx, nint image, float x, float y, float w, float h, uint ix, uint iy, uint iw, uint ih, float opacity ) {

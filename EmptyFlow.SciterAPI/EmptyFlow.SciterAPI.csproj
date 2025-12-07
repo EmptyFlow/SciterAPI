@@ -24,7 +24,8 @@
 			SciterAPIHost.CreateMainWindow parameters width and height now is not mandatory, if you not specify window it will be centered and half from screen size
 			SciterAPIHost.GraphicsDrawImage added override with Vector2 parameters
 			SciterAPIHost.GraphicsCreateTextForElement new method for creating text related to element
-			SciterAPIHost.GraphicsDrawText full refactored and fixed
+			SciterAPIHost.GraphicsCreateTextForElementWithStyle new method for creating text related to element
+			SciterAPIHost.GraphicsDrawText full refactored
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>

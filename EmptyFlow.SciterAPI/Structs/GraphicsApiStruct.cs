@@ -53,8 +53,8 @@ namespace EmptyFlow.SciterAPI.Structs {
     public delegate GraphInResult GraphicsGLineGradientRadial ( IntPtr hgfx, float x, float y, float rx, float ry, ColorStop[] stops, uint nstops );
     public delegate GraphInResult GraphicsGFillGradientRadial ( IntPtr hgfx, float x, float y, float rx, float ry, ColorStop[] stops, uint nstops );
     public delegate GraphInResult GraphicsGFillMode ( IntPtr hgfx, bool evenOdd );
-    public delegate GraphInResult GraphicsTextCreateForElement ( out nint ptext, nint text, uint textLength, IntPtr he, [MarshalAs ( UnmanagedType.LPWStr )] string classNameOrNull );
-    public delegate GraphInResult GraphicsTextCreateForElementAndStyle ( IntPtr ptext, [MarshalAs ( UnmanagedType.LPWStr )] string text, uint textLength, IntPtr he, [MarshalAs ( UnmanagedType.LPWStr )] string style, uint styleLength );
+    public delegate GraphInResult GraphicsTextCreateForElement ( out nint ptext, [MarshalAs ( UnmanagedType.LPWStr )] string text, uint textLength, IntPtr he, [MarshalAs ( UnmanagedType.LPWStr )] string classNameOrNull );
+    public delegate GraphInResult GraphicsTextCreateForElementAndStyle ( out nint ptext, [MarshalAs ( UnmanagedType.LPWStr )] string text, uint textLength, IntPtr he, [MarshalAs ( UnmanagedType.LPWStr )] string style, uint styleLength );
     public delegate GraphInResult GraphicsTextAddRef ( IntPtr path );
     public delegate GraphInResult GraphicsTextRelease ( IntPtr path );
     public delegate GraphInResult GraphicsTextGetMetrics ( IntPtr text, out float minWidth, out float maxWidth, out float height, out float ascent, out float descent, out float nLines );
