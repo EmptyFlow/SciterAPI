@@ -37,17 +37,17 @@ public class MyWindowEventHandler : WindowEventHandler {
 public class TestGraphicsEventHandler : ElementEventHandler {
 
     public TestGraphicsEventHandler ( nint element, SciterAPIHost host ) : base ( element, host ) {
+        Text = Host.GraphicsCreateTextForElement ( element, "test text!!!111", "test-class" );
+        Text2 = Host.GraphicsCreateTextForElementWithStyle ( element, "test text!!!111", "font-size: 18px;color: green;" );
     }
 
-    public GraphicsTextModel? Text { get; set; }
+    public GraphicsTextModel Text { get; set; }
 
-    public GraphicsTextModel? Text2 { get; set; }
+    public GraphicsTextModel Text2 { get; set; }
 
     public override void DrawEvent ( DrawEvents command, nint gfx, SciterRectangle area, uint reserved ) {
         var color = Host.Graphics.RGBA ( 0, 204, 0, 255 );
         var blue = Host.Graphics.RGBA ( 0, 0, 255, 255 );
-        if ( Text == null ) Text = Host.GraphicsCreateTextForElement ( gfx, ProcessedElement, "test text!!!111", "test-class" );
-        if ( Text2 == null ) Text2 = Host.GraphicsCreateTextForElementWithStyle ( gfx, ProcessedElement, "test text!!!111", "font-size: 18px;color: green;" );
         if ( command == DrawEvents.DRAW_CONTENT ) {
             Host.GraphicsSaveState ( gfx );
             Host.GraphicsFillColor ( gfx, color );
