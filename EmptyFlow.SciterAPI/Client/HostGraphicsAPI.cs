@@ -1,4 +1,5 @@
 ﻿using EmptyFlow.SciterAPI.Client.Models;
+using EmptyFlow.SciterAPI.Enums;
 using EmptyFlow.SciterAPI.Structs;
 using System.Numerics;
 using System.Runtime.InteropServices;
@@ -231,18 +232,21 @@ namespace EmptyFlow.SciterAPI {
         public GraphicsTextModel GraphicsCreateTextForElement ( nint hgfx, nint he, string text, string className ) {
             if ( !CheckGraphics () ) return new GraphicsTextModel { Element = nint.Zero, Id = nint.Zero };
 
-            var textPointer = Marshal.AllocHGlobal ( Marshal.SizeOf<int> () );
-            var result = new GraphicsTextModel { Id = textPointer, Element = he };
-            m_graphicsApi.textCreateForElement ( textPointer, text, (uint) text.Length, he, className );
-
-            return result;
+            var pointer = Marshal.StringToHGlobalUni ( text );
+            nint textPointer;
+            var graphResult = m_graphicsApi.textCreateForElement ( out textPointer, pointer, (uint) text.Length, he, className );
+            if ( graphResult != GraphInResult.Ok ) {
+                Console.WriteLine ( "GraphicsCreateTextForElement resulted with error, actual result - " + graphResult );
+                return new GraphicsTextModel { Id = nint.Zero, Element = nint.Zero };
+            }
+            return new GraphicsTextModel { Id = textPointer, Element = he };
         }
 
-        public void GraphicsReleaseText( GraphicsTextModel text) {
+        public void GraphicsReleaseText ( GraphicsTextModel text ) {
             if ( !CheckGraphics () ) return;
 
-            m_graphicsApi.textRelease ( text.Id );
-            Marshal.FreeHGlobal ( text.Id );
+            var graphResult = m_graphicsApi.textRelease ( text.Id );
+            if ( graphResult == GraphInResult.Ok ) Marshal.FreeHGlobal ( text.Id );
         }
 
         /// <summary>

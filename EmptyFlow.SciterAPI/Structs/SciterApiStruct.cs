@@ -34,7 +34,7 @@ namespace EmptyFlow.SciterAPI.Structs {
     public delegate bool SciterSetHomeUrl ( IntPtr hwnd, string baseUrl );
     public delegate IntPtr SciterCreateNsView ( ref SciterRectangle frame );
     public delegate IntPtr SciterCreateWidget ( ref SciterRectangle frame );
-    public delegate IntPtr SciterCreateWindow ( WindowsFlags creationFlags, ref SciterRectangle frame, IntPtr delegt, IntPtr delegateParam, IntPtr parent );
+    public delegate IntPtr SciterCreateWindow ( WindowsFlags creationFlags, nint frame, IntPtr delegt, IntPtr delegateParam, IntPtr parent );
     public delegate void SciterSetupDebugOutput ( IntPtr hwndOrNull, IntPtr param, DebugOutputProc pfOutput );
 
     // DOM API
