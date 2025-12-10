@@ -10,7 +10,7 @@ var pathToSciter = "C:/IDEs/sciter/sciter-js-sdk-6.0.2.30";
 var host = new SciterAPIHost ( Path.Combine ( pathToSciter, "bin/windows/x64" ), true, true );
 var path = "file://" + Path.Combine ( pathToSciter, "samples/html/details-summary.htm" );
 host.Callbacks.AddAttachBehaviourFactory ( "testbehaviour", ( element ) => new TestGraphicsEventHandler ( element, host ) );
-host.CreateMainWindow ( 0, 0, enableDebug: true, enableFeature: true );
+host.CreateMainWindow ( 300, 300, enableDebug: true, enableFeature: true );
 host.AddWindowEventHandler ( new MyWindowEventHandler ( host.MainWindow, host ) );
 host.LoadFile ( path );
 host.Process ();
@@ -39,20 +39,27 @@ public class TestGraphicsEventHandler : ElementEventHandler {
     public TestGraphicsEventHandler ( nint element, SciterAPIHost host ) : base ( element, host ) {
         Text = Host.GraphicsCreateTextForElement ( element, "test text!!!111", "test-class" );
         Text2 = Host.GraphicsCreateTextForElementWithStyle ( element, "test text!!!111", "font-size: 18px;color: green;" );
+        Color1 = Host.GraphicsGetColor ( 0, 204, 0 );
+        Color2 = Host.GraphicsGetColor ( 0, 0, 255 );
     }
+
+    public uint Color1 { get; set; }
+
+    public uint Color2 { get; set; }
 
     public GraphicsTextModel Text { get; set; }
 
     public GraphicsTextModel Text2 { get; set; }
 
     public override void DrawEvent ( DrawEvents command, nint gfx, SciterRectangle area, uint reserved ) {
-        var color = Host.Graphics.RGBA ( 0, 204, 0, 255 );
-        var blue = Host.Graphics.RGBA ( 0, 0, 255, 255 );
+        var (position, size) = Host.GetMainWindowPositionAndSize ();
+        Console.WriteLine ( $"Position: {position.X} - {position.Y}" );
+
         if ( command == DrawEvents.DRAW_CONTENT ) {
             Host.GraphicsSaveState ( gfx );
-            Host.GraphicsFillColor ( gfx, color );
+            Host.GraphicsFillColor ( gfx, Color1 );
             Host.GraphicsDrawRectangle ( gfx, area.Left, area.Top, area.Left + area.Width, area.Top + area.Height );
-            Host.GraphicsDrawLine ( gfx, area.LeftTopCorner, area.RightBottomCorner, blue, 10 );
+            Host.GraphicsDrawLine ( gfx, area.LeftTopCorner, area.RightBottomCorner, Color2, 10 );
             Host.GraphicsDrawText ( gfx, Text, new Vector2 ( area.Left, area.Top ), SciterTextPosition.TopLeft );
             Host.GraphicsDrawText ( gfx, Text2, new Vector2 ( area.Left, area.Top + 30 ), SciterTextPosition.TopLeft );
             Host.GraphicsRestoreState ( gfx );

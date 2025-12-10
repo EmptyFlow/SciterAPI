@@ -2,7 +2,7 @@
 
 namespace EmptyFlow.SciterAPI {
     [StructLayout ( LayoutKind.Sequential )]
-    public struct SciterSize {
+    public struct SciterSize { // Original name tagSIZE, SIZE, *PSIZE, *LPSIZE
         public int cx;
         public int cy;
 

@@ -1,6 +1,6 @@
 ﻿namespace EmptyFlow.SciterAPI.Client.Models {
 
-    public class GraphicsTextModel {
+    public record GraphicsTextModel {
 
         public nint Id { get; set; }
 

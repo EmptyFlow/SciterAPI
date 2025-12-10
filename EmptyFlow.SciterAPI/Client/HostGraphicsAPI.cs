@@ -293,8 +293,8 @@ namespace EmptyFlow.SciterAPI {
         /// <param name="r">Red.</param>
         /// <param name="g">Green.</param>
         /// <param name="b">Blue.</param>
-        /// <param name="a">Alpha.</param>
-        public uint GraphicsGetColor ( uint r, uint g, uint b, uint a ) {
+        /// <param name="a">Alpha, be default is 255.</param>
+        public uint GraphicsGetColor ( uint r, uint g, uint b, uint a = 255 ) {
             if ( CheckGraphics () ) return m_graphicsApi.RGBA ( r, g, b, a );
 
             return 0;
