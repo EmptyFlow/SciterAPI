@@ -1,0 +1,19 @@
+<html>
+<body>
+    <div>
+        Result from protocol is:
+        <div id="result">
+        </div>
+    </div>
+    <script>
+        async function loadData() {
+            const response = await fetch('http://data.json');
+            const data = await response.json();
+            const element = document.getElementById('result');
+            element.innerText = JSON.stringify(data);
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
