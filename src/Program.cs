@@ -52,9 +52,6 @@ public class TestGraphicsEventHandler : ElementEventHandler {
     public GraphicsTextModel Text2 { get; set; }
 
     public override void DrawEvent ( DrawEvents command, nint gfx, SciterRectangle area, uint reserved ) {
-        var (position, size) = Host.GetMainWindowPositionAndSize ();
-        Console.WriteLine ( $"Position: {position.X} - {position.Y}" );
-
         if ( command == DrawEvents.DRAW_CONTENT ) {
             Host.GraphicsSaveState ( gfx );
             Host.GraphicsFillColor ( gfx, Color1 );
