@@ -121,7 +121,7 @@ namespace EmptyFlow.SciterAPI {
                 IntPtr.Zero
             );
 
-            if ( rectangePointer != nint.Zero) Marshal.FreeHGlobal ( rectangePointer );
+            if ( rectangePointer != nint.Zero ) Marshal.FreeHGlobal ( rectangePointer );
 
             if ( enableDebug ) {
                 m_basicApi.SciterSetupDebugOutput (
@@ -162,20 +162,20 @@ namespace EmptyFlow.SciterAPI {
 
         public int Process () {
             //activate window
-            m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_ACTIVATE, 1, IntPtr.Zero );
+            m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_ACTIVATE, 1, nint.Zero );
 
             //expand window
-            m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_SET_STATE, 1, IntPtr.Zero );
+            m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_SET_STATE, 1, nint.Zero );
 
             // run loop for waiting close all windows
-            var code = m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_LOOP, IntPtr.Zero, IntPtr.Zero );
+            var code = m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_LOOP, nint.Zero, nint.Zero );
 
             // remove event handlers
             if ( m_eventHandlerMap.Any () ) m_eventHandlerMap.Clear ();
             if ( m_eventHandlerUniqueMap.Any () ) m_eventHandlerUniqueMap.Clear ();
 
             // deinitialize engine
-            m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_SHUTDOWN, IntPtr.Zero, IntPtr.Zero );
+            m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_SHUTDOWN, nint.Zero, nint.Zero );
 
             return code;
         }

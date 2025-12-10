@@ -204,7 +204,7 @@ namespace EmptyFlow.SciterAPI.Structs {
     public delegate bool SciterReleaseGlobalAsset ( SomAsset pass );
 
     public delegate int SciterExec ( ApplicationCommand appCmd, IntPtr p1, IntPtr p2 );
-    public delegate int SciterWindowExec ( IntPtr hwnd, WindowCommand windowCmd, int p1, IntPtr p2 );
+    public delegate int SciterWindowExec ( IntPtr hwnd, WindowCommand windowCmd, nint p1, nint p2 );
 
     public delegate IntPtr /* typedef void(* proc_ptr_t)(void) */ SciterEGLGetProcAddress ( IntPtr procName /* char const* */ );
 

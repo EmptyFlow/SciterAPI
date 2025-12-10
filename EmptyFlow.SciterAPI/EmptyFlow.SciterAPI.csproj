@@ -26,6 +26,7 @@
 			SciterAPIHost.GraphicsCreateTextForElement new method for creating text related to element
 			SciterAPIHost.GraphicsCreateTextForElementWithStyle new method for creating text related to element
 			SciterAPIHost.GraphicsDrawText full refactored
+			SciterAPIHost.GraphicsGetColor alpha channel is optional now
 			Added new record GraphicsDrawText for respresent font state
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
