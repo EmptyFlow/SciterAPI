@@ -5,7 +5,7 @@ using EmptyFlow.SciterAPI.Client.Models;
 using EmptyFlow.SciterAPI.Enums;
 using System.Numerics;
 
-var pathToSciter = "C:/IDEs/sciter/sciter-js-sdk-6.0.2.30";
+var pathToSciter = "C:/IDEs/sciter/sciter-js-sdk-6.0.3.2";
 
 var host = new SciterAPIHost ( Path.Combine ( pathToSciter, "bin/windows/x64" ), true, true );
 var path = "file://" + Path.Combine ( pathToSciter, "samples/html/details-summary.htm" );
