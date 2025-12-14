@@ -1112,7 +1112,7 @@ namespace EmptyFlow.SciterAPI.Tests {
         }
 
         [Fact, Trait ( "Category", "Integration" )]
-        public void SciterAPIHost_Completed_GetMainWindowSizeAndPosition () {
+        public void SciterAPIHost_Completed_GetWindowSizeAndPosition () {
             //Arrange
             var host = new SciterAPIHost ( "" );
 
@@ -1133,13 +1133,41 @@ namespace EmptyFlow.SciterAPI.Tests {
 
             //Assert
             void ProcessCompleted () {
-                var data = host.GetMainWindowSizeAndPosition ( WindowSizeMode.Client, WindowRelateMode.Monitor, false );
+                var data = host.GetWindowSizeAndPosition ( host.MainWindow, WindowSizeMode.Client, WindowRelateMode.Monitor, false );
                 host.CloseMainWindow ();
                 Assert.NotNull ( data );
                 Assert.Equal ( 8, data.Position.X );
                 Assert.Equal ( 31, data.Position.Y );
                 Assert.Equal ( 284, data.Size.Width );
                 Assert.Equal ( 261, data.Size.Height );
+            }
+        }
+
+        [Fact, Trait ( "Category", "Integration" )]
+        public void SciterAPIHost_Completed_GetWindowActive () {
+            //Arrange
+            var host = new SciterAPIHost ( "" );
+
+            host.CreateMainWindow ( 300, 300, enableDebug: true, enableFeature: true );
+            host.LoadHtml (
+                """
+                <html>
+                    <body>
+                        <span>IsActive</span>
+                    </body>
+                </html>
+                """
+            );
+            host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+            //Act
+            host.Process ();
+
+            //Assert
+            void ProcessCompleted () {
+                var isActive = host.GetWindowActive ( host.MainWindow );
+                host.CloseMainWindow ();
+                Assert.True ( isActive );
             }
         }
 
