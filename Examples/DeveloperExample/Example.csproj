@@ -22,9 +22,8 @@
 		<PackageTags>sciter,htmlrendering,htmlengine,html</PackageTags>
 		<Description>The library contains bindings for the Sciter library, as well as some simple helpers to make working with raw bindings easier.</Description>
 	</PropertyGroup>
-
 	<ItemGroup>
-	  <ProjectReference Include="..\EmptyFlow.SciterAPI\EmptyFlow.SciterAPI.csproj" />
+	  <ProjectReference Include="..\..\src\EmptyFlow.SciterAPI\EmptyFlow.SciterAPI.csproj" />
 	</ItemGroup>
 
 </Project>

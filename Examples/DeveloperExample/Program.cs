@@ -5,6 +5,9 @@ using EmptyFlow.SciterAPI.Client.Models;
 using EmptyFlow.SciterAPI.Enums;
 using System.Numerics;
 
+// These example developer used for experiment with some new features
+// please use another examples in folder Examples. Thanks!
+
 var pathToSciter = "C:/IDEs/sciter/sciter-js-sdk-6.0.3.2";
 
 var host = new SciterAPIHost ( Path.Combine ( pathToSciter, "bin/windows/x64" ), true, true );
