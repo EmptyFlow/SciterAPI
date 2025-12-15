@@ -50,6 +50,8 @@ namespace EmptyFlow.SciterAPI {
         }
 
         private void InnerLoadAPI () {
+            Console.WriteLine ("Start load Sciter API....");
+
             m_apiPointer = SciterAPI ();
             if ( m_apiPointer == IntPtr.Zero ) return;
 
@@ -69,6 +71,8 @@ namespace EmptyFlow.SciterAPI {
             Console.WriteLine ( $"SciterAPI version: {VersionOfLibrary}" );
 
             m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_INIT, IntPtr.Zero, IntPtr.Zero );
+
+            Console.WriteLine ( "Sciter API Loaded!" );
         }
 
         /// <summary>
