@@ -1,0 +1,21 @@
+<html>
+<body>
+    <div>
+        <div id="element1" style="behavior: test1;"></div>
+        <div id="element2" style="behavior: test2;"></div>
+        <span id="result1">No result 1</span>
+        <span id="result2">No result 2</span>
+    </div>
+    <script>
+        function getResult() {
+            const element1 = document.getElementById('element1');
+            const element2 = document.getElementById('element2');
+            const result1 = document.getElementById('result1');
+            const result2 = document.getElementById('result2');
+            result1.innerText = element1.xcall("testMethod", true, [1, 2, 3], "lala");
+            result2.innerText = element2.xcall("anotherMethod", { argus: 1, burgus: 2 });
+        }
+        getResult();
+    </script>
+</body>
+</html>

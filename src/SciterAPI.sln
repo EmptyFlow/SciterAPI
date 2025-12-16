@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyFlow.SciterAPI", "Empt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyFlow.SciterAPI.Tests", "EmptyFlow.SciterAPI.UnitTest\EmptyFlow.SciterAPI.Tests.csproj", "{60ED6E9F-AD0C-6239-1494-45646741EEFD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseXCall", "..\Examples\UseXCall\UseXCall.csproj", "{B1777049-4D4C-4CC1-82D9-E4D221979ED8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,14 @@ Global
 		{60ED6E9F-AD0C-6239-1494-45646741EEFD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{60ED6E9F-AD0C-6239-1494-45646741EEFD}.Release|x64.ActiveCfg = Release|Any CPU
 		{60ED6E9F-AD0C-6239-1494-45646741EEFD}.Release|x64.Build.0 = Release|Any CPU
+		{B1777049-4D4C-4CC1-82D9-E4D221979ED8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1777049-4D4C-4CC1-82D9-E4D221979ED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1777049-4D4C-4CC1-82D9-E4D221979ED8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B1777049-4D4C-4CC1-82D9-E4D221979ED8}.Debug|x64.Build.0 = Debug|Any CPU
+		{B1777049-4D4C-4CC1-82D9-E4D221979ED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1777049-4D4C-4CC1-82D9-E4D221979ED8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1777049-4D4C-4CC1-82D9-E4D221979ED8}.Release|x64.ActiveCfg = Release|Any CPU
+		{B1777049-4D4C-4CC1-82D9-E4D221979ED8}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +81,7 @@ Global
 		{DEBFFD08-66D1-42E5-A2C8-563457B43614} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{1211908B-01A7-A571-C417-C52E0F5111D1} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{71F26395-10AA-1AFA-3DE8-DC02C4938743} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{B1777049-4D4C-4CC1-82D9-E4D221979ED8} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3264AD46-2365-4471-9339-5C196445FDFC}
