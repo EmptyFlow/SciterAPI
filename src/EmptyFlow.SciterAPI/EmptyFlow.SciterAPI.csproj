@@ -22,6 +22,7 @@
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
 			SciterAPIHost.CreateMainWindow parameters width and height now is not mandatory, if you not specify it window it will be centered and sized to half from screen size
+			SciterAPIHost.CreateMainWindow added parameter flags for control over flags in window, be default it will be WindowsFlags.Main | WindowsFlags.Resizeable | WindowsFlags.Titlebar | WindowsFlags.Controls
 			SciterAPIHost.GetWindowSizeAndPosition method for get size and position of window
 			SciterAPIHost.GetWindowActive method for get window activated state
 			SciterAPIHost.GraphicsDrawImage added override with Vector2 parameters

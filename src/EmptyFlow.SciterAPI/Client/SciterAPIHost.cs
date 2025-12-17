@@ -106,7 +106,7 @@ namespace EmptyFlow.SciterAPI {
             return 0;
         }
 
-        public void CreateMainWindow ( int width = 0, int height = 0, bool enableDebug = false, bool enableFeature = false ) {
+        public void CreateMainWindow ( int width = 0, int height = 0, bool enableDebug = false, bool enableFeature = false, WindowsFlags? flags = default ) {
             if ( enableDebug ) m_basicApi.SciterSetOption ( IntPtr.Zero, RtOptions.SCITER_SET_DEBUG_MODE, new IntPtr ( 1 ) );
             if ( enableFeature ) m_basicApi.SciterSetOption ( IntPtr.Zero, RtOptions.SCITER_SET_SCRIPT_RUNTIME_FEATURES, new IntPtr ( (int) DefaultRuntimeFeatures ) );
 
@@ -119,7 +119,7 @@ namespace EmptyFlow.SciterAPI {
             var ptr = Marshal.GetFunctionPointerForDelegate<WindowDelegate> ( WindowsDelegateImplementaion );
 
             m_mainWindow = m_basicApi.SciterCreateWindow (
-                WindowsFlags.Main | WindowsFlags.Resizeable | WindowsFlags.Titlebar | WindowsFlags.Controls,
+                flags == null ? WindowsFlags.Main | WindowsFlags.Resizeable | WindowsFlags.Titlebar | WindowsFlags.Controls : flags.Value,
                 rectangePointer,
                 RuntimeInformation.IsOSPlatform ( OSPlatform.Windows ) ? ptr : IntPtr.Zero,
                 IntPtr.Zero,
