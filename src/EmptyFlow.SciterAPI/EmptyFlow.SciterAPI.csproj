@@ -21,7 +21,6 @@
 		<Version>1.2.1.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
-			SciterAPIHost.SetWindowActive set window active state
 			SciterAPIHost.MoveWindow move window to new position
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>

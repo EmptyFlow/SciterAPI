@@ -67,20 +67,6 @@ namespace EmptyFlow.SciterAPI {
             return false;
         }
 
-        public bool SetWindowActive ( nint window, bool value ) {
-            var script = $"Window.this.isActive = {( value ? "true" : "false" )}";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
-                if ( result.IsErrorString || result.IsObjectError ) {
-                    Console.WriteLine ( "SetWindowActive: isActive not change state!" );
-                    return false;
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
         public bool MoveWindow ( nint window, int x, int y ) {
             var script = $"Window.this.move({x}, {y})";
             if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
