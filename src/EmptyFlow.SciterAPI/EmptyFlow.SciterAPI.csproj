@@ -18,19 +18,11 @@
 		<RepositoryUrl>https://github.com/EmptyFlow/SciterAPI</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>html;html-engine;htmlengine;sciter;binding</PackageTags>
-		<Version>1.2.0.0</Version>
+		<Version>1.2.1.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
-			SciterAPIHost.CreateMainWindow parameters width and height now is not mandatory, if you not specify it window it will be centered and sized to half from screen size
-			SciterAPIHost.CreateMainWindow added parameter flags for control over flags in window, be default it will be WindowsFlags.Main | WindowsFlags.Resizeable | WindowsFlags.Titlebar | WindowsFlags.Controls
-			SciterAPIHost.GetWindowSizeAndPosition method for get size and position of window
-			SciterAPIHost.GetWindowActive method for get window activated state
-			SciterAPIHost.GraphicsDrawImage added override with Vector2 parameters
-			SciterAPIHost.GraphicsCreateTextForElement new method for creating text related to element
-			SciterAPIHost.GraphicsCreateTextForElementWithStyle new method for creating text related to element
-			SciterAPIHost.GraphicsDrawText full refactored
-			SciterAPIHost.GraphicsGetColor alpha channel is optional now
-			Added new record GraphicsDrawText for respresent font state
+			SciterAPIHost.SetWindowActive set window active state
+			SciterAPIHost.MoveWindow move window to new position
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
