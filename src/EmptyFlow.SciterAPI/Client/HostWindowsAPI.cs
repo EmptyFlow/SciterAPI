@@ -249,7 +249,70 @@ namespace EmptyFlow.SciterAPI {
             return false;
         }
 
+        public SciterWindowFrameType GetWindowFrameType ( nint window ) {
+            var script = $"Window.this.frameType";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( !result.IsString ) {
+                    Console.WriteLine ( "GetWindowFrameType: caption return not string!" );
+                    return SciterWindowFrameType.Unknown;
+                }
+
+                var value = GetValueString ( ref result );
+                return value switch {
+                    "standard" => SciterWindowFrameType.Standart,
+                    "transparent" => SciterWindowFrameType.Transparent,
+                    "solid" => SciterWindowFrameType.Solid,
+                    "solid-with-shadow" => SciterWindowFrameType.SolidWithShadows,
+                    "extended" => SciterWindowFrameType.Extended,
+                    _ => SciterWindowFrameType.Unknown
+                };
+            }
+
+            return SciterWindowFrameType.Unknown;
+        }
+
+        public bool SetWindowFrameType ( nint window, SciterWindowFrameType value ) {
+            if ( value == SciterWindowFrameType.Unknown ) throw new Exception ( "Frame type SciterWindowFrameType.Unknown not supported!" );
+
+            var stringValue = value switch {
+                SciterWindowFrameType.Standart => "standard",
+                SciterWindowFrameType.Transparent => "transparent",
+                SciterWindowFrameType.Solid => "solid",
+                SciterWindowFrameType.SolidWithShadows => "solid-with-shadow",
+                SciterWindowFrameType.Extended => "extended",
+                _ => ""
+            };
+
+            var script = $"Window.this.frameType = \"{stringValue}\"";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( result.IsErrorString || result.IsObjectError ) {
+                    Console.WriteLine ( "SetWindowFrameType: value not changed! " );
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
     }
+
+    public enum SciterWindowFrameType {
+
+        Unknown = 0,
+
+        Standart = 1,
+
+        Transparent = 2,
+
+        Solid = 3,
+
+        SolidWithShadows = 4,
+
+        Extended = 5
+
+    };
 
     public record SciterWindowInfo ( SciterWindowSize Size, SciterWindowPosition Position );
 

@@ -32,6 +32,8 @@
 			SciterAPIHost.SetWindowEnabled set value isEnabled
 			SciterAPIHost.GetWindowCaption get value of caption
 			SciterAPIHost.SetWindowCaption set value caption
+			SciterAPIHost.GetWindowFrameType get value of frameType
+			SciterAPIHost.SetWindowFrameType set value frameType
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
