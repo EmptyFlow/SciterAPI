@@ -67,11 +67,179 @@ namespace EmptyFlow.SciterAPI {
             return false;
         }
 
-        public bool MoveWindow ( nint window, int x, int y ) {
-            var script = $"Window.this.move({x}, {y})";
+        public bool MoveWindow ( nint window, SciterWindowPosition position ) {
+            var script = $"Window.this.move({position.X}, {position.Y})";
             if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
                 if ( result.IsErrorString || result.IsObjectError ) {
                     Console.WriteLine ( "MoveWindow: window not moved!" );
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool GetWindowTopMost ( nint window ) {
+            var script = $"Window.this.isTopmost";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( !result.IsBoolean ) {
+                    Console.WriteLine ( "GetWindowTopMost: isTopmost return not boolean!" );
+                    return false;
+                }
+
+                return result.d == 1;
+            }
+
+            return false;
+        }
+
+        public bool SetWindowTopMost ( nint window, bool state ) {
+            var script = $"Window.this.isTopmost = {( state == true ? "true" : "false" )}";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( result.IsErrorString || result.IsObjectError ) {
+                    Console.WriteLine ( "SetWindowTopMost: value not changed! " );
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool GetWindowMaximizable ( nint window ) {
+            var script = $"Window.this.isMaximizable";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( !result.IsBoolean ) {
+                    Console.WriteLine ( "GetWindowMaximizable: isMaximizable return not boolean!" );
+                    return false;
+                }
+
+                return result.d == 1;
+            }
+
+            return false;
+        }
+
+        public bool SetWindowMaximizable ( nint window, bool state ) {
+            var script = $"Window.this.isMaximizable = {( state == true ? "true" : "false" )}";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( result.IsErrorString || result.IsObjectError ) {
+                    Console.WriteLine ( "SetWindowMaximizable: value not changed! " );
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool GetWindowMinimizable ( nint window ) {
+            var script = $"Window.this.isMinimizable";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( !result.IsBoolean ) {
+                    Console.WriteLine ( "GetWindowMinimizable: isMinimizable return not boolean!" );
+                    return false;
+                }
+
+                return result.d == 1;
+            }
+
+            return false;
+        }
+
+        public bool SetWindowMinimizable ( nint window, bool state ) {
+            var script = $"Window.this.isMinimizable = {( state == true ? "true" : "false" )}";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( result.IsErrorString || result.IsObjectError ) {
+                    Console.WriteLine ( "SetWindowMinimizable: value not changed! " );
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool GetWindowEnabled ( nint window ) {
+            var script = $"Window.this.isEnabled";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( !result.IsBoolean ) {
+                    Console.WriteLine ( "GetWindowEnabled: isEnabled return not boolean!" );
+                    return false;
+                }
+
+                return result.d == 1;
+            }
+
+            return false;
+        }
+
+        public bool SetWindowEnabled ( nint window, bool state ) {
+            var script = $"Window.this.isEnabled = {( state == true ? "true" : "false" )}";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( result.IsErrorString || result.IsObjectError ) {
+                    Console.WriteLine ( "SetWindowEnabled: value not changed! " );
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public double? GetWindowAspectRatio ( nint window ) {
+            var script = $"Window.this.aspectRatio";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( !result.IsFloat ) {
+                    Console.WriteLine ( "GetWindowAspectRatio: aspectRatio return not boolean!" );
+                    return null;
+                }
+
+                return GetValueDouble ( ref result );
+            }
+
+            return null;
+        }
+
+        public bool SetWindowAspectRatio ( nint window, double value ) {
+            var script = $"Window.this.aspectRatio = {value}";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( result.IsErrorString || result.IsObjectError ) {
+                    Console.WriteLine ( "SetWindowAspectRatio: value not changed! " );
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public string GetWindowCaption ( nint window ) {
+            var script = $"Window.this.caption";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( !result.IsString ) {
+                    Console.WriteLine ( "GetWindowCaption: caption return not string!" );
+                    return "";
+                }
+
+                return GetValueString ( ref result );
+            }
+
+            return "";
+        }
+
+        public bool SetWindowCaption ( nint window, string value ) {
+            var script = $"Window.this.caption = \"{value}\"";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( result.IsErrorString || result.IsObjectError ) {
+                    Console.WriteLine ( "SetWindowCaption: value not changed! " );
                     return false;
                 }
 
