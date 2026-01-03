@@ -1,5 +1,4 @@
-﻿using EmptyFlow.SciterAPI.Enums;
-using EmptyFlow.SciterAPI.Structs;
+﻿using EmptyFlow.SciterAPI.Structs;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -37,6 +36,7 @@ namespace EmptyFlow.SciterAPI {
         public SciterAPIHost ( string pathToLibrary, bool enableGraphicsApi = false, bool enableRequestApi = false ) {
             SciterLoader.Initialize ( pathToLibrary );
 
+            AdjustVersion ();
             m_callbacks = new SciterAPIGlobalCallbacks ( this );
             InnerLoadAPI ();
 
@@ -45,8 +45,14 @@ namespace EmptyFlow.SciterAPI {
         }
 
         public SciterAPIHost () {
+            AdjustVersion ();
             m_callbacks = new SciterAPIGlobalCallbacks ( this );
             InnerLoadAPI ();
+        }
+
+        private void AdjustVersion() {
+            var version = typeof ( SciterAPIHost ).Assembly.GetName ()?.Version;
+            if ( version != null ) VersionOfLibrary = $"{version.Major}.{version.Minor}.{version.Build}";
         }
 
         private void InnerLoadAPI () {
