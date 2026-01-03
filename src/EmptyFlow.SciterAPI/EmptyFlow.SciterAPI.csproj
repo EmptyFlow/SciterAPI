@@ -36,6 +36,8 @@
 			SciterAPIHost.SetWindowFrameType set value frameType
 			SciterAPIHost.GetWindowResizable get value of isResizable
 			SciterAPIHost.SetWindowResizable set value isResizable
+			SciterAPIHost.ExecuteWindowEval can evaluate any custom script in context of window
+			SciterAPIHost.ShowWindowSelectFileDialog show open or save file dialog
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>

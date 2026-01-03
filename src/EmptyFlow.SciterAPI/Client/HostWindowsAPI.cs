@@ -1,4 +1,5 @@
 ﻿using EmptyFlow.SciterAPI.Enums;
+using System.Runtime.CompilerServices;
 
 namespace EmptyFlow.SciterAPI {
 
@@ -15,6 +16,9 @@ namespace EmptyFlow.SciterAPI {
 
             m_basicApi.SciterWindowExec ( window, WindowCommand.SCITER_WINDOW_SET_STATE, (int) WindowState.SCITER_WINDOW_STATE_CLOSED, IntPtr.Zero );
         }
+
+        [MethodImpl ( MethodImplOptions.AggressiveInlining )]
+        public void ExecuteWindowEval ( nint window, string script, out SciterValue result ) => m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out result );
 
         /// <summary>
         /// Get main window size and position.
@@ -324,7 +328,64 @@ namespace EmptyFlow.SciterAPI {
             return false;
         }
 
+        public IEnumerable<string>? ShowWindowSelectFileDialog ( nint window, SciterSelectFileDialogMode mode, IDictionary<string, string> filters, string defaultExtension, string? caption = default, string? path = default ) {
+            var keys = new Dictionary<string, string> ();
+            var scriptMode = mode switch {
+                SciterSelectFileDialogMode.Save => "save",
+                SciterSelectFileDialogMode.Open => "open",
+                SciterSelectFileDialogMode.OpenMultiple => "open-multiple",
+                _ => "open"
+            };
+            keys.Add ( "mode", scriptMode );
+            keys.Add ( "filter", string.Join ( '|', filters.Select ( a => string.Join ( '|', a.Key, a.Value ) ) ) );
+            var scriptCaption = mode switch {
+                SciterSelectFileDialogMode.Save => "Save As",
+                SciterSelectFileDialogMode.Open => "Open File",
+                SciterSelectFileDialogMode.OpenMultiple => "Open Files",
+                _ => "Open File"
+            };
+            keys.Add ( "caption", scriptCaption );
+            keys.Add ( "extension", defaultExtension );
+            if ( path != default ) keys.Add ( "path", path );
+
+            var properties = "{" + string.Join ( ",", keys.Select ( a => a.Key + ": \"" + a.Value + "\"" ) ) + "}";
+
+            var script = $"Window.this.selectFile({properties})";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( result.IsErrorString || result.IsObjectError ) {
+                    Console.WriteLine ( "ShowWindowSelectFileDialog: error occurs when calling! " );
+                    return null;
+                }
+
+                if ( result.IsString ) return [GetValueString ( ref result )];
+                if ( result.IsArray || result.IsArrayLike ) {
+                    List<string> files = [];
+                    var count = GetArrayOrMapCount ( ref result );
+                    for ( var i = 0; i < count; i++ ) {
+                        var element = GetArrayItem ( ref result, i );
+                        files.Add ( GetValueString ( ref element ) );
+                    }
+                    return files;
+                }
+                if ( result.IsNull ) return null;
+
+                return null;
+            }
+
+            return null;
+        }
+
     }
+
+    public enum SciterSelectFileDialogMode {
+
+        Save = 0,
+
+        Open = 1,
+
+        OpenMultiple = 2
+
+    };
 
     public enum SciterWindowFrameType {
 
