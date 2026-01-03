@@ -77,6 +77,7 @@ You can check the table below to see which version of SciterAPI is compatible wi
 * ~~Binding for Graphics API~~
 * ~~Binding for Request API~~
 * ~~Get/Set Variables~~
+* ~~Helpers for Window Management~~
 * Support SOM mapping
 * Helpers for Sciter Node API
 * Helpers for Graphics API
