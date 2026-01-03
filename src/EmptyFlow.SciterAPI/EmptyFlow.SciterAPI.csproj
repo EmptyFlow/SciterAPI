@@ -34,6 +34,8 @@
 			SciterAPIHost.SetWindowCaption set value caption
 			SciterAPIHost.GetWindowFrameType get value of frameType
 			SciterAPIHost.SetWindowFrameType set value frameType
+			SciterAPIHost.GetWindowResizable get value of isResizable
+			SciterAPIHost.SetWindowResizable set value isResizable
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>

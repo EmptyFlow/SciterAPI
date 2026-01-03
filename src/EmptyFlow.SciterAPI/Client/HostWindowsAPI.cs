@@ -296,6 +296,34 @@ namespace EmptyFlow.SciterAPI {
             return false;
         }
 
+        public bool GetWindowResizable ( nint window ) {
+            var script = $"Window.this.isResizable";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( !result.IsBoolean ) {
+                    Console.WriteLine ( "GetWindowResizable: isResizable return not boolean!" );
+                    return false;
+                }
+
+                return result.d == 1;
+            }
+
+            return false;
+        }
+
+        public bool SetWindowResizable ( nint window, bool state ) {
+            var script = $"Window.this.isResizable = {( state == true ? "true" : "false" )}";
+            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+                if ( result.IsErrorString || result.IsObjectError ) {
+                    Console.WriteLine ( "SetWindowResizable: value not changed! " );
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
     }
 
     public enum SciterWindowFrameType {
