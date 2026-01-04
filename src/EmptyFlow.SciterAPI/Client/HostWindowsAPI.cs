@@ -18,7 +18,7 @@ namespace EmptyFlow.SciterAPI {
         }
 
         [MethodImpl ( MethodImplOptions.AggressiveInlining )]
-        public void ExecuteWindowEval ( nint window, string script, out SciterValue result ) => m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out result );
+        public bool ExecuteWindowEval ( nint window, string script, out SciterValue result ) => m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out result );
 
         /// <summary>
         /// Get main window size and position.

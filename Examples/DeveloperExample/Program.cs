@@ -26,10 +26,18 @@ public class MyWindowEventHandler : WindowEventHandler {
 
     public override void BehaviourEvent ( BehaviourEvents cmd, nint heTarget, nint he, nint reason, SciterValue data, string name ) {
         if ( cmd == BehaviourEvents.DOCUMENT_READY ) {
-            var body = Host.MakeCssSelector ( "body" );
-            var firstElement = body.First ();
-            var childrens = Host.GetElementChildrens ( firstElement );
-            if ( childrens.Any () ) {
+            Host.MoveWindow ( Host.MainWindow, new SciterWindowPosition ( 800, 300 ) );
+            var files = Host.ShowWindowSelectFileDialog (
+                Host.MainWindow,
+                SciterSelectFileDialogMode.Open,
+                new Dictionary<string, string> {
+                    ["Pdf Files (*.pdf)"] = "*.pdf",
+                    ["All Files (*.*)"] = "*.*",
+                },
+                "pdf",
+                "Lalala",
+                "" );
+            if ( files?.Any () == true ) {
 
             }
         }
