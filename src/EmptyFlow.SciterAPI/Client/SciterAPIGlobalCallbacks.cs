@@ -78,6 +78,15 @@ namespace EmptyFlow.SciterAPI {
             m_sciterApiStruct.SciterSetCallback ( m_host.MainWindow, m_sciterHostCallback, 1 );
         }
 
+        /// <summary>
+        /// Register window callback.
+        /// </summary>
+        /// <param name="window">Window which will be binded with callback.</param>
+        /// <param name="callback">Callback, if null will be used default callback same as in main window.</param>
+        public void RegisterWindowCallback ( nint window, SciterHostCallback? callback ) {
+            m_sciterApiStruct.SciterSetCallback ( window, callback != null ? callback : m_sciterHostCallback, 1 );
+        }
+
         public void AddProtocolHandler ( string protocol, Func<string, byte[]> handlers ) {
             if ( string.IsNullOrEmpty ( protocol ) ) throw new ArgumentNullException ( "protocol" );
             if ( handlers == null ) throw new ArgumentNullException ( "handlers" );

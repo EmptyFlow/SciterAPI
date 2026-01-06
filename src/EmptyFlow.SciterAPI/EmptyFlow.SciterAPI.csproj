@@ -21,23 +21,11 @@
 		<Version>1.2.1.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
-			SciterAPIHost.MoveWindow move window to new position
-			SciterAPIHost.GetWindowTopMost get value of isTopmost
-			SciterAPIHost.SetWindowTopMost set value isTopmost
-			SciterAPIHost.GetWindowMaximizable get value of isMaximizable
-			SciterAPIHost.SetWindowMaximizable set value isMaximizable
-			SciterAPIHost.GetWindowMinimizable get value of isMinimizable
-			SciterAPIHost.SetWindowMinimizable set value isMinimizable
-			SciterAPIHost.GetWindowEnabled get value of isEnabled
-			SciterAPIHost.SetWindowEnabled set value isEnabled
-			SciterAPIHost.GetWindowCaption get value of caption
-			SciterAPIHost.SetWindowCaption set value caption
-			SciterAPIHost.GetWindowFrameType get value of frameType
-			SciterAPIHost.SetWindowFrameType set value frameType
-			SciterAPIHost.GetWindowResizable get value of isResizable
-			SciterAPIHost.SetWindowResizable set value isResizable
-			SciterAPIHost.ExecuteWindowEval can evaluate any custom script in context of window
-			SciterAPIHost.ShowWindowSelectFileDialog show open or save file dialog
+			SciterAPIHost.CreateWindow extra way to create additional (from main) windows from C#
+			SciterAPIHost.LoadFile added parameter windowPointer
+			SciterAPIHost.LoadHtml added parameter windowPointer
+			SciterAPIHost.LoadHtml added parameter windowPointer
+			SciterAPIHost.AddWindowEventHandler added parameter windowPointer
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>

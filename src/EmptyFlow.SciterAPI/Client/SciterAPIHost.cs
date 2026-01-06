@@ -148,16 +148,19 @@ namespace EmptyFlow.SciterAPI {
             m_callbacks.RegisterCallback ();
         }
 
-        public void LoadFile ( string htmlPath ) {
-            if ( m_mainWindow == IntPtr.Zero ) return;
+        public void LoadFile ( string htmlPath, nint windowPointer = default ) {
+            var window = windowPointer == default ? m_mainWindow : windowPointer;
+            if ( window == IntPtr.Zero ) return;
 
-            m_basicApi.SciterLoadFile ( m_mainWindow, htmlPath );
+            m_basicApi.SciterLoadFile ( window, htmlPath );
         }
 
-        public void LoadHtml ( string html ) {
-            if ( m_mainWindow == IntPtr.Zero ) return;
+        public void LoadHtml ( string html, nint windowPointer = default ) {
+            var window = windowPointer == default ? m_mainWindow : windowPointer;
+            if ( window == IntPtr.Zero ) return;
+
             var bytes = Encoding.UTF8.GetBytes ( html );
-            m_basicApi.SciterLoadHtml ( m_mainWindow, bytes, (uint) bytes.Length, "" );
+            m_basicApi.SciterLoadHtml ( window, bytes, (uint) bytes.Length, "" );
         }
 
         public void PrepareGraphicsApi () {
