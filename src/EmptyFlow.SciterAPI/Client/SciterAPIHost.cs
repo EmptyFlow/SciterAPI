@@ -50,13 +50,13 @@ namespace EmptyFlow.SciterAPI {
             InnerLoadAPI ();
         }
 
-        private void AdjustVersion() {
+        private void AdjustVersion () {
             var version = typeof ( SciterAPIHost ).Assembly.GetName ()?.Version;
             if ( version != null ) VersionOfLibrary = $"{version.Major}.{version.Minor}.{version.Build}";
         }
 
         private void InnerLoadAPI () {
-            Console.WriteLine ("Start load Sciter API....");
+            Console.WriteLine ( "Start load Sciter API...." );
 
             m_apiPointer = SciterAPI ();
             if ( m_apiPointer == IntPtr.Zero ) return;
@@ -148,11 +148,20 @@ namespace EmptyFlow.SciterAPI {
             m_callbacks.RegisterCallback ();
         }
 
+        private readonly Dictionary<nint, string> m_latestLoadedFile = new Dictionary<nint, string> ();
+
         public void LoadFile ( string htmlPath, nint windowPointer = default ) {
             var window = windowPointer == default ? m_mainWindow : windowPointer;
             if ( window == IntPtr.Zero ) return;
 
             m_basicApi.SciterLoadFile ( window, htmlPath );
+            m_latestLoadedFile[window] = htmlPath;
+        }
+
+        public string GetLatestLoadedFilePath ( nint windowPointer ) {
+            if ( m_latestLoadedFile.ContainsKey ( windowPointer ) ) return m_latestLoadedFile[windowPointer];
+
+            return "";
         }
 
         public void LoadHtml ( string html, nint windowPointer = default ) {

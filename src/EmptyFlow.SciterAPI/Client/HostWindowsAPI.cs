@@ -89,7 +89,7 @@ namespace EmptyFlow.SciterAPI {
                 _ => ""
             };
             var script = $"Window.this.box(\"xywh\",\"{boxOf}\", \"{relTo}\", {( inPhisicalDevicePixels ? "true" : "false" )})";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( !result.IsArray && !result.IsArrayLike ) {
                     Console.WriteLine ( "GetMainWindowSizeAndPosition: box() return not array!" );
                     return null;
@@ -113,7 +113,7 @@ namespace EmptyFlow.SciterAPI {
 
         public bool GetWindowActive ( nint window ) {
             var script = $"Window.this.isActive";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( !result.IsBoolean ) {
                     Console.WriteLine ( "GetWindowActive: isActive return not boolean!" );
                     return false;
@@ -127,7 +127,7 @@ namespace EmptyFlow.SciterAPI {
 
         public bool MoveWindow ( nint window, SciterWindowPosition position ) {
             var script = $"Window.this.move({position.X}, {position.Y})";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( result.IsErrorString || result.IsObjectError ) {
                     Console.WriteLine ( "MoveWindow: window not moved!" );
                     return false;
@@ -141,7 +141,7 @@ namespace EmptyFlow.SciterAPI {
 
         public bool GetWindowTopMost ( nint window ) {
             var script = $"Window.this.isTopmost";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( !result.IsBoolean ) {
                     Console.WriteLine ( "GetWindowTopMost: isTopmost return not boolean!" );
                     return false;
@@ -155,7 +155,7 @@ namespace EmptyFlow.SciterAPI {
 
         public bool SetWindowTopMost ( nint window, bool state ) {
             var script = $"Window.this.isTopmost = {( state == true ? "true" : "false" )}";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( result.IsErrorString || result.IsObjectError ) {
                     Console.WriteLine ( "SetWindowTopMost: value not changed! " );
                     return false;
@@ -169,7 +169,7 @@ namespace EmptyFlow.SciterAPI {
 
         public bool GetWindowMaximizable ( nint window ) {
             var script = $"Window.this.isMaximizable";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( !result.IsBoolean ) {
                     Console.WriteLine ( "GetWindowMaximizable: isMaximizable return not boolean!" );
                     return false;
@@ -183,7 +183,7 @@ namespace EmptyFlow.SciterAPI {
 
         public bool SetWindowMaximizable ( nint window, bool state ) {
             var script = $"Window.this.isMaximizable = {( state == true ? "true" : "false" )}";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( result.IsErrorString || result.IsObjectError ) {
                     Console.WriteLine ( "SetWindowMaximizable: value not changed! " );
                     return false;
@@ -197,7 +197,7 @@ namespace EmptyFlow.SciterAPI {
 
         public bool GetWindowMinimizable ( nint window ) {
             var script = $"Window.this.isMinimizable";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( !result.IsBoolean ) {
                     Console.WriteLine ( "GetWindowMinimizable: isMinimizable return not boolean!" );
                     return false;
@@ -211,7 +211,7 @@ namespace EmptyFlow.SciterAPI {
 
         public bool SetWindowMinimizable ( nint window, bool state ) {
             var script = $"Window.this.isMinimizable = {( state == true ? "true" : "false" )}";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( result.IsErrorString || result.IsObjectError ) {
                     Console.WriteLine ( "SetWindowMinimizable: value not changed! " );
                     return false;
@@ -225,7 +225,7 @@ namespace EmptyFlow.SciterAPI {
 
         public bool GetWindowEnabled ( nint window ) {
             var script = $"Window.this.isEnabled";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( !result.IsBoolean ) {
                     Console.WriteLine ( "GetWindowEnabled: isEnabled return not boolean!" );
                     return false;
@@ -239,7 +239,7 @@ namespace EmptyFlow.SciterAPI {
 
         public bool SetWindowEnabled ( nint window, bool state ) {
             var script = $"Window.this.isEnabled = {( state == true ? "true" : "false" )}";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( result.IsErrorString || result.IsObjectError ) {
                     Console.WriteLine ( "SetWindowEnabled: value not changed! " );
                     return false;
@@ -253,7 +253,7 @@ namespace EmptyFlow.SciterAPI {
 
         public double? GetWindowAspectRatio ( nint window ) {
             var script = $"Window.this.aspectRatio";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( !result.IsFloat ) {
                     Console.WriteLine ( "GetWindowAspectRatio: aspectRatio return not boolean!" );
                     return null;
@@ -267,7 +267,7 @@ namespace EmptyFlow.SciterAPI {
 
         public bool SetWindowAspectRatio ( nint window, double value ) {
             var script = $"Window.this.aspectRatio = {value}";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( result.IsErrorString || result.IsObjectError ) {
                     Console.WriteLine ( "SetWindowAspectRatio: value not changed! " );
                     return false;
@@ -281,7 +281,7 @@ namespace EmptyFlow.SciterAPI {
 
         public string GetWindowCaption ( nint window ) {
             var script = $"Window.this.caption";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( !result.IsString ) {
                     Console.WriteLine ( "GetWindowCaption: caption return not string!" );
                     return "";
@@ -295,7 +295,7 @@ namespace EmptyFlow.SciterAPI {
 
         public bool SetWindowCaption ( nint window, string value ) {
             var script = $"Window.this.caption = \"{value}\"";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( result.IsErrorString || result.IsObjectError ) {
                     Console.WriteLine ( "SetWindowCaption: value not changed! " );
                     return false;
@@ -309,7 +309,7 @@ namespace EmptyFlow.SciterAPI {
 
         public SciterWindowFrameType GetWindowFrameType ( nint window ) {
             var script = $"Window.this.frameType";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( !result.IsString ) {
                     Console.WriteLine ( "GetWindowFrameType: caption return not string!" );
                     return SciterWindowFrameType.Unknown;
@@ -342,7 +342,7 @@ namespace EmptyFlow.SciterAPI {
             };
 
             var script = $"Window.this.frameType = \"{stringValue}\"";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( result.IsErrorString || result.IsObjectError ) {
                     Console.WriteLine ( "SetWindowFrameType: value not changed! " );
                     return false;
@@ -356,7 +356,7 @@ namespace EmptyFlow.SciterAPI {
 
         public bool GetWindowResizable ( nint window ) {
             var script = $"Window.this.isResizable";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( !result.IsBoolean ) {
                     Console.WriteLine ( "GetWindowResizable: isResizable return not boolean!" );
                     return false;
@@ -370,7 +370,7 @@ namespace EmptyFlow.SciterAPI {
 
         public bool SetWindowResizable ( nint window, bool state ) {
             var script = $"Window.this.isResizable = {( state == true ? "true" : "false" )}";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( result.IsErrorString || result.IsObjectError ) {
                     Console.WriteLine ( "SetWindowResizable: value not changed! " );
                     return false;
@@ -405,7 +405,7 @@ namespace EmptyFlow.SciterAPI {
             var properties = "{" + string.Join ( ",", keys.Select ( a => a.Key + ": \"" + a.Value + "\"" ) ) + "}";
 
             var script = $"Window.this.selectFile({properties})";
-            if ( m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out var result ) ) {
+            if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
                 if ( result.IsErrorString || result.IsObjectError ) {
                     Console.WriteLine ( "ShowWindowSelectFileDialog: error occurs when calling! " );
                     return null;
