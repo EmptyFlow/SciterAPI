@@ -7,6 +7,7 @@ namespace EmptyFlow.SciterAPI {
 
     public partial class SciterAPIHost {
 
+        [Obsolete ( "Please use CloseWindow instead" )]
         public void CloseMainWindow () {
             if ( m_mainWindow == IntPtr.Zero ) return;
 
@@ -72,7 +73,7 @@ namespace EmptyFlow.SciterAPI {
         }
 
         [MethodImpl ( MethodImplOptions.AggressiveInlining )]
-        public bool ExecuteWindowEval ( nint window, string script, out SciterValue result ) => m_basicApi.SciterEval ( m_mainWindow, script, (uint) script.Length, out result );
+        public bool ExecuteWindowEval ( nint window, string script, out SciterValue result ) => m_basicApi.SciterEval ( window, script, (uint) script.Length, out result );
 
         /// <summary>
         /// Get main window size and position.

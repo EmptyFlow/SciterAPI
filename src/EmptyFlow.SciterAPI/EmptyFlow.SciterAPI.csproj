@@ -26,6 +26,8 @@
 			SciterAPIHost.LoadHtml added parameter windowPointer
 			SciterAPIHost.LoadHtml added parameter windowPointer
 			SciterAPIHost.AddWindowEventHandler added parameter windowPointer
+			Fixed window management methods in SciterAPIHost for custom window
+			Added new class DeveloperConsole contains few helpers can be useful in development
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
