@@ -24,8 +24,8 @@
 			SciterAPIHost.CreateWindow extra way to create additional (from main) windows from C#
 			SciterAPIHost.LoadFile added parameter windowPointer
 			SciterAPIHost.LoadHtml added parameter windowPointer
-			SciterAPIHost.LoadHtml added parameter windowPointer
 			SciterAPIHost.AddWindowEventHandler added parameter windowPointer
+			SciterAPIHost.UpdateWindow request calculation of layout of elements inside the window
 			Fixed window management methods in SciterAPIHost for custom window
 			Added new class DeveloperConsole contains few helpers can be useful in development
 		</PackageReleaseNotes>

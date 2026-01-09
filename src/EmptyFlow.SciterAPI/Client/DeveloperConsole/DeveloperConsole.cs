@@ -113,6 +113,16 @@
 				display: flex;
 				flex-direction: column;
 			}
+			.text-section {
+				width: 100%;
+				border-width: 1px;
+				border-style: solid;
+				border-color: #e7e9eb;
+				border-radius: 2px;
+				background-color: white;
+				padding: 2px;
+			}
+
 		</style>
 	</head>
 	<body>
@@ -129,11 +139,21 @@
 				</div>
 			</div>
 		</div>
+		<div id="empty-page">
+			<div class="tab-page-layout">
+				<span style="align-self: center; text-align: center;margin-top: 10px;">Welcome to Developer Console!<br>To get started, click on one of the tabs above.</span>
+			</div>
+		</div>
 		<div class="tab-page" id="window-page">
 			<div class="tab-page-layout">
-				<button id="reloadpage">Reload page</button>
+				<div style="width: 100%; display: flex; flex-direction: column;">
+					<button id="reloadpage" style="align-self: end;background-color: green;">Reload page</button>
+				</div>
 				<div>
-					Loaded document: <br><span id="window-loaded-path"></span>
+					Loaded document:
+					<div class="text-section">
+						<span id="window-loaded-path"></span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -146,11 +166,12 @@
 			const reloadPageButton = document.getElementById('reloadpage');
 			const windowTab = document.getElementById('window-tab');
 			const eventsTab = document.getElementById('events-tab');
+			const emptyPage = document.getElementById('empty-page');
 			const windowPage = document.getElementById('window-page');
 			const eventsPage = document.getElementById('events-page');
 			const windowLoadedPath = document.getElementById('window-loaded-path');
-			const tabsPages = [{tab: windowTab, page: windowPage}, {tab: eventsTab, page: eventsPage}];
-			let selectedTab = null;
+			const tabsPages = [{tab: windowTab, page: windowPage}, {tab: eventsTab, page: eventsPage}, {tab: emptyPage, page: emptyPage}];
+			let selectedTab = emptyPage;
 			const hub = document.getElementById('hub');
 			reloadPageButton.addEventListener(
 				"click",
@@ -177,8 +198,6 @@
 				selectedTab = newSelectTab;
 				newItem.page.style.display = 'block';
 			}
-
-			selectTab(windowTab);
 
 			function handleExternalEvent(event) {
 				switch (event.type) {
