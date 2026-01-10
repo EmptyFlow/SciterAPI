@@ -390,6 +390,21 @@ namespace EmptyFlow.SciterAPI {
 			return false;
 		}
 
+		public int CountOfScreens ( nint window ) {
+			var script = $"Window.screens";
+			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
+				if ( result.IsErrorString || result.IsObjectError ) {
+					Console.WriteLine ( "CountOfScreens: error is happened! " );
+					return 0;
+				}
+
+				var screenCount = GetValueInt32 ( ref result );
+				return screenCount;
+			}
+
+			return 0;
+		}
+
 		public IEnumerable<string>? ShowWindowSelectFileDialog ( nint window, SciterSelectFileDialogMode mode, IDictionary<string, string> filters, string defaultExtension, string? caption = default, string? path = default ) {
 			var keys = new Dictionary<string, string> ();
 			var scriptMode = mode switch {
