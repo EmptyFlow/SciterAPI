@@ -7,7 +7,7 @@
 		private nint m_consolePointer = nint.Zero;
 
 		public DeveloperConsole ( SciterAPIHost host, nint windowPointer ) {
-			m_windowHandler = new DeveloperConsoleWindowHandler ( windowPointer, host );
+			m_windowHandler = new DeveloperConsoleWindowHandler ( windowPointer, host, this );
 			host.AddWindowEventHandler ( m_windowHandler, windowPointer );
 			var consoleWindowOutputDebug = false;
 #if DEBUG
