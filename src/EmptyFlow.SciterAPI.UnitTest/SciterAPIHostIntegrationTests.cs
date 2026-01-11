@@ -33,7 +33,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			void ProcessCompleted () {
 				var elements = host.MakeCssSelector ( "#textspan" );
 				Assert.Single ( elements );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 			}
 		}
 
@@ -54,7 +54,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			void ProcessCompleted () {
 				var elements = host.MakeCssSelector ( "span.item1" );
 				Assert.Equal ( 3, elements.Count () );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 			}
 		}
 
@@ -76,7 +76,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			void ProcessCompleted () {
 				var element = host.MakeCssSelector ( "#textspan" ).First ();
 				result = host.GetElementText ( element );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.Equal ( "Lalalala", result );
 			}
 		}
@@ -100,7 +100,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 				var element = host.MakeCssSelector ( "#textspan" ).First ();
 				host.SetElementText ( element, "new value11111" );
 				result = host.GetElementText ( element );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.Equal ( "new value11111", result );
 			}
 		}
@@ -123,7 +123,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			void ProcessCompleted () {
 				var element = host.MakeCssSelector ( "body" ).First ();
 				var html = host.GetElementHtml ( element, false );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.Equal ( "\n    <span id=\"textspan\">Lalalala</span>\n", html );
 			}
 		}
@@ -146,7 +146,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			void ProcessCompleted () {
 				var element = host.MakeCssSelector ( "body" ).First ();
 				var html = host.GetElementHtml ( element, true );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.Equal ( "<body>\n    <span id=\"textspan\">Lalalala</span>\n</body>", html );
 			}
 		}
@@ -170,7 +170,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 				var element = host.MakeCssSelector ( "#textspan" ).First ();
 				host.SetElementHtml ( element, "<b>Bold</b><i>Italic</i>", SetElementHtml.ReplaceContent );
 				var html = host.GetElementHtml ( element, false );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.Equal ( "<b>Bold</b><i>Italic</i>", html );
 			}
 		}
@@ -211,7 +211,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			//Assert
 			void ProcessCompleted () {
 				Assert.Single ( host.MakeCssSelector ( "#world" ) );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 			}
 		}
 
@@ -254,7 +254,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 				newSciterEventHandler = new SciterAPIHost_Completed_Callbacks_AttachCustomBehaviorHit ( element, host );
 				newSciterEventHandler.AfterRegisterEventFired = () => {
 					handlerFired = true;
-					host.CloseWindow(host.MainWindow);
+					host.CloseWindow ( host.MainWindow );
 				};
 				return newSciterEventHandler;
 			};
@@ -264,7 +264,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			host.Process ();
 
 			await Task.Delay ( 2000 );
-			host.CloseWindow(host.MainWindow);
+			host.CloseWindow ( host.MainWindow );
 
 			//Assert
 			Assert.True ( handlerFired );
@@ -308,7 +308,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 				var element = host.MakeCssSelector ( "#world" ).Single ();
 				var id = host.GetElementAttribute ( element, "id" );
 				Assert.Equal ( "world", id );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 			}
 		}
 
@@ -350,7 +350,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 				var element = host.MakeCssSelector ( "#world" ).Single ();
 				var value = host.GetElementAttribute ( element, "notexists" );
 				Assert.Empty ( value );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 			}
 		}
 
@@ -395,7 +395,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 				host.SetElementAttribute ( element, "test", "muher" );
 				var newValue = host.GetElementAttribute ( element, "test" );
 				Assert.Equal ( "muher", newValue );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 			}
 		}
 
@@ -436,7 +436,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			void ProcessCompleted () {
 				var element = host.MakeCssSelector ( "#world" ).Single ();
 				var names = host.GetElementAttributeNames ( element );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.Equal ( 6, names.Count () );
 				Assert.Equal ( "id", names.ElementAt ( 0 ) );
 				Assert.Equal ( "attribute1", names.ElementAt ( 1 ) );
@@ -484,7 +484,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			void ProcessCompleted () {
 				var element = host.MakeCssSelector ( "#world" ).Single ();
 				var attributes = host.GetElementAttributes ( element );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.Equal ( 6, attributes.Count () );
 				Assert.Equal ( "id", attributes.ElementAt ( 0 ).Key );
 				Assert.Equal ( "world", attributes.ElementAt ( 0 ).Value );
@@ -543,7 +543,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			void ProcessCompleted () {
 				var element = host.MakeCssSelector ( "#world" ).Single ();
 				var result = host.GetElementHasAttribute ( element, "attribute1" );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.True ( result );
 			}
 		}
@@ -585,7 +585,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			void ProcessCompleted () {
 				var element = host.MakeCssSelector ( "#world" ).Single ();
 				var result = host.GetElementHasAttribute ( element, "attribute1" );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.False ( result );
 			}
 		}
@@ -626,7 +626,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			//Assert
 			void ProcessCompleted () {
 				var booleanValue = host.CreateValue ( true );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.True ( booleanValue.IsBoolean );
 				Assert.Equal ( (uint) 1, booleanValue.d );
 			}
@@ -669,7 +669,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			void ProcessCompleted () {
 				var value = host.CreateValue ( 456565 );
 				var innerValue = host.GetValueInt32 ( ref value );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.True ( value.IsInteger );
 				Assert.Equal ( 456565u, value.d );
 				Assert.Equal ( 456565, innerValue );
@@ -713,7 +713,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			void ProcessCompleted () {
 				var value = host.CreateValue ( 456565L );
 				var innerValue = host.GetValueInt64 ( ref value );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.True ( value.IsLong );
 				Assert.Equal ( 456565L, innerValue );
 			}
@@ -756,7 +756,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			void ProcessCompleted () {
 				var value = host.CreateValue ( 38.89 );
 				var innerValue = host.GetValueDouble ( ref value );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.True ( value.IsFloat );
 				Assert.Equal ( 38.89, innerValue );
 			}
@@ -799,7 +799,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			void ProcessCompleted () {
 				var value = host.CreateValue ( "Asta Lavista" );
 				var innerValue = host.GetValueString ( ref value );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.True ( value.IsString );
 				Assert.Equal ( "Asta Lavista", innerValue );
 			}
@@ -851,7 +851,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 					var arrayItem = host.GetArrayItem ( ref valueArray, i );
 					resultString.Add ( host.GetValueString ( ref arrayItem ) );
 				}
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				var exceptedArray = new List<string> {
 					"First Item",
 					"Second Item",
@@ -911,7 +911,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 					.Select ( a => host.GetValueString ( ref a ) )
 					.ToList ();
 
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.Equal ( "Second Item", secondMapValueString );
 				Assert.Equal ( "third", thirdKeyString );
 				Assert.Equal ( new List<string> { "first", "second", "third" }, resultMap.Keys );
@@ -969,7 +969,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 				var function = arguments.FirstOrDefault ();
 				var functionResult = host.ValueInvoke ( ref function, null, Enumerable.Empty<SciterValue> () );
 				var functionResultValue = host.GetValueInt32 ( ref functionResult );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.Equal ( "luher", name );
 				Assert.Equal ( 4568, functionResultValue );
 			}
@@ -1021,7 +1021,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			void MethodHandled ( string name, IEnumerable<SciterValue> arguments ) {
 				var globalVariable = arguments.FirstOrDefault ();
 				var testValue = host.GetValueString ( ref globalVariable );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.Equal ( "luher", name );
 				Assert.True ( globalVariable.IsString );
 				Assert.Equal ( "testvalue", testValue );
@@ -1047,7 +1047,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			void ProcessCompleted () {
 				var result = host.GetMainWindowVariable ( "globalVariable" );
 				var resultString = host.GetValueString ( ref result );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.Equal ( "testvalue", resultString );
 			}
 		}
@@ -1070,7 +1070,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 				var divElement = host.MakeCssSelector ( "div" ).First ();
 				host.SetElementStyleProperty ( divElement, "color", "#ccccff" );
 				var savedProperty = host.GetElementStyleProperty ( divElement, "color" );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.Equal ( "rgb(204,204,255)", savedProperty );
 			}
 		}
@@ -1105,7 +1105,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 				var divElement = host.MakeCssSelector ( "#insideelement" ).First ();
 				var allSpans = host.MakeCssSelector ( "span" ).Count ();
 				var insideSpans = host.MakeCssSelector ( "span", divElement ).Count ();
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.Equal ( 3, allSpans );
 				Assert.Equal ( 2, insideSpans );
 			}
@@ -1134,7 +1134,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			//Assert
 			void ProcessCompleted () {
 				var data = host.GetWindowSizeAndPosition ( host.MainWindow, WindowSizeMode.Client, WindowRelateMode.Monitor, false );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.NotNull ( data );
 				Assert.Equal ( 8, data.Position.X );
 				Assert.Equal ( 31, data.Position.Y );
@@ -1166,8 +1166,50 @@ namespace EmptyFlow.SciterAPI.Tests {
 			//Assert
 			void ProcessCompleted () {
 				var isActive = host.GetWindowActive ( host.MainWindow );
-				host.CloseWindow(host.MainWindow);
+				host.CloseWindow ( host.MainWindow );
 				Assert.True ( isActive );
+			}
+		}
+
+		public class AddEventHandlerTestHandler : SciterEventHandler {
+
+			public AddEventHandlerTestHandler ( nint element, SciterAPIHost host ) : base ( element, host, SciterEventHandlerMode.Element ) {
+			}
+
+			public override string GetUnique () {
+				return "Lalala";
+			}
+
+		}
+
+		[Fact, Trait ( "Category", "Integration" )]
+		public void SciterAPIHost_Completed_AddEventHandler_GetEventHandlerByUnique () {
+			//Arrange
+			var host = new SciterAPIHost ( "" );
+
+			host.CreateMainWindow ();
+			host.LoadHtml (
+				"""
+                <html>
+                    <body>
+                        <span>AddEventHandler</span>
+                    </body>
+                </html>
+                """
+			);
+			host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+
+			//Act
+			host.Process ();
+
+			//Assert
+			void ProcessCompleted () {
+				var spanElement = host.MakeCssSelector ( "span" ).First ();
+				var eventHandler = new AddEventHandlerTestHandler ( spanElement, host );
+				host.AddEventHandler ( eventHandler );
+				var handler = host.GetEventHandlerByUnique ( "Lalala" );
+				host.CloseWindow ( host.MainWindow );
+				Assert.Equal ( handler, eventHandler );
 			}
 		}
 

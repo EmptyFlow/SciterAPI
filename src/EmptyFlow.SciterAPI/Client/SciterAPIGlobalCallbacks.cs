@@ -31,10 +31,10 @@ namespace EmptyFlow.SciterAPI {
 		private Action<IntPtr, IntPtr, IntPtr> m_notificationPostedAction;
 
 		[DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
-		private Func<string, IntPtr, SciterEventHandler?> m_attachBehaviourAction;
+		private Func<string, IntPtr, SciterEventHandlerRaw?> m_attachBehaviourAction;
 
 		[DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
-		protected Dictionary<string, Func<IntPtr, SciterEventHandler>> m_attachBehaviourFactories = new Dictionary<string, Func<IntPtr, SciterEventHandler>> ();
+		protected Dictionary<string, Func<IntPtr, SciterEventHandlerRaw>> m_attachBehaviourFactories = new Dictionary<string, Func<IntPtr, SciterEventHandlerRaw>> ();
 
 		[DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
 		public SciterAPIGlobalCallbacks ( SciterAPIHost host ) {
@@ -68,7 +68,7 @@ namespace EmptyFlow.SciterAPI {
 			set => m_notificationPostedAction = value;
 		}
 
-		public Func<string, IntPtr, SciterEventHandler?> AttachBehaviourAction {
+		public Func<string, IntPtr, SciterEventHandlerRaw?> AttachBehaviourAction {
 			get => m_attachBehaviourAction;
 			set => m_attachBehaviourAction = value;
 		}
@@ -95,7 +95,7 @@ namespace EmptyFlow.SciterAPI {
 			m_protocolHandlers.Add ( protocol, handlers );
 		}
 
-		public void AddAttachBehaviourFactory ( string name, Func<IntPtr, SciterEventHandler> handler ) {
+		public void AddAttachBehaviourFactory ( string name, Func<IntPtr, SciterEventHandlerRaw> handler ) {
 			if ( m_attachBehaviourFactories.ContainsKey ( name ) ) throw new ArgumentException ( $"Factory with name {name} already attached!" );
 			if ( handler == null ) throw new ArgumentException ( $"Parameter handler contains null!" );
 
@@ -164,7 +164,7 @@ namespace EmptyFlow.SciterAPI {
 		private void EmptyNotificationPostedAction ( IntPtr wparam, IntPtr lparam, IntPtr lreturn ) {
 		}
 
-		private SciterEventHandler? DefaultAttachedBahaviourAction ( string behaviourName, IntPtr element ) {
+		private SciterEventHandlerRaw? DefaultAttachedBahaviourAction ( string behaviourName, nint element ) {
 			if ( m_attachBehaviourFactories.ContainsKey ( behaviourName ) ) {
 				try {
 					var handler = m_attachBehaviourFactories[behaviourName] ( element );

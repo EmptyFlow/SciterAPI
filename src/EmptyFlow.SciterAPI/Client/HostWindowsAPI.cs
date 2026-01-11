@@ -25,15 +25,17 @@ namespace EmptyFlow.SciterAPI {
 		/// </summary>
 		/// <param name="width">Width, if omit will be half of curent screen.</param>
 		/// <param name="height">Height, if omit will be half of curent screen.</param>
+		/// <param name="x">X coordinate for window</param>
+		/// <param name="y">Y coordinate for window.</param>
 		/// <param name="flags">Windows flags.</param>
 		/// <param name="debugOutput">It will be showed output in stout or not.</param>
 		/// <param name="hostCallback">Host callback, can be remake all default events like bahaviour, create window or so on. If omit will be apply default just like in main window.</param>
 		/// <param name="parent">Can be specified parent window, can be useful in some cases.</param>
 		/// <returns>Pointer to created window.</returns>
-		public nint CreateWindow ( int width = 0, int height = 0, WindowsFlags? flags = default, bool debugOutput = false, SciterHostCallback? hostCallback = default, nint parent = default ) {
+		public nint CreateWindow ( int width = 0, int height = 0, int x = 0, int y = 0, WindowsFlags? flags = default, bool debugOutput = false, SciterHostCallback? hostCallback = default, nint parent = default ) {
 			var rectangePointer = nint.Zero;
 			if ( width > 0 && height > 0 ) {
-				var rectangle = new SciterRectangle ( 0, 0, width, height );
+				var rectangle = new SciterRectangle ( x, y, width, height );
 				rectangePointer = Marshal.AllocHGlobal ( Marshal.SizeOf<SciterRectangle> () );
 				Marshal.StructureToPtr ( rectangle, rectangePointer, false );
 			}

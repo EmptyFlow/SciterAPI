@@ -27,6 +27,7 @@
 			SciterAPIHost.AddWindowEventHandler added parameter windowPointer
 			SciterAPIHost.UpdateWindow request calculation of layout of elements inside the window
 			SciterAPIHost.CountOfScreens get count of screens
+			Move SciterEventHandler basic stuff to lite class SciterEventHandlerRaw
 			Fixed window management methods in SciterAPIHost for custom window
 			Added new class DeveloperConsole contains few helpers can be useful in development
 		</PackageReleaseNotes>

@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace EmptyFlow.SciterAPI {
 
-	public class SciterEventHandler {
+	public class SciterEventHandler : SciterEventHandlerRaw, IUniqueEventHandler {
 
 		private IntPtr m_processedElement = IntPtr.Zero;
 
@@ -12,13 +12,9 @@ namespace EmptyFlow.SciterAPI {
 
 		private nint m_relatedAsset = nint.Zero;
 
-		private readonly IntPtr m_subscribedElement = IntPtr.Zero;
-
 		private readonly SciterEventHandlerMode m_mode = SciterEventHandlerMode.Element;
 
 		private readonly SciterAPIHost m_host;
-
-		private readonly ElementEventProc m_innerDelegate;
 
 		private readonly List<EventBehaviourGroups> m_includedEvents = [];
 
@@ -33,28 +29,16 @@ namespace EmptyFlow.SciterAPI {
 		public SciterAPIHost Host => m_host;
 
 		/// <summary>
-		/// Element on which event subscribed this handler.
-		/// </summary>
-		public IntPtr SubscribedElement => m_subscribedElement;
-
-		/// <summary>
 		/// Mode of handler, can be two types Window or Element.
 		/// </summary>
 		public SciterEventHandlerMode Mode => m_mode;
-
-		/// <summary>
-		/// Inner delegate which is used in handling events.
-		/// </summary>
-		public ElementEventProc InnerDelegate => m_innerDelegate;
 
 		public nint AttachedPassport => m_relatedPassport;
 
 		public nint AttachedAsset => m_relatedAsset;
 
-		public SciterEventHandler ( IntPtr relatedThing, SciterAPIHost host, SciterEventHandlerMode mode ) {
-			m_subscribedElement = relatedThing;
+		public SciterEventHandler ( IntPtr relatedThing, SciterAPIHost host, SciterEventHandlerMode mode ) : base ( relatedThing ) {
 			m_host = host ?? throw new ArgumentNullException ( nameof ( host ) );
-			m_innerDelegate = SciterHandleEvent;
 			m_mode = mode;
 		}
 
@@ -62,8 +46,6 @@ namespace EmptyFlow.SciterAPI {
 			m_includedEvents.Clear ();
 			m_includedEvents.AddRange ( groups );
 		}
-
-		private bool SciterHandleEvent ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) => EventHandler ( tag, he, evtg, prms );
 
 		private static int m_referenceCounter = 0;
 
@@ -131,14 +113,12 @@ namespace EmptyFlow.SciterAPI {
 			return m_relatedAsset;
 		}
 
-		public virtual bool EventHandler ( IntPtr tag, IntPtr he, uint evtg, IntPtr prms ) {
-			if ( m_includedEvents.Any () && !m_includedEvents.Contains ( (EventBehaviourGroups) evtg ) ) return false;
+		public override bool EventHandler ( nint processedElement, EventBehaviourGroups eventBehaviourGroup, nint parameters ) {
+			if ( m_includedEvents.Any () && !m_includedEvents.Contains ( eventBehaviourGroup ) ) return false;
 
-			m_processedElement = he;
+			m_processedElement = processedElement;
 
-			var parameters = prms;
-
-			switch ( (EventBehaviourGroups) evtg ) {
+			switch ( eventBehaviourGroup ) {
 				case EventBehaviourGroups.SUBSCRIPTIONS_REQUEST:
 					var registeredType = BeforeRegisterEvent ();
 					Marshal.WriteInt32 ( parameters, (int) registeredType );
@@ -263,7 +243,8 @@ namespace EmptyFlow.SciterAPI {
 					AttributeChanged ( attributeChanged.Element, attributeChanged.Name, attributeChanged.Value );
 					return true;
 				case EventBehaviourGroups.HANDLE_STYLE_CHANGE:
-					StyleChanged ( he );
+					var changeKind = (uint) parameters.ToInt32 ();
+					StyleChanged ( processedElement, changeKind );
 					return true;
 			}
 
@@ -310,7 +291,8 @@ namespace EmptyFlow.SciterAPI {
 		public virtual void AttributeChanged ( nint element, string name, string value ) {
 		}
 
-		public virtual void StyleChanged ( nint element ) {
+		public virtual void StyleChanged ( nint element, uint changeKind ) {
+
 		}
 
 		public virtual void MethodCall ( BehaviourMethodIdentifiers methodID ) {

@@ -14,10 +14,12 @@
 			m_basicApi.SciterWindowAttachEventHandler ( windowPointer == default ? m_mainWindow : windowPointer, handler.InnerDelegate, 1, (uint) EventBehaviourGroups.HandleAll );
 		}
 
-		private bool AddToEventHandlers ( SciterEventHandler handler ) {
+		private bool AddToEventHandlers ( SciterEventHandlerRaw handler ) {
 			m_eventHandlerMap.Add ( handler.SubscribedElement, handler );
-			var unique = handler.GetUnique ();
+			var uniqueHandler = handler as IUniqueEventHandler;
+			var unique = uniqueHandler != null ? uniqueHandler.GetUnique() : null;
 			if ( string.IsNullOrEmpty ( unique ) ) return false;
+
 			if ( m_eventHandlerUniqueMap.ContainsKey ( unique ) ) {
 				Console.WriteLine ( $"EventHandler with unique value: {unique} is already registered! It is not without reason that this is called a UNIQUE value." );
 				return false;
@@ -31,11 +33,8 @@
 		/// Add event handler and optionally attach to element.
 		/// </summary>
 		/// <param name="handler">Handler that will be attached to element.</param>
-		/// <param name="fromFactory">If parameter is true which mean </param>
 		/// <exception cref="ArgumentException"></exception>
-		internal void AddEventHandlerWithoutAttaching ( SciterEventHandler handler ) {
-			if ( handler.Mode != SciterEventHandlerMode.Element ) throw new ArgumentException ( "Passed EventHandler must be with mode = SciterEventHandlerMode.Element!" );
-
+		internal void AddEventHandlerWithoutAttaching ( SciterEventHandlerRaw handler ) {
 			AddToEventHandlers ( handler );
 		}
 
@@ -45,9 +44,7 @@
 		/// <param name="handler">Handler that will be attached to element.</param>
 		/// <param name="fromFactory">If parameter is true which mean </param>
 		/// <exception cref="ArgumentException"></exception>
-		public void AddEventHandler ( SciterEventHandler handler ) {
-			if ( handler.Mode != SciterEventHandlerMode.Element ) throw new ArgumentException ( "Passed EventHandler must be with mode = SciterEventHandlerMode.Element!" );
-
+		public void AddEventHandler ( SciterEventHandlerRaw handler ) {
 			if ( AddToEventHandlers ( handler ) ) m_basicApi.SciterAttachEventHandler ( handler.SubscribedElement, handler.InnerDelegate, 1 );
 		}
 
@@ -78,7 +75,7 @@
 		/// If it will be two or more event handlers with same unique value you get first and order is not guaranteed.
 		/// </summary>
 		/// <param name="unique">Event handler with unique value.</param>
-		public SciterEventHandler? GetEventHandlerByUnique ( string unique ) {
+		public SciterEventHandlerRaw? GetEventHandlerByUnique ( string unique ) {
 			if ( !m_eventHandlerUniqueMap.ContainsKey ( unique ) ) return null;
 
 			return GetEventHandlerByPointer ( m_eventHandlerUniqueMap[unique] );
@@ -88,7 +85,7 @@
 		/// Get a registered event handler whose SubscribedElement is equal to the passed pointer parameter.
 		/// </summary>
 		/// <param name="pointer">The pointer for which to find the event handler.</param>
-		public SciterEventHandler? GetEventHandlerByPointer ( nint pointer ) {
+		public SciterEventHandlerRaw? GetEventHandlerByPointer ( nint pointer ) {
 			if ( !m_eventHandlerMap.ContainsKey ( pointer ) ) return null;
 
 			return m_eventHandlerMap[pointer];

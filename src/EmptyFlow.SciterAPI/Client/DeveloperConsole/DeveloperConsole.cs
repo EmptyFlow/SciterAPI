@@ -13,7 +13,7 @@
 #if DEBUG
 			consoleWindowOutputDebug = true;
 #endif
-			m_consolePointer = host.CreateWindow ( width: 500, height: 400, debugOutput: consoleWindowOutputDebug );
+			m_consolePointer = host.CreateWindow ( width: 500, height: 400, x: 100, y: 100, debugOutput: consoleWindowOutputDebug );
 			host.Callbacks.AddAttachBehaviourFactory (
 				"developerconsolehub",
 				( element ) => {
@@ -22,7 +22,6 @@
 			);
 			host.LoadHtml ( DeveloperConsoleHtml.Content, m_consolePointer );
 			host.ShowWindow ( m_consolePointer );
-			host.MoveWindow ( m_consolePointer, new SciterWindowPosition ( 100, 100 ) );
 			host.SetWindowCaption ( m_consolePointer, "Developer Console" );
 
 			RefreshWindowLoadedPath ();

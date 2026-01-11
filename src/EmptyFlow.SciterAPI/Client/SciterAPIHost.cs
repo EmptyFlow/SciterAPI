@@ -9,7 +9,7 @@ namespace EmptyFlow.SciterAPI {
 		[DllImport ( SciterLoader.SciterLibrary, EntryPoint = "SciterAPI", CallingConvention = CallingConvention.Cdecl )]
 		private static extern IntPtr SciterAPI ();
 
-		private readonly Dictionary<nint, SciterEventHandler> m_eventHandlerMap = [];
+		private readonly Dictionary<nint, SciterEventHandlerRaw> m_eventHandlerMap = [];
 
 		private readonly Dictionary<string, nint> m_eventHandlerUniqueMap = [];
 
@@ -79,14 +79,6 @@ namespace EmptyFlow.SciterAPI {
 			m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_INIT, IntPtr.Zero, IntPtr.Zero );
 
 			Console.WriteLine ( "Sciter API Loaded!" );
-		}
-
-		/// <summary>
-		/// Please don't use these method, appropriate methods already called in constructor.
-		/// These method stay for backward compatibility.
-		/// </summary>
-		[Obsolete]
-		public void LoadAPI () {
 		}
 
 		public IntPtr MainWindow => m_mainWindow;
