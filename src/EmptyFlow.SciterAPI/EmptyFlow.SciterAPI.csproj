@@ -21,12 +21,14 @@
 		<Version>1.2.1.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
-			SciterAPIHost.CreateWindow extra way to create additional (from main) windows from C#
+			SciterAPIHost.CreateWindow new way to create windows from C#
 			SciterAPIHost.LoadFile added parameter windowPointer
 			SciterAPIHost.LoadHtml added parameter windowPointer
 			SciterAPIHost.AddWindowEventHandler added parameter windowPointer
 			SciterAPIHost.UpdateWindow request calculation of layout of elements inside the window
 			SciterAPIHost.CountOfScreens get count of screens
+			SciterAPIHost.EnableDebugMode now enabling these mode to responsible of method CreateMainWindow
+			SciterAPIHost.EnableFeatures now enabling these mode to responsible of method CreateMainWindow
 			Move SciterEventHandler basic stuff to lite class SciterEventHandlerRaw
 			Fixed window management methods in SciterAPIHost for custom window
 			Added new class DeveloperConsole contains few helpers can be useful in development

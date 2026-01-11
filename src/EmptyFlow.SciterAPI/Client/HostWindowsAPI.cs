@@ -31,8 +31,11 @@ namespace EmptyFlow.SciterAPI {
 		/// <param name="debugOutput">It will be showed output in stout or not.</param>
 		/// <param name="hostCallback">Host callback, can be remake all default events like bahaviour, create window or so on. If omit will be apply default just like in main window.</param>
 		/// <param name="parent">Can be specified parent window, can be useful in some cases.</param>
+		/// <param name="asMain">Point to main window will be stored to SciterAPIHost instance and can be accessed via <see cref="MainWindow"/> property.</param>
 		/// <returns>Pointer to created window.</returns>
-		public nint CreateWindow ( int width = 0, int height = 0, int x = 0, int y = 0, WindowsFlags? flags = default, bool debugOutput = false, SciterHostCallback? hostCallback = default, nint parent = default ) {
+		public nint CreateWindow ( int width = 0, int height = 0, int x = 0, int y = 0, WindowsFlags? flags = default, bool debugOutput = false, SciterHostCallback? hostCallback = default, nint parent = default, bool asMain = false ) {
+			if ( asMain && m_mainWindow != nint.Zero ) throw new Exception ( "The main window had already been created earlier!" );
+
 			var rectangePointer = nint.Zero;
 			if ( width > 0 && height > 0 ) {
 				var rectangle = new SciterRectangle ( x, y, width, height );
@@ -62,6 +65,8 @@ namespace EmptyFlow.SciterAPI {
 			}
 
 			m_callbacks.RegisterWindowCallback ( windowPointer, hostCallback );
+
+			if ( asMain ) m_mainWindow = windowPointer;
 
 			return windowPointer;
 		}

@@ -104,6 +104,21 @@ namespace EmptyFlow.SciterAPI {
 			return 0;
 		}
 
+		public void EnableDebugMode () => m_basicApi.SciterSetOption ( IntPtr.Zero, RtOptions.SCITER_SET_DEBUG_MODE, new IntPtr ( 1 ) );
+
+		public void EnableFeatures ( SciterRuntimeFeatures? features = default ) {
+			var appliedFeature = features.HasValue ? features.Value : DefaultRuntimeFeatures;
+			m_basicApi.SciterSetOption ( IntPtr.Zero, RtOptions.SCITER_SET_SCRIPT_RUNTIME_FEATURES, new IntPtr ( (int) appliedFeature ) );
+		}
+
+		/// <summary>
+		/// Create main window shortcut.
+		/// </summary>
+		/// <param name="width">Width of window.</param>
+		/// <param name="height">Height of window.</param>
+		/// <param name="enableDebug">Not worked now, need to use method <see cref="EnableDebugMode"/></param>
+		/// <param name="enableFeature">Not worked now, need to use method <see cref="EnableFeatures"/></param>
+		/// <param name="flags">Setup window flags.</param>
 		public void CreateMainWindow ( int width = 0, int height = 0, bool enableDebug = false, bool enableFeature = false, WindowsFlags? flags = default ) {
 			if ( enableDebug ) m_basicApi.SciterSetOption ( IntPtr.Zero, RtOptions.SCITER_SET_DEBUG_MODE, new IntPtr ( 1 ) );
 			if ( enableFeature ) m_basicApi.SciterSetOption ( IntPtr.Zero, RtOptions.SCITER_SET_SCRIPT_RUNTIME_FEATURES, new IntPtr ( (int) DefaultRuntimeFeatures ) );
