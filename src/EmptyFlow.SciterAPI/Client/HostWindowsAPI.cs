@@ -32,8 +32,9 @@ namespace EmptyFlow.SciterAPI {
 		/// <param name="hostCallback">Host callback, can be remake all default events like bahaviour, create window or so on. If omit will be apply default just like in main window.</param>
 		/// <param name="parent">Can be specified parent window, can be useful in some cases.</param>
 		/// <param name="asMain">Point to main window will be stored to SciterAPIHost instance and can be accessed via <see cref="MainWindow"/> property.</param>
+		/// <param name="debugOutputHandler">If <see cref="debugOutput"/> is true you can override default console output on you own custom delegate.</param>
 		/// <returns>Pointer to created window.</returns>
-		public nint CreateWindow ( int width = 0, int height = 0, int x = 0, int y = 0, WindowsFlags? flags = default, bool debugOutput = false, SciterHostCallback? hostCallback = default, nint parent = default, bool asMain = false ) {
+		public nint CreateWindow ( int width = 0, int height = 0, int x = 0, int y = 0, WindowsFlags? flags = default, bool debugOutput = false, Action<string>? debugOutputHandler = default, SciterHostCallback? hostCallback = default, nint parent = default, bool asMain = false ) {
 			if ( asMain && m_mainWindow != nint.Zero ) throw new Exception ( "The main window had already been created earlier!" );
 
 			var rectangePointer = nint.Zero;
@@ -58,7 +59,11 @@ namespace EmptyFlow.SciterAPI {
 					windowPointer,
 					1,
 					( IntPtr param, uint subsystem, uint severity, IntPtr text_ptr, uint text_length ) => {
-						Console.WriteLine ( Marshal.PtrToStringUni ( text_ptr, (int) text_length ) );
+						if ( debugOutputHandler != default ) {
+							debugOutputHandler?.Invoke ( Marshal.PtrToStringUni ( text_ptr, (int) text_length ) );
+						} else {
+							Console.WriteLine ( Marshal.PtrToStringUni ( text_ptr, (int) text_length ) );
+						}
 						return IntPtr.Zero;
 					}
 				);
