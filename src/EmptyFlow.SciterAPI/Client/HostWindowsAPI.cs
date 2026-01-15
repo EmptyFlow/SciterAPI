@@ -88,8 +88,9 @@ namespace EmptyFlow.SciterAPI {
 		public bool ExecuteWindowEval ( nint window, string script, out SciterValue result ) => m_basicApi.SciterEval ( window, script, (uint) script.Length, out result );
 
 		/// <summary>
-		/// Get main window size and position.
+		/// Get window size and position.
 		/// </summary>
+		/// <param name="window">Window pointer.</param>
 		/// <param name="sizeMode">In which window size area will be result.</param>
 		/// <param name="windowRelateMode">In which area relate to monitor or other window will be coordinates.</param>
 		/// <param name="inPhisicalDevicePixels"> If true coordinates are in physical device pixels, if false in CSS pixels 1/96 of inch.</param>
@@ -105,6 +106,42 @@ namespace EmptyFlow.SciterAPI {
 			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
 				if ( !result.IsArray && !result.IsArrayLike ) {
 					Console.WriteLine ( "GetMainWindowSizeAndPosition: box() return not array!" );
+					return null;
+				}
+				var count = GetArrayOrMapCount ( ref result );
+				var size = new SciterWindowSize ( 0, 0 );
+				var position = new SciterWindowPosition ( 0, 0 );
+				for ( var i = 0; i < count; i++ ) {
+					var arrayItem = GetArrayItem ( ref result, i );
+					var value = (int) arrayItem.d;
+					if ( i == 0 ) position = position with { X = value };
+					if ( i == 1 ) position = position with { Y = value };
+					if ( i == 2 ) size = size with { Width = value };
+					if ( i == 3 ) size = size with { Height = value };
+				}
+				return new SciterWindowInfo ( size, position );
+			}
+
+			return null;
+		}
+		/// <summary>
+		/// Get screen, on which window showed, size and position.
+		/// </summary>
+		/// <param name="window">Window pointer.</param>
+		/// <param name="screenRelateMode"></param>
+		/// <param name="inPhisicalDevicePixels"></param>
+		/// <returns></returns>
+		public SciterWindowInfo? GetWindowScreenSizeAndPosition( nint window, ScreenRelateMode screenRelateMode, bool inPhisicalDevicePixels = false ) {
+			var relTo = screenRelateMode switch {
+				ScreenRelateMode.Frame => "frame",
+				ScreenRelateMode.WorkArea => "workarea",
+				_ => ""
+			};
+
+			var script = $"Window.this.screenBox(\"{relTo}\", \"xywh\", {( inPhisicalDevicePixels ? "true" : "false" )})";
+			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
+				if ( !result.IsArray && !result.IsArrayLike ) {
+					Console.WriteLine ( "GetWindowScreenSizeAndPosition: screenBox() return not array!" );
 					return null;
 				}
 				var count = GetArrayOrMapCount ( ref result );
@@ -492,9 +529,23 @@ namespace EmptyFlow.SciterAPI {
 
 	};
 
+	public enum ScreenRelateMode {
+
+		/// <summary>
+		/// Physical position and size of the monitor in screen pixels projected on desktop.
+		/// </summary>
+		Frame = 0,
+
+		/// <summary>
+		/// Physical position and size of work area on the monitor ( frame minus taskbar ).
+		/// </summary>
+		WorkArea = 1,
+
+	};
+
 	public record SciterWindowInfo ( SciterWindowSize Size, SciterWindowPosition Position );
 
-	public record SciterWindowSize ( int Width, int Height );
+		public record SciterWindowSize ( int Width, int Height );
 
 	public record SciterWindowPosition ( int X, int Y );
 

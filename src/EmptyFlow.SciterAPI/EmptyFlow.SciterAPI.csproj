@@ -29,6 +29,7 @@
 			SciterAPIHost.CountOfScreens get count of screens
 			SciterAPIHost.EnableDebugMode now enabling these mode to responsible of method CreateMainWindow
 			SciterAPIHost.EnableFeatures now enabling these mode to responsible of method CreateMainWindow
+			SciterAPIHost.GetWindowScreenSizeAndPosition get position and size of monitor on which showed window
 			Move SciterEventHandler basic stuff to lite class SciterEventHandlerRaw
 			Fixed window management methods in SciterAPIHost for custom window
 			Added new class DeveloperConsole contains few helpers can be useful in development

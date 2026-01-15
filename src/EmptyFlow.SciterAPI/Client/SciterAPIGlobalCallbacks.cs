@@ -73,8 +73,11 @@ namespace EmptyFlow.SciterAPI {
 			set => m_attachBehaviourAction = value;
 		}
 
-		public void RegisterCallback () {
+		internal void AdjustOriginalAPI() {
 			m_sciterApiStruct = m_host.OriginalApi;
+		}
+
+		public void RegisterCallback () {
 			m_sciterApiStruct.SciterSetCallback ( m_host.MainWindow, m_sciterHostCallback, 1 );
 		}
 
