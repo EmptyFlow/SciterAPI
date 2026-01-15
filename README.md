@@ -1,4 +1,5 @@
  [![nugeticon](https://img.shields.io/badge/nuget-available-blue)](https://www.nuget.org/packages/EmptyFlow.SciterAPI)
+ [![docslink](https://img.shields.io/badge/docs-latest-blue)](https://www.nuget.org/packages/EmptyFlow.SciterAPI)
  [![CI and Tests](https://github.com/EmptyFlow/SciterAPI/actions/workflows/dotnet.yml/badge.svg)](https://github.com/EmptyFlow/SciterAPI/actions/workflows/dotnet.yml)
  [![nugeticon](https://img.shields.io/nuget/dt/emptyflow.sciterapi)](https://www.nuget.org/packages/EmptyFlow.SciterAPI)
 
