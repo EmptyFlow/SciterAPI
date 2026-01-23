@@ -131,7 +131,7 @@ namespace EmptyFlow.SciterAPI {
 		/// <param name="screenRelateMode"></param>
 		/// <param name="inPhisicalDevicePixels"></param>
 		/// <returns></returns>
-		public SciterWindowInfo? GetWindowScreenSizeAndPosition( nint window, ScreenRelateMode screenRelateMode, bool inPhisicalDevicePixels = false ) {
+		public SciterWindowInfo? GetWindowScreenSizeAndPosition ( nint window, ScreenRelateMode screenRelateMode, bool inPhisicalDevicePixels = false ) {
 			var relTo = screenRelateMode switch {
 				ScreenRelateMode.Frame => "frame",
 				ScreenRelateMode.WorkArea => "workarea",
@@ -501,6 +501,29 @@ namespace EmptyFlow.SciterAPI {
 			return null;
 		}
 
+		public string? ShowWindowSelectFolderDialog ( nint window, string caption, string path ) {
+			var keys = new Dictionary<string, string> {
+				["caption"] = caption,
+				//["path"] = path
+			};
+			var properties = "{" + string.Join ( ",", keys.Select ( a => a.Key + ": \"" + a.Value + "\"" ) ) + "}";
+
+			var script = $"Window.this.selectFolder({properties})";
+			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
+				if ( result.IsErrorString || result.IsObjectError ) {
+					Console.WriteLine ( "ShowWindowSelectFolderDialog: error occurs when calling! " );
+					return null;
+				}
+
+				if ( result.IsString ) return GetValueString ( ref result );
+				if ( result.IsNull ) return null;
+
+				return null;
+			}
+
+			return null;
+		}
+
 	}
 
 	public enum SciterSelectFileDialogMode {
@@ -545,7 +568,7 @@ namespace EmptyFlow.SciterAPI {
 
 	public record SciterWindowInfo ( SciterWindowSize Size, SciterWindowPosition Position );
 
-		public record SciterWindowSize ( int Width, int Height );
+	public record SciterWindowSize ( int Width, int Height );
 
 	public record SciterWindowPosition ( int X, int Y );
 
