@@ -329,6 +329,17 @@ namespace EmptyFlow.SciterAPI {
 			return false;
 		}
 
+		public nint GetWindowFocus ( nint window ) {
+			var script = $"Window.this.focus";
+			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
+				if ( result.IsNull ) return nint.Zero;
+
+				return ElementFromValue ( result );
+			}
+
+			return nint.Zero;
+		}
+
 		public string GetWindowCaption ( nint window ) {
 			var script = $"Window.this.caption";
 			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {

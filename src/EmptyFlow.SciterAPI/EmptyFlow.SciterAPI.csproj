@@ -23,6 +23,7 @@
 		<PackageReleaseNotes>
 			Added enum SciterKeyCode contains all supported key codes
 			SciterAPIHost.ShowWindowSelectFolderDialog for show select folder dialog
+			SciterAPIHost.GetWindowFocus get focus element in window
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
