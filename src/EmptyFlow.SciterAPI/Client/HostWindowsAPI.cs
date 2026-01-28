@@ -340,6 +340,20 @@ namespace EmptyFlow.SciterAPI {
 			return nint.Zero;
 		}
 
+		public int GetWindowScreen ( nint window ) {
+			var script = $"Window.this.screen";
+			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
+				if ( !result.IsInteger ) {
+					Console.WriteLine ( "GetWindowScreen: screen not number! " );
+					return -1;
+				}
+
+				return GetValueInt32 ( ref result );
+			}
+
+			return -1;
+		}
+
 		public string GetWindowCaption ( nint window ) {
 			var script = $"Window.this.caption";
 			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
