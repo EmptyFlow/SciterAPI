@@ -25,6 +25,7 @@
 			SciterAPIHost.ShowWindowSelectFolderDialog for show select folder dialog
 			SciterAPIHost.GetWindowFocus get focus element in window
 			SciterAPIHost.GetWindowScreen get window current screen
+			SciterAPIHost.GetWindowParent get window parent pointer
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>

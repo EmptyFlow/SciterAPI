@@ -340,6 +340,17 @@ namespace EmptyFlow.SciterAPI {
 			return nint.Zero;
 		}
 
+		public nint GetWindowParent ( nint window ) {
+			var script = $"Window.this.parent";
+			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
+				if ( result.IsNull ) return nint.Zero;
+
+				return ElementFromValue ( result );
+			}
+
+			return nint.Zero;
+		}
+
 		public int GetWindowScreen ( nint window ) {
 			var script = $"Window.this.screen";
 			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
