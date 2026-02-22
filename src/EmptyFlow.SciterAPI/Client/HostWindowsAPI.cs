@@ -76,6 +76,10 @@ namespace EmptyFlow.SciterAPI {
 			return windowPointer;
 		}
 
+		/// <summary>
+		/// Activate and show window on desktop.
+		/// </summary>
+		/// <param name="windowPointer"></param>
 		public void ShowWindow ( nint windowPointer ) {
 			//activate window
 			m_basicApi.SciterWindowExec ( windowPointer, WindowCommand.SCITER_WINDOW_ACTIVATE, 1, nint.Zero );
@@ -84,8 +88,28 @@ namespace EmptyFlow.SciterAPI {
 			m_basicApi.SciterWindowExec ( windowPointer, WindowCommand.SCITER_WINDOW_SET_STATE, 1, nint.Zero );
 		}
 
+		/// <summary>
+		/// Make JavaScript evaluation for passed script on window.
+		/// </summary>
+		/// <param name="window">Window for context.</param>
+		/// <param name="script">Any JavaScript source code.</param>
+		/// <param name="result">Result of evaluation.</param>
+		/// <returns></returns>
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
 		public bool ExecuteWindowEval ( nint window, string script, out SciterValue result ) => m_basicApi.SciterEval ( window, script, (uint) script.Length, out result );
+
+		/// <summary>
+		/// Execute JavaScript function inside window.
+		/// </summary>
+		/// <param name="window">Window for context.</param>
+		/// <param name="functionName">Name of function.</param>
+		/// <param name="parameters">Parameters which will be passed to function.</param>
+		/// <param name="result">Result of function.</param>
+		/// <returns></returns>
+		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
+		public bool ExecuteWindowFunction ( nint window, string functionName, IEnumerable<SciterValue> parameters, out SciterValue result ) {
+			return m_basicApi.SciterCall ( window, functionName, (uint) parameters.Count (), [.. parameters], out result );
+		}
 
 		/// <summary>
 		/// Get window size and position.

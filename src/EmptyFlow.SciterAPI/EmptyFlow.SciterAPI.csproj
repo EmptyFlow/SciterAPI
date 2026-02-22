@@ -26,6 +26,7 @@
 			SciterAPIHost.GetWindowFocus get focus element in window
 			SciterAPIHost.GetWindowScreen get window current screen
 			SciterAPIHost.GetWindowParent get window parent pointer
+			SciterAPIHost.ExecuteWindowFunction execute function in window
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
