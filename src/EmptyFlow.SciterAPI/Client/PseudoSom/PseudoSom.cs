@@ -25,6 +25,7 @@ namespace EmptyFlow.SciterAPI.Client.PseudoSom {
 			var tempId = "temporary-element-" + Guid.NewGuid ().ToString ();
 			host.SetElementAttribute ( element, tempId, "enabled" );
 			var script = new StringBuilder ();
+			script.AppendLine ( $"const element = document.querySelector('[{tempId}]')" );
 			script.AppendLine ( "const model = Object.create(Object.prototype, {" );
 
 			foreach ( var property in model.GetProperties () ) {
@@ -32,11 +33,12 @@ namespace EmptyFlow.SciterAPI.Client.PseudoSom {
 					$$"""
 					{{property}}: {
 						configurable: false,
-						get() {
-							return element.xcall('get_' + name);
+						enumerable: true,
+						get: () => {
+							return element.xcall('get_{{property}}');
 						},
-						set(value) {
-							element.xcall('set_' + name, value);
+						set: (value) => {
+							element.xcall('set_{{property}}', value);
 						}
 					}
 					"""
@@ -48,8 +50,9 @@ namespace EmptyFlow.SciterAPI.Client.PseudoSom {
 					{{method}}: {
 						writable: false,
 						configurable: false,
+						enumerable: true,
 						value: function(...args) {
-							element.xcall('call_' + name, args);
+							element.xcall('call_{{method}}', args);
 						}
 					}
 					"""
@@ -57,10 +60,11 @@ namespace EmptyFlow.SciterAPI.Client.PseudoSom {
 			}
 
 			script.AppendLine ( "});" );
-			script.AppendLine ( $"const element = document.querySelector('[{tempId}]')" );
+			
 			script.AppendLine ( $"element.{model.GetModelName ()} = model;" );
 
 			host.ExecuteWindowEval ( window, script.ToString (), out var result );
+
 			if ( result.IsErrorString || result.IsObjectError ) {
 				return false;
 			}

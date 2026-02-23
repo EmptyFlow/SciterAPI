@@ -28,6 +28,7 @@
 			SciterAPIHost.GetWindowParent get window parent pointer
 			SciterAPIHost.ExecuteWindowFunction execute function in window
 			Fix show window for version 6.0.3.6 and upper, old version still will be have backawrd compatibility
+			Added PseudoSom helper
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
