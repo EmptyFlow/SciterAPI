@@ -85,7 +85,11 @@ namespace EmptyFlow.SciterAPI {
 			m_basicApi.SciterWindowExec ( windowPointer, WindowCommand.SCITER_WINDOW_ACTIVATE, 1, nint.Zero );
 
 			//expand window
-			m_basicApi.SciterWindowExec ( windowPointer, WindowCommand.SCITER_WINDOW_SET_STATE, 1, nint.Zero );
+			if ( m_version.Minor == 0 && m_version.Build == 3 && m_version.Revision < 6 ) { // for backward compatibility
+				m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_SET_STATE, 1, nint.Zero );
+			} else {
+				m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_SET_STATE, (int) WindowState.SCITER_WINDOW_STATE_SHOWN, nint.Zero );
+			}
 		}
 
 		/// <summary>

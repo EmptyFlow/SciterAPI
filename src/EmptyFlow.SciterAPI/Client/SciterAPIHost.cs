@@ -75,6 +75,7 @@ namespace EmptyFlow.SciterAPI {
 			Console.WriteLine ( $"Sciter class name: {m_className}" );
 			Console.WriteLine ( $"Sciter version: {sciterVersion}" );
 			Console.WriteLine ( $"SciterAPI version: {VersionOfLibrary}" );
+			m_version = sciterVersion;
 
 			m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_INIT, IntPtr.Zero, IntPtr.Zero );
 
@@ -193,13 +194,7 @@ namespace EmptyFlow.SciterAPI {
 		}
 
 		public int Process () {
-			if (m_mainWindow != nint.Zero) {
-				//activate window
-				m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_ACTIVATE, 1, nint.Zero );
-
-				//expand window
-				m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_SET_STATE, 1, nint.Zero );
-			}
+			if (m_mainWindow != nint.Zero) ShowWindow ( m_mainWindow );
 
 			// run loop for waiting close all windows
 			var code = m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_LOOP, nint.Zero, nint.Zero );
