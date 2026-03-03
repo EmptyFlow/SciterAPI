@@ -1,6 +1,6 @@
 ﻿namespace EmptyFlow.SciterAPI.Client.DeveloperConsole {
 
-	internal class DeveloperConsoleWindowHandler : WindowEventHandler {
+	internal class DeveloperConsoleWindowHandler : SciterEventHandler {
 
 		private readonly DeveloperConsole m_developerConsole;
 

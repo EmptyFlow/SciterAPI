@@ -3,6 +3,7 @@
 	/// <summary>
 	/// Event handler for window.
 	/// </summary>
+	[Obsolete]
 	public class WindowEventHandler : SciterEventHandler {
 
 		public WindowEventHandler ( nint window, SciterAPIHost host ) : base ( window, host, SciterEventHandlerMode.Window ) {

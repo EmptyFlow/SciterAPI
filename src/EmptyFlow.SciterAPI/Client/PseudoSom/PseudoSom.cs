@@ -22,7 +22,8 @@ namespace EmptyFlow.SciterAPI.Client.PseudoSom {
 		}
 
 		public static bool RegisterModel ( IPseudoSomModel model, SciterAPIHost host, nint window, nint element ) {
-			var tempId = "temporary-element-" + Guid.NewGuid ().ToString ();
+			if ( string.IsNullOrEmpty ( model.Unique ) ) model.SetUnique ( "model-unique-element-" + Guid.NewGuid ().ToString () );
+			var tempId = model.Unique;
 			host.SetElementAttribute ( element, tempId, "enabled" );
 			var script = new StringBuilder ();
 			script.AppendLine ( $"const element = document.querySelector('[{tempId}]')" );
@@ -60,7 +61,7 @@ namespace EmptyFlow.SciterAPI.Client.PseudoSom {
 			}
 
 			script.AppendLine ( "});" );
-			
+
 			script.AppendLine ( $"element.{model.GetModelName ()} = model;" );
 
 			host.ExecuteWindowEval ( window, script.ToString (), out var result );

@@ -13,6 +13,10 @@
 
 		string GetModelName ();
 
+		void SetUnique ( string unique );
+
+		public string Unique { get; }
+
 	}
 
 }

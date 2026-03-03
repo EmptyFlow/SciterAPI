@@ -1,5 +1,4 @@
 ﻿using EmptyFlow.SciterAPI.Structs;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace EmptyFlow.SciterAPI {
@@ -11,6 +10,8 @@ namespace EmptyFlow.SciterAPI {
 		private nint m_relatedPassport = nint.Zero;
 
 		private nint m_relatedAsset = nint.Zero;
+
+		private bool? m_returnState = null;
 
 		private readonly SciterEventHandlerMode m_mode = SciterEventHandlerMode.Element;
 
@@ -37,7 +38,7 @@ namespace EmptyFlow.SciterAPI {
 
 		public nint AttachedAsset => m_relatedAsset;
 
-		public SciterEventHandler ( IntPtr relatedThing, SciterAPIHost host, SciterEventHandlerMode mode ) : base ( relatedThing ) {
+		public SciterEventHandler ( IntPtr relatedThing, SciterAPIHost host, SciterEventHandlerMode mode = SciterEventHandlerMode.Element ) : base ( relatedThing ) {
 			m_host = host ?? throw new ArgumentNullException ( nameof ( host ) );
 			m_mode = mode;
 		}
@@ -47,10 +48,13 @@ namespace EmptyFlow.SciterAPI {
 			m_includedEvents.AddRange ( groups );
 		}
 
+		public void SetReturnState ( bool state ) => m_returnState = state;
+
 		public override bool EventHandler ( nint processedElement, EventBehaviourGroups eventBehaviourGroup, nint parameters ) {
 			if ( m_includedEvents.Any () && !m_includedEvents.Contains ( eventBehaviourGroup ) ) return false;
 
 			m_processedElement = processedElement;
+			m_returnState = null;
 
 			switch ( eventBehaviourGroup ) {
 				case EventBehaviourGroups.SUBSCRIPTIONS_REQUEST:
@@ -169,6 +173,8 @@ namespace EmptyFlow.SciterAPI {
 			}
 
 			m_processedElement = nint.Zero;
+
+			if ( m_returnState.HasValue ) return m_returnState.Value;
 
 			return false;
 		}

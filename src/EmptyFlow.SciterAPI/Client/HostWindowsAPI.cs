@@ -86,9 +86,9 @@ namespace EmptyFlow.SciterAPI {
 
 			//expand window
 			if ( m_version.Minor == 0 && m_version.Build == 3 && m_version.Revision < 6 ) { // for backward compatibility
-				m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_SET_STATE, 1, nint.Zero );
+				m_basicApi.SciterWindowExec ( windowPointer, WindowCommand.SCITER_WINDOW_SET_STATE, 1, nint.Zero );
 			} else {
-				m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_SET_STATE, (int) WindowState.SCITER_WINDOW_STATE_SHOWN, nint.Zero );
+				m_basicApi.SciterWindowExec ( windowPointer, WindowCommand.SCITER_WINDOW_SET_STATE, (int) WindowState.SCITER_WINDOW_STATE_SHOWN, nint.Zero );
 			}
 		}
 
@@ -572,7 +572,7 @@ namespace EmptyFlow.SciterAPI {
 			};
 			var properties = "{" + string.Join ( ",", keys.Select ( a => a.Key + ": \"" + a.Value + "\"" ) ) + "}";
 
-			var script = $"Window.this.selectFolder({properties})";
+			var script = $"const result = Window.this.selectFolder({properties}); if (!result) console.log('lalalla');";
 			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
 				if ( result.IsErrorString || result.IsObjectError ) {
 					Console.WriteLine ( "ShowWindowSelectFolderDialog: error occurs when calling! " );

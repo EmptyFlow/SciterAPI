@@ -8,10 +8,8 @@
 		/// </summary>
 		/// <param name="handler">Event Handler.</param>
 		/// <exception cref="ArgumentException">Event handler must be with mode <see cref="SciterEventHandlerMode.Window"/>.</exception>
-		public void AddWindowEventHandler ( SciterEventHandler handler, nint windowPointer = default ) {
-			if ( handler.Mode != SciterEventHandlerMode.Window ) throw new ArgumentException ( "Passed EventHandler must be with mode = SciterEventHandlerMode.Window!" );
-
-			m_basicApi.SciterWindowAttachEventHandler ( windowPointer == default ? m_mainWindow : windowPointer, handler.InnerDelegate, 1, (uint) EventBehaviourGroups.HandleAll );
+		public void AddWindowEventHandler ( SciterEventHandlerRaw handler, nint windowPointer = default, EventBehaviourGroups behaviours = EventBehaviourGroups.HandleAll ) {
+			m_basicApi.SciterWindowAttachEventHandler ( windowPointer == default ? m_mainWindow : windowPointer, handler.InnerDelegate, 1, (uint) behaviours );
 		}
 
 		private bool AddToEventHandlers ( SciterEventHandlerRaw handler ) {
