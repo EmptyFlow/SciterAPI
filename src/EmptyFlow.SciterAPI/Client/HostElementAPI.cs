@@ -172,6 +172,8 @@ namespace EmptyFlow.SciterAPI {
 
 		public void UpdateElement ( nint element, bool forceRender ) => m_basicApi.SciterUpdateElement ( element, forceRender );
 
+		public void ScrollToElement ( nint element, SciterScrollFlags scrollPosition ) => m_basicApi.SciterScrollToView ( element, (uint) scrollPosition );
+
 	}
 
 }
