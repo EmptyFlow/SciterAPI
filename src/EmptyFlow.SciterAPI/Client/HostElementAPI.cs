@@ -166,9 +166,11 @@ namespace EmptyFlow.SciterAPI {
 			return valueReceiver.Value ();
 		}
 
-		public void SetElementStyleProperty ( IntPtr element, string name, string value ) {
+		public void SetElementStyleProperty ( nint element, string name, string value ) {
 			m_basicApi.SciterSetStyleAttribute ( element, name, value );
 		}
+
+		public void UpdateElement ( nint element, bool forceRender ) => m_basicApi.SciterUpdateElement ( element, forceRender );
 
 	}
 

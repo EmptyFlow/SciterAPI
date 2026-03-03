@@ -1,6 +1,7 @@
 ﻿
 using EmptyFlow.SciterAPI;
 using EmptyFlow.SciterAPI.Client;
+using EmptyFlow.SciterAPI.Client.DeveloperConsole;
 using EmptyFlow.SciterAPI.Client.Models;
 using EmptyFlow.SciterAPI.Client.PseudoSom;
 using EmptyFlow.SciterAPI.Enums;
@@ -16,24 +17,25 @@ var path = "file://" + Path.Combine ( pathToSciter, "samples/html/details-summar
 //host.Callbacks.AddAttachBehaviourFactory ( "testbehaviour", ( element ) => new TestGraphicsEventHandler ( element, host ) );
 host.Callbacks.AddAttachBehaviourFactory ( "psom", ( element ) => new PseudoSomHandler ( element, host ) );
 host.EnableDebugMode ();
-host.EnableFeatures ( SciterRuntimeFeatures.ALLOW_SOCKET_IO );
+host.EnableFeatures ( SciterRuntimeFeatures.ALLOW_SOCKET_IO);
 host.CreateWindow ( asMain: true, debugOutput: true );
 host.AddWindowEventHandler ( new MyWindowEventHandler ( host.MainWindow, host ) );
 host.LoadFile ( path );
 host.Process ();
 
 
-public class MyWindowEventHandler : WindowEventHandler {
+public class MyWindowEventHandler : ElementEventHandler {
+
+	DeveloperConsole _devConsole;
 
 	public MyWindowEventHandler ( nint window, SciterAPIHost host ) : base ( window, host ) {
+		_devConsole = new DeveloperConsole ( host, host.MainWindow );
 	}
 
 	public override void BehaviourEvent ( BehaviourEvents cmd, nint heTarget, nint he, nint reason, SciterValue data, string name ) {
 		if ( cmd == BehaviourEvents.DOCUMENT_READY ) {
-			var value = Host.GetWindowParent ( Host.MainWindow );
-			if ( value == 0 ) {
 
-			}
+			//var result = Host.ExecuteWindowFunction ( Host.MainWindow, "testFolder", [], out var res );// ShowWindowSelectFolderDialog ( Host.MainWindow, "Test", "" );
 		}
 	}
 
@@ -42,6 +44,8 @@ public class MyWindowEventHandler : WindowEventHandler {
 public class TestModel : IPseudoSomModel {
 
 	private readonly SciterAPIHost m_host;
+
+	private string _unique = "";
 
 	public TestModel ( SciterAPIHost host ) {
 		m_host = host;
@@ -61,6 +65,8 @@ public class TestModel : IPseudoSomModel {
 
 	public int Counter { get; set; } = 5;
 
+	public string Unique => _unique;
+
 	public SciterValue GetPropetyValue ( string name ) {
 		return name switch {
 			"counter" => m_host.CreateValue ( Counter ),
@@ -75,6 +81,10 @@ public class TestModel : IPseudoSomModel {
 		}
 
 		return false;
+	}
+
+	public void SetUnique ( string unique ) {
+		_unique = unique;
 	}
 }
 

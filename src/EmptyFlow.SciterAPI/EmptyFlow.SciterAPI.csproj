@@ -26,6 +26,7 @@
 			SciterEventHandler.SetReturnState for some handlers it required to change return state
 			WindowEventHandler now obsolete, it redundant class please use SciterEventHandler instead in all cases
 			SciterAPIHost.AddWindowEventHandler added argument behaviours for change tracked behaviours
+			SciterAPIHost.UpdateElement for (re)render element
 			Fixed issue in showing different from main window
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
