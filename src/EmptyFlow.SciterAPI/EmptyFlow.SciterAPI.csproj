@@ -28,7 +28,7 @@
 			SciterAPIHost.AddWindowEventHandler added argument behaviours for change tracked behaviours
 			SciterAPIHost.UpdateElement for (re)render element
 			SciterAPIHost.ScrollToElement scroll to element
-			Fixed issue in showing different from main window
+			Fixed issue in showing different from main windows
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
