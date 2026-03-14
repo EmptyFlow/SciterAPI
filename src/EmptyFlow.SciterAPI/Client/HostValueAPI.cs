@@ -229,7 +229,7 @@ namespace EmptyFlow.SciterAPI {
 		/// </summary>
 		/// <returns>Return element.</returns>
 		/// <exception cref="Exception">If Result will be not zero it will be part of error message.</exception>
-		public nint ElementFromValue ( SciterValue sciterValue ) {
+		public nint ElementFromValue ( ref SciterValue sciterValue ) {
 			var pointer = nint.Zero;
 			var domResult = m_basicApi.SciterElementUnwrap ( sciterValue, ref pointer );
 			if ( domResult != 0 ) throw new Exception ( $"Can't get element from value. DomResult is {domResult}" );
@@ -255,7 +255,7 @@ namespace EmptyFlow.SciterAPI {
 		/// <summary>
 		/// Sets variable that will be available in each document loaded after this call.
 		/// </summary>
-		public void SetSharedVariable ( string name, SciterValue value ) {
+		public void SetSharedVariable ( string name, ref SciterValue value ) {
 			var code = m_basicApi.SciterSetVariable ( nint.Zero, name, value );
 			if ( code != (uint) DomResult.SCDOM_OK ) throw new Exception ( $"Can't set variable {name}. Error is {code}." );
 		}
@@ -263,7 +263,7 @@ namespace EmptyFlow.SciterAPI {
 		/// <summary>
 		/// Sets variable that will be available in root document of main window, call it in or after DOCUMENT_CREATED event.
 		/// </summary>
-		public void SetMainWindowVariable ( string name, SciterValue value ) {
+		public void SetMainWindowVariable ( string name, ref SciterValue value ) {
 			var code = m_basicApi.SciterSetVariable ( m_mainWindow, name, value );
 			if ( code != (uint) DomResult.SCDOM_OK ) throw new Exception ( $"Can't set variable {name}. Error is {code}." );
 		}

@@ -362,7 +362,7 @@ namespace EmptyFlow.SciterAPI {
 			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
 				if ( result.IsNull ) return nint.Zero;
 
-				return ElementFromValue ( result );
+				return ElementFromValue ( ref result );
 			}
 
 			return nint.Zero;
@@ -373,7 +373,7 @@ namespace EmptyFlow.SciterAPI {
 			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
 				if ( result.IsNull ) return nint.Zero;
 
-				return ElementFromValue ( result );
+				return ElementFromValue ( ref result );
 			}
 
 			return nint.Zero;

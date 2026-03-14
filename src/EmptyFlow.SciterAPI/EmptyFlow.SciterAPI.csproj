@@ -21,14 +21,9 @@
 		<Version>1.2.4.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
-			IPseudoSomModel.SetUnique for set model unique identifier
-			IPseudoSomModel.Unique for get model unique identifier
-			SciterEventHandler.SetReturnState for some handlers it required to change return state
-			WindowEventHandler now obsolete, it redundant class please use SciterEventHandler instead in all cases
-			SciterAPIHost.AddWindowEventHandler added argument behaviours for change tracked behaviours
-			SciterAPIHost.UpdateElement for (re)render element
-			SciterAPIHost.ScrollToElement scroll to element
-			Fixed issue in showing different from main windows
+			SciterAPIHost.ElementFromValue first argument now have ref modificator
+			SciterAPIHost.SetSharedVariable argument value now have ref modificator
+			SciterAPIHost.SetMainWindowVariable argument value now have ref modificator
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
