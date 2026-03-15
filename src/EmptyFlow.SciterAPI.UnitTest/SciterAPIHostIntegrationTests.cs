@@ -1009,7 +1009,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 				)
 			);
 			var value = host.CreateValue ( "testvalue" );
-			host.SetSharedVariable ( "globalVariable", value );
+			host.SetSharedVariable ( "globalVariable", ref value );
 			host.CreateMainWindow ( 300, 300, enableDebug: true );
 			host.LoadFile ( "embedded://test.html" );
 			host.AddWindowEventHandler ( new DocumentXCallHandler ( MethodHandled, host ) );
@@ -1038,7 +1038,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			host.LoadHtml ( "<html><body></body></html>" );
 			host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
 			var value = host.CreateValue ( "testvalue" );
-			host.SetMainWindowVariable ( "globalVariable", value );
+			host.SetMainWindowVariable ( "globalVariable", ref value );
 
 			//Act
 			host.Process ();
