@@ -5,6 +5,31 @@ namespace EmptyFlow.SciterAPI {
 
 	public partial class SciterAPIHost {
 
+		private SciterValue m_trueValue;
+
+		private SciterValue m_falseValue;
+
+		private SciterValue m_nullValue;
+
+		public SciterValue TrueValue {
+			get => m_trueValue;
+			set => m_trueValue = value;
+		}
+		public SciterValue FalseValue {
+			get => m_falseValue;
+			set => m_falseValue = value;
+		}
+
+		public SciterValue NullValue {
+			get => m_nullValue;
+			set => m_nullValue = value;
+		}
+
+		private void InitializeGlobalConstants () {
+			TrueValue = CreateValue ( true );
+			FalseValue = CreateValue ( false );
+			NullValue = CreateNullValue ();
+		}
 
 		public SciterValue CreateValue<T> ( T value ) {
 			if ( value == null ) throw new ArgumentNullException ( nameof ( value ) );

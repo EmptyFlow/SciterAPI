@@ -24,6 +24,9 @@
 			SciterAPIHost.ElementFromValue first argument now have ref modificator
 			SciterAPIHost.SetSharedVariable argument value now have ref modificator
 			SciterAPIHost.SetMainWindowVariable argument value now have ref modificator
+			SciterAPIHost.TrueValue global true value
+			SciterAPIHost.FalseValue global false value
+			SciterAPIHost.NullValue global null value
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>

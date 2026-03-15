@@ -1213,6 +1213,56 @@ namespace EmptyFlow.SciterAPI.Tests {
 			}
 		}
 
+		[Fact, Trait ( "Category", "Integration" )]
+		public void SciterAPIHost_Completed_GlobalPredefinedVariables () {
+			//Arrange
+			SciterLoader.Initialize ( "" );
+			var host = new SciterAPIHost ();
+
+			host.CreateMainWindow ( 300, 300, enableDebug: true );
+			host.LoadHtml ( "<html><body><span>fdsfdsf</span></body></html>" );
+
+			var globalTrue = host.TrueValue;
+			var globalFalse = host.FalseValue;
+			var globalNull = host.NullValue;
+			SciterValue globalTrueActual = host.CreateNullValue ();
+			SciterValue globalFalseActual = host.CreateNullValue ();
+			SciterValue globalNullActual = host.CreateNullValue ();
+
+			bool trueValue = false;
+			bool falseValue = false;
+
+			host.AddWindowEventHandler (
+				new DocumentReadyHandler (
+					() => {
+						host.SetMainWindowVariable ( "globaltrue", ref globalTrue );
+						host.SetMainWindowVariable ( "globalfalse", ref globalFalse );
+						host.SetMainWindowVariable ( "globalnull", ref globalNull );
+
+						globalTrueActual = host.GetMainWindowVariable ( "globaltrue" );
+						globalFalseActual = host.GetMainWindowVariable ( "globalfalse" );
+						globalNullActual = host.GetMainWindowVariable ( "globalnull" );
+
+						trueValue = globalTrueActual.IsBoolean && globalTrueActual.d == 1;
+						falseValue = globalFalseActual.IsBoolean && globalFalseActual.d == 0;
+
+						host.CloseWindow ( host.MainWindow );
+					},
+					host
+				)
+			);
+
+			//Act
+			host.Process ();
+
+			//Assert
+			Assert.Equal ( globalTrue, globalTrueActual );
+			Assert.Equal ( globalFalse, globalFalseActual );
+			Assert.Equal ( globalNull, globalNullActual );
+			Assert.True ( trueValue );
+			Assert.True ( falseValue );
+		}
+
 	}
 
 	public class DocumentReadyHandler : SciterEventHandler {

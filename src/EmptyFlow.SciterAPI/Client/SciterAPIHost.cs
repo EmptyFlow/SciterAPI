@@ -82,6 +82,8 @@ namespace EmptyFlow.SciterAPI {
 			Console.WriteLine ( "Sciter API Loaded!" );
 
 			m_callbacks.AdjustOriginalAPI ();
+
+			InitializeGlobalConstants ();
 		}
 
 		public IntPtr MainWindow => m_mainWindow;

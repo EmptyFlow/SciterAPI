@@ -7,10 +7,6 @@ namespace EmptyFlow.SciterAPI {
 
 		private IntPtr m_processedElement = IntPtr.Zero;
 
-		private nint m_relatedPassport = nint.Zero;
-
-		private nint m_relatedAsset = nint.Zero;
-
 		private bool? m_returnState = null;
 
 		private readonly SciterEventHandlerMode m_mode = SciterEventHandlerMode.Element;
@@ -33,10 +29,6 @@ namespace EmptyFlow.SciterAPI {
 		/// Mode of handler, can be two types Window or Element.
 		/// </summary>
 		public SciterEventHandlerMode Mode => m_mode;
-
-		public nint AttachedPassport => m_relatedPassport;
-
-		public nint AttachedAsset => m_relatedAsset;
 
 		public SciterEventHandler ( IntPtr relatedThing, SciterAPIHost host, SciterEventHandlerMode mode = SciterEventHandlerMode.Element ) : base ( relatedThing ) {
 			m_host = host ?? throw new ArgumentNullException ( nameof ( host ) );
