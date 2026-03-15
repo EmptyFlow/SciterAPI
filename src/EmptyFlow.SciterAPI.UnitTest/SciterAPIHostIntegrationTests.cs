@@ -1197,20 +1197,26 @@ namespace EmptyFlow.SciterAPI.Tests {
                 </html>
                 """
 			);
-			host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+			SciterEventHandlerRaw? handler = null;
+			AddEventHandlerTestHandler? eventHandler = null;
+			host.AddWindowEventHandler (
+				new DocumentReadyHandler (
+					() => {
+						var spanElement = host.MakeCssSelector ( "span" ).First ();
+						eventHandler = new AddEventHandlerTestHandler ( spanElement, host );
+						host.AddEventHandler ( eventHandler );
+						handler = host.GetEventHandlerByUnique ( "Lalala" );
+						host.CloseWindow ( host.MainWindow );
+					},
+					host
+				)
+			);
 
 			//Act
 			host.Process ();
 
 			//Assert
-			void ProcessCompleted () {
-				var spanElement = host.MakeCssSelector ( "span" ).First ();
-				var eventHandler = new AddEventHandlerTestHandler ( spanElement, host );
-				host.AddEventHandler ( eventHandler );
-				var handler = host.GetEventHandlerByUnique ( "Lalala" );
-				host.CloseWindow ( host.MainWindow );
-				Assert.Equal ( handler, eventHandler );
-			}
+			Assert.Equal ( handler, eventHandler );
 		}
 
 		[Fact, Trait ( "Category", "Integration" )]
