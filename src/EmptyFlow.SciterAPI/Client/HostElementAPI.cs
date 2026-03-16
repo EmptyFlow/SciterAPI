@@ -41,6 +41,13 @@ namespace EmptyFlow.SciterAPI {
 			return (int) count;
 		}
 
+		public nint GetElementChildren ( IntPtr element, int index ) {
+			var nthChildResult = m_basicApi.SciterGetNthChild ( element, (uint) index, out var nthElement );
+			if ( nthChildResult != DomResult.SCDOM_OK ) return nint.Zero;
+
+			return nthElement;
+		}
+
 		public IEnumerable<nint> GetElementChildrens ( IntPtr element ) {
 			var domResult = m_basicApi.SciterGetChildrenCount ( element, out var count );
 			if ( domResult != DomResult.SCDOM_OK ) return [];

@@ -27,6 +27,7 @@
 			SciterAPIHost.TrueValue global true value
 			SciterAPIHost.FalseValue global false value
 			SciterAPIHost.NullValue global null value
+			SciterAPIHost.GetElementChildren get children by index
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>

@@ -889,34 +889,42 @@ namespace EmptyFlow.SciterAPI.Tests {
 			);
 			host.CreateMainWindow ( 300, 300 );
 			host.LoadFile ( "embedded://test.html" );
-			host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+			string secondMapValueString = "";
+			string thirdKeyString = "";
+			IDictionary<string, SciterValue> resultMap = new Dictionary<string, SciterValue> ();
+			IEnumerable<string> resultMapValues = new List<string> ();
+			host.AddWindowEventHandler (
+				new DocumentReadyHandler (
+					() => {
+						var map = new Dictionary<string, SciterValue> ();
+						map.Add ( "first", host.CreateValue ( "First Item" ) );
+						map.Add ( "second", host.CreateValue ( "Second Item" ) );
+						map.Add ( "third", host.CreateValue ( "Third Item" ) );
+						var valueMap = host.CreateValue ( map );
+
+						var secondMapValue = host.GetMapItem ( ref valueMap, "second" );
+						secondMapValueString = host.GetValueString ( ref secondMapValue );
+						resultMap = host.GetMapItems ( ref valueMap );
+						var thirdKey = host.GetValueMapKey ( ref valueMap, 2 );
+						thirdKeyString = host.GetValueString ( ref thirdKey );
+						resultMapValues = resultMap.Values
+							.Select ( a => host.GetValueString ( ref a ) )
+							.ToList ();
+
+						host.CloseWindow ( host.MainWindow );
+					},
+					host
+				)
+			);
 
 			//Act
 			host.Process ();
 
 			//Assert
-			void ProcessCompleted () {
-				var map = new Dictionary<string, SciterValue> ();
-				map.Add ( "first", host.CreateValue ( "First Item" ) );
-				map.Add ( "second", host.CreateValue ( "Second Item" ) );
-				map.Add ( "third", host.CreateValue ( "Third Item" ) );
-				var valueMap = host.CreateValue ( map );
-
-				var secondMapValue = host.GetMapItem ( ref valueMap, "second" );
-				var secondMapValueString = host.GetValueString ( ref secondMapValue );
-				var resultMap = host.GetMapItems ( ref valueMap );
-				var thirdKey = host.GetValueMapKey ( ref valueMap, 2 );
-				var thirdKeyString = host.GetValueString ( ref thirdKey );
-				var resultMapValues = resultMap.Values
-					.Select ( a => host.GetValueString ( ref a ) )
-					.ToList ();
-
-				host.CloseWindow ( host.MainWindow );
-				Assert.Equal ( "Second Item", secondMapValueString );
-				Assert.Equal ( "third", thirdKeyString );
-				Assert.Equal ( new List<string> { "first", "second", "third" }, resultMap.Keys );
-				Assert.Equal ( new List<string> { "First Item", "Second Item", "Third Item" }, resultMapValues );
-			}
+			Assert.Equal ( "Second Item", secondMapValueString );
+			Assert.Equal ( "third", thirdKeyString );
+			Assert.Equal ( new List<string> { "first", "second", "third" }, resultMap.Keys );
+			Assert.Equal ( new List<string> { "First Item", "Second Item", "Third Item" }, resultMapValues );
 		}
 
 		[Fact, Trait ( "Category", "Integration" )]
@@ -959,20 +967,27 @@ namespace EmptyFlow.SciterAPI.Tests {
 			);
 			host.CreateMainWindow ( 300, 300, enableDebug: true );
 			host.LoadFile ( "embedded://test.html" );
-			host.AddWindowEventHandler ( new DocumentXCallHandler ( MethodHandled, host ) );
+			var luherName = "";
+			int functionResultValue = 0;
+			host.AddWindowEventHandler (
+				new DocumentXCallHandler (
+					( name, arguments ) => {
+						luherName = name;
+						var function = arguments.FirstOrDefault ();
+						var functionResult = host.ValueInvoke ( ref function, null, Enumerable.Empty<SciterValue> () );
+						functionResultValue = host.GetValueInt32 ( ref functionResult );
+						host.CloseWindow ( host.MainWindow );
+					},
+					host
+				)
+			);
 
 			//Act
 			host.Process ();
 
 			//Assert
-			void MethodHandled ( string name, IEnumerable<SciterValue> arguments ) {
-				var function = arguments.FirstOrDefault ();
-				var functionResult = host.ValueInvoke ( ref function, null, Enumerable.Empty<SciterValue> () );
-				var functionResultValue = host.GetValueInt32 ( ref functionResult );
-				host.CloseWindow ( host.MainWindow );
-				Assert.Equal ( "luher", name );
-				Assert.Equal ( 4568, functionResultValue );
-			}
+			Assert.Equal ( "luher", luherName );
+			Assert.Equal ( 4568, functionResultValue );
 		}
 
 		[Fact, Trait ( "Category", "Integration" )]
@@ -1012,20 +1027,28 @@ namespace EmptyFlow.SciterAPI.Tests {
 			host.SetSharedVariable ( "globalVariable", ref value );
 			host.CreateMainWindow ( 300, 300, enableDebug: true );
 			host.LoadFile ( "embedded://test.html" );
-			host.AddWindowEventHandler ( new DocumentXCallHandler ( MethodHandled, host ) );
+			var nameLuher = "";
+			SciterValue globalVariable = new SciterValue ();
+			var testValue = "";
+			host.AddWindowEventHandler (
+				new DocumentXCallHandler (
+					( name, arguments ) => {
+						nameLuher = name;
+						globalVariable = arguments.FirstOrDefault ();
+						testValue = host.GetValueString ( ref globalVariable );
+						host.CloseWindow ( host.MainWindow );
+					},
+					host
+				)
+			);
 
 			//Act
 			host.Process ();
 
 			//Assert
-			void MethodHandled ( string name, IEnumerable<SciterValue> arguments ) {
-				var globalVariable = arguments.FirstOrDefault ();
-				var testValue = host.GetValueString ( ref globalVariable );
-				host.CloseWindow ( host.MainWindow );
-				Assert.Equal ( "luher", name );
-				Assert.True ( globalVariable.IsString );
-				Assert.Equal ( "testvalue", testValue );
-			}
+			Assert.Equal ( "luher", nameLuher );
+			Assert.True ( globalVariable.IsString );
+			Assert.Equal ( "testvalue", testValue );
 		}
 
 		[Fact, Trait ( "Category", "Integration" )]
@@ -1036,7 +1059,17 @@ namespace EmptyFlow.SciterAPI.Tests {
 
 			host.CreateMainWindow ( 300, 300, enableDebug: true );
 			host.LoadHtml ( "<html><body></body></html>" );
-			host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+			var resultString = "";
+			host.AddWindowEventHandler (
+				new DocumentReadyHandler (
+					() => {
+						var result = host.GetMainWindowVariable ( "globalVariable" );
+						resultString = host.GetValueString ( ref result );
+						host.CloseWindow ( host.MainWindow );
+					},
+					host
+				)
+			);
 			var value = host.CreateValue ( "testvalue" );
 			host.SetMainWindowVariable ( "globalVariable", ref value );
 
@@ -1044,12 +1077,7 @@ namespace EmptyFlow.SciterAPI.Tests {
 			host.Process ();
 
 			//Assert
-			void ProcessCompleted () {
-				var result = host.GetMainWindowVariable ( "globalVariable" );
-				var resultString = host.GetValueString ( ref result );
-				host.CloseWindow ( host.MainWindow );
-				Assert.Equal ( "testvalue", resultString );
-			}
+			Assert.Equal ( "testvalue", resultString );
 		}
 
 		[Fact, Trait ( "Category", "Integration" )]
@@ -1060,19 +1088,24 @@ namespace EmptyFlow.SciterAPI.Tests {
 
 			host.CreateMainWindow ( 300, 300, enableDebug: true );
 			host.LoadHtml ( "<html><body><div></div></body></html>" );
-			host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+			string savedProperty = "";
+			host.AddWindowEventHandler (
+				new DocumentReadyHandler (
+					() => {
+						var divElement = host.MakeCssSelector ( "div" ).First ();
+						host.SetElementStyleProperty ( divElement, "color", "#ccccff" );
+						savedProperty = host.GetElementStyleProperty ( divElement, "color" );
+						host.CloseWindow ( host.MainWindow );
+					},
+					host
+				)
+			);
 
 			//Act
 			host.Process ();
 
 			//Assert
-			void ProcessCompleted () {
-				var divElement = host.MakeCssSelector ( "div" ).First ();
-				host.SetElementStyleProperty ( divElement, "color", "#ccccff" );
-				var savedProperty = host.GetElementStyleProperty ( divElement, "color" );
-				host.CloseWindow ( host.MainWindow );
-				Assert.Equal ( "rgb(204,204,255)", savedProperty );
-			}
+			Assert.Equal ( "#CCCCFF", savedProperty );
 		}
 
 		[Fact, Trait ( "Category", "Integration" )]
@@ -1095,20 +1128,26 @@ namespace EmptyFlow.SciterAPI.Tests {
                 </html>
                 """
 			);
-			host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+			int allSpans = 0;
+			int insideSpans = 0;
+			host.AddWindowEventHandler (
+				new DocumentReadyHandler (
+					() => {
+						var divElement = host.MakeCssSelector ( "#insideelement" ).First ();
+						allSpans = host.MakeCssSelector ( "span" ).Count ();
+						insideSpans = host.MakeCssSelector ( "span", divElement ).Count ();
+						host.CloseWindow ( host.MainWindow );
+					},
+					host
+				)
+			);
 
 			//Act
 			host.Process ();
 
 			//Assert
-			void ProcessCompleted () {
-				var divElement = host.MakeCssSelector ( "#insideelement" ).First ();
-				var allSpans = host.MakeCssSelector ( "span" ).Count ();
-				var insideSpans = host.MakeCssSelector ( "span", divElement ).Count ();
-				host.CloseWindow ( host.MainWindow );
-				Assert.Equal ( 3, allSpans );
-				Assert.Equal ( 2, insideSpans );
-			}
+			Assert.Equal ( 3, allSpans );
+			Assert.Equal ( 2, insideSpans );
 		}
 
 		[Fact, Trait ( "Category", "Integration" )]
@@ -1126,21 +1165,28 @@ namespace EmptyFlow.SciterAPI.Tests {
                 </html>
                 """
 			);
-			host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+			SciterWindowInfo data = new SciterWindowInfo ( new SciterWindowSize ( 0, 0 ), new SciterWindowPosition ( 0, 0 ) );
+			host.AddWindowEventHandler (
+				new DocumentReadyHandler (
+					() => {
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+						data = host.GetWindowSizeAndPosition ( host.MainWindow, WindowSizeMode.Client, WindowRelateMode.Monitor, false );
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+						host.CloseWindow ( host.MainWindow );
+					},
+					host
+				)
+			);
 
 			//Act
 			host.Process ();
 
 			//Assert
-			void ProcessCompleted () {
-				var data = host.GetWindowSizeAndPosition ( host.MainWindow, WindowSizeMode.Client, WindowRelateMode.Monitor, false );
-				host.CloseWindow ( host.MainWindow );
-				Assert.NotNull ( data );
-				Assert.Equal ( 8, data.Position.X );
-				Assert.Equal ( 31, data.Position.Y );
-				Assert.Equal ( 284, data.Size.Width );
-				Assert.Equal ( 261, data.Size.Height );
-			}
+			Assert.NotNull ( data );
+			Assert.Equal ( 8, data.Position.X );
+			Assert.Equal ( 31, data.Position.Y );
+			Assert.Equal ( 284, data.Size.Width );
+			Assert.Equal ( 261, data.Size.Height );
 		}
 
 		[Fact, Trait ( "Category", "Integration" )]
@@ -1158,17 +1204,22 @@ namespace EmptyFlow.SciterAPI.Tests {
                 </html>
                 """
 			);
-			host.AddWindowEventHandler ( new DocumentReadyHandler ( ProcessCompleted, host ) );
+			var isActive = false;
+			host.AddWindowEventHandler (
+				new DocumentReadyHandler (
+					() => {
+						isActive = host.GetWindowActive ( host.MainWindow );
+						host.CloseWindow ( host.MainWindow );
+					},
+					host
+				)
+			);
 
 			//Act
 			host.Process ();
 
 			//Assert
-			void ProcessCompleted () {
-				var isActive = host.GetWindowActive ( host.MainWindow );
-				host.CloseWindow ( host.MainWindow );
-				Assert.True ( isActive );
-			}
+			Assert.True ( isActive );
 		}
 
 		public class AddEventHandlerTestHandler : SciterEventHandler {
