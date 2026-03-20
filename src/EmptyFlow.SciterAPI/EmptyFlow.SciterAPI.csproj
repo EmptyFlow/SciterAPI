@@ -28,6 +28,11 @@
 			SciterAPIHost.FalseValue global false value
 			SciterAPIHost.NullValue global null value
 			SciterAPIHost.GetElementChildren get children by index
+			SciterAPIHost.NodeRemove remove node/element
+			SciterAPIHost.NodeNextSibling get next sibling node/element
+			SciterAPIHost.NodePreviousSibling get previous sibling node/element
+			SciterAPIHost.NodeFirstChild get first child
+			SciterAPIHost.NodeLastChild get last child
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
