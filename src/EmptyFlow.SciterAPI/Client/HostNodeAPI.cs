@@ -31,8 +31,8 @@
 		/// <param name="node">Node/Element.</param>
 		/// <returns>Previous sibling node/element or zero.</returns>
 		public nint NodePreviousSibling ( nint node ) {
-			var domResult = m_basicApi.SciterNodePrevSibling ( node, out var nextNode );
-			if ( domResult == DomResult.SCDOM_OK ) return nextNode;
+			var domResult = m_basicApi.SciterNodePrevSibling ( node, out var previousNode );
+			if ( domResult == DomResult.SCDOM_OK ) return previousNode;
 
 			return nint.Zero;
 		}
@@ -43,8 +43,8 @@
 		/// <param name="node">Node/Element.</param>
 		/// <returns>Next sibling node/element or zero.</returns>
 		public nint NodeFirstChild ( nint node ) {
-			var domResult = m_basicApi.SciterNodeFirstChild ( node, out var nextNode );
-			if ( domResult == DomResult.SCDOM_OK ) return nextNode;
+			var domResult = m_basicApi.SciterNodeFirstChild ( node, out var firstChild );
+			if ( domResult == DomResult.SCDOM_OK ) return firstChild;
 
 			return nint.Zero;
 		}
@@ -55,8 +55,8 @@
 		/// <param name="node">Node/Element.</param>
 		/// <returns>Previous sibling node/element or zero.</returns>
 		public nint NodeLastChild ( nint node ) {
-			var domResult = m_basicApi.SciterNodeLastChild ( node, out var nextNode );
-			if ( domResult == DomResult.SCDOM_OK ) return nextNode;
+			var domResult = m_basicApi.SciterNodeLastChild ( node, out var lastChild );
+			if ( domResult == DomResult.SCDOM_OK ) return lastChild;
 
 			return nint.Zero;
 		}

@@ -1320,6 +1320,146 @@ namespace EmptyFlow.SciterAPI.Tests {
 			Assert.True ( falseValue );
 		}
 
+		[Fact, Trait ( "Category", "Integration" )]
+		public void SciterAPIHost_Completed_NodeNextSibling () {
+			//Arrange
+			var host = new SciterAPIHost ( "" );
+
+			host.CreateMainWindow ();
+			host.LoadHtml (
+				"""
+                <html>
+                    <body>
+                        <div>Sibling 1</div><div id="middlesibling">Sibling 2</div><div>Sibling 3</div>
+                    </body>
+                </html>
+                """
+			);
+			var html = "";
+			host.AddWindowEventHandler (
+				new DocumentReadyHandler (
+					() => {
+						var spanElement = host.MakeCssSelector ( "#middlesibling" ).First ();
+						var nextSibling = host.NodeNextSibling ( spanElement );
+						html = host.GetElementHtml ( nextSibling, false );
+						host.CloseWindow ( host.MainWindow );
+					},
+					host
+				)
+			);
+
+			//Act
+			host.Process ();
+
+			//Assert
+			Assert.Equal ( "Sibling 3", html );
+		}
+
+		[Fact, Trait ( "Category", "Integration" )]
+		public void SciterAPIHost_Completed_NodePreviousSibling () {
+			//Arrange
+			var host = new SciterAPIHost ( "" );
+
+			host.CreateMainWindow ();
+			host.LoadHtml (
+				"""
+                <html>
+                    <body>
+                        <div>Sibling 1</div><div id="middlesibling">Sibling 2</div><div>Sibling 3</div>
+                    </body>
+                </html>
+                """
+			);
+			var html = "";
+			host.AddWindowEventHandler (
+				new DocumentReadyHandler (
+					() => {
+						var spanElement = host.MakeCssSelector ( "#middlesibling" ).First ();
+						var nextSibling = host.NodePreviousSibling ( spanElement );
+						html = host.GetElementHtml ( nextSibling, false );
+						host.CloseWindow ( host.MainWindow );
+					},
+					host
+				)
+			);
+
+			//Act
+			host.Process ();
+
+			//Assert
+			Assert.Equal ( "Sibling 1", html );
+		}
+
+		[Fact, Trait ( "Category", "Integration" )]
+		public void SciterAPIHost_Completed_NodeFirstChild () {
+			//Arrange
+			var host = new SciterAPIHost ( "" );
+
+			host.CreateMainWindow ();
+			host.LoadHtml (
+				"""
+                <html>
+                    <body>
+                        <div id="container"><div>Sibling 1</div><div>Sibling 2</div><div>Sibling 3</div></div>
+                    </body>
+                </html>
+                """
+			);
+			var html = "";
+			host.AddWindowEventHandler (
+				new DocumentReadyHandler (
+					() => {
+						var spanElement = host.MakeCssSelector ( "#container" ).First ();
+						var firstChild = host.NodeFirstChild ( spanElement );
+						html = host.GetElementText ( firstChild );
+						host.CloseWindow ( host.MainWindow );
+					},
+					host
+				)
+			);
+
+			//Act
+			host.Process ();
+
+			//Assert
+			Assert.Equal ( "Sibling 1", html );
+		}
+
+		[Fact, Trait ( "Category", "Integration" )]
+		public void SciterAPIHost_Completed_NodeLastChild () {
+			//Arrange
+			var host = new SciterAPIHost ( "" );
+
+			host.CreateMainWindow ();
+			host.LoadHtml (
+				"""
+                <html>
+                    <body>
+                        <div id="container"><div>Sibling 1</div><div>Sibling 2</div><div>Sibling 3</div></div>
+                    </body>
+                </html>
+                """
+			);
+			var html = "";
+			host.AddWindowEventHandler (
+				new DocumentReadyHandler (
+					() => {
+						var spanElement = host.MakeCssSelector ( "#container" ).First ();
+						var lastChild = host.NodeLastChild ( spanElement );
+						html = host.GetElementText ( lastChild );
+						host.CloseWindow ( host.MainWindow );
+					},
+					host
+				)
+			);
+
+			//Act
+			host.Process ();
+
+			//Assert
+			Assert.Equal ( "Sibling 3", html );
+		}
+
 	}
 
 	public class DocumentReadyHandler : SciterEventHandler {
