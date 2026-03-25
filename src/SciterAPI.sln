@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallJavaScript", "..\Examples\CallJavaScript\CallJavaScript\CallJavaScript.csproj", "{6041AA02-6EAA-4405-9538-BEB8DF3F6720}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,14 @@ Global
 		{B1777049-4D4C-4CC1-82D9-E4D221979ED8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B1777049-4D4C-4CC1-82D9-E4D221979ED8}.Release|x64.ActiveCfg = Release|Any CPU
 		{B1777049-4D4C-4CC1-82D9-E4D221979ED8}.Release|x64.Build.0 = Release|Any CPU
+		{6041AA02-6EAA-4405-9538-BEB8DF3F6720}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6041AA02-6EAA-4405-9538-BEB8DF3F6720}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6041AA02-6EAA-4405-9538-BEB8DF3F6720}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6041AA02-6EAA-4405-9538-BEB8DF3F6720}.Debug|x64.Build.0 = Debug|Any CPU
+		{6041AA02-6EAA-4405-9538-BEB8DF3F6720}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6041AA02-6EAA-4405-9538-BEB8DF3F6720}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6041AA02-6EAA-4405-9538-BEB8DF3F6720}.Release|x64.ActiveCfg = Release|Any CPU
+		{6041AA02-6EAA-4405-9538-BEB8DF3F6720}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +97,7 @@ Global
 		{1211908B-01A7-A571-C417-C52E0F5111D1} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{71F26395-10AA-1AFA-3DE8-DC02C4938743} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{B1777049-4D4C-4CC1-82D9-E4D221979ED8} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{6041AA02-6EAA-4405-9538-BEB8DF3F6720} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3264AD46-2365-4471-9339-5C196445FDFC}

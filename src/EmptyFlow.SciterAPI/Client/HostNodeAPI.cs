@@ -1,4 +1,8 @@
-﻿namespace EmptyFlow.SciterAPI {
+﻿using EmptyFlow.SciterAPI.Structs;
+using System.Runtime.InteropServices;
+using System.Text;
+
+namespace EmptyFlow.SciterAPI {
 
 	public partial class SciterAPIHost {
 
@@ -59,6 +63,80 @@
 			if ( domResult == DomResult.SCDOM_OK ) return lastChild;
 
 			return nint.Zero;
+		}
+
+		/// <summary>
+		/// Get node type.
+		/// </summary>
+		/// <param name="node">Node/Element.</param>
+		/// <returns>Node type or null if dom result not success.</returns>
+		public NodeType? GetNodeType ( nint node ) {
+			var domResult = m_basicApi.SciterNodeType ( node, out var type );
+			if ( domResult == DomResult.SCDOM_OK ) return type;
+
+			return null;
+		}
+
+		/// <summary>
+		/// Get node text.
+		/// </summary>
+		/// <param name="node">Node/Element.</param>
+		/// <returns>Node text.</returns>
+		public string GetNodeText ( nint node ) {
+			var resultString = new StringBuilder ();
+			lpcwstReceiver callback = ( IntPtr bytes, uint num_bytes, IntPtr param ) => {
+				resultString.Append ( Marshal.PtrToStringUni ( bytes, Convert.ToInt32 ( num_bytes ) ) );
+			};
+			var domResult = m_basicApi.SciterNodeGetText ( node, callback, nint.Zero );
+			if ( domResult == DomResult.SCDOM_OK ) return resultString.ToString ();
+
+			return "";
+		}
+
+		/// <summary>
+		/// Set node text.
+		/// </summary>
+		/// <param name="node">Node/Element.</param>
+		/// <param name="text">Text which will be inserted into node.</param>
+		/// <returns>Operation was successed?</returns>
+		public bool SetNodeText ( nint node, string text ) {
+			var domResult = m_basicApi.SciterNodeSetText ( node, text, (uint) text.Length );
+			return domResult == DomResult.SCDOM_OK;
+		}
+
+		/// <summary>
+		/// Get node/element parent.
+		/// </summary>
+		/// <param name="node">Node/Element.</param>
+		/// <returns>Parent or null.</returns>
+		public nint NodeParent ( nint node ) {
+			var domResult = m_basicApi.SciterNodeParent ( node, out var parent );
+			if ( domResult == DomResult.SCDOM_OK ) return parent;
+
+			return nint.Zero;
+		}
+
+		/// <summary>
+		/// Get node/element child.
+		/// </summary>
+		/// <param name="node">Node/Element.</param>
+		/// <returns>Child or null.</returns>
+		public nint NodeNthChild ( nint node, int index ) {
+			var domResult = m_basicApi.SciterNodeNthChild ( node, (uint) index, out var child );
+			if ( domResult == DomResult.SCDOM_OK ) return child;
+
+			return nint.Zero;
+		}
+
+		/// <summary>
+		/// Get node/element childrens count.
+		/// </summary>
+		/// <param name="node">Node/Element.</param>
+		public int NodeChildrenCount ( nint node ) {
+			var domResult = m_basicApi.SciterNodeChildrenCount ( node, out var count );
+			if ( domResult == DomResult.SCDOM_OK ) return (int) count;
+
+			return 0;
 		}
 
 	}

@@ -58,6 +58,16 @@ namespace EmptyFlow.SciterAPI {
 		public bool IsObjectError => t == ValueType.T_OBJECT && u == SciterValueUnitTypes.ObjectError;
 		public bool IsObjectBuffer => t == ValueType.T_OBJECT && u == SciterValueUnitTypes.ObjectBuffer;
 
+		/// <summary>
+		/// Convert sciter value to boolean.
+		/// </summary>
+		/// <returns>True/false or null if value was not boolean.</returns>
+		bool? ToBoolean () {
+			if ( IsBoolean ) return d == 1;
+
+			return null;
+		}
+
 	}
 
 }

@@ -1,0 +1,30 @@
+<html>
+<body>
+    <div>
+        <div id="element1"></div>
+        <div id="element2"></div>
+    </div>
+    <script>
+        let globalValue1 = 1;
+
+        let globalValue2 = 1;
+
+        function changeValue(value) {
+            globalValue1 = value;
+
+            showValue();
+
+            return true;
+        }
+
+        function showValue() {
+            const element1 = document.getElementById('element1');
+            element1.innerText = "globalValue1 = " + globalValue1;
+
+            const element2 = document.getElementById('element2');
+            element2.innerText = "globalValue2 = " + globalValue2;
+        }
+        getResult();
+    </script>
+</body>
+</html>
