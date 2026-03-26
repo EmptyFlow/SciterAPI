@@ -167,13 +167,13 @@ namespace EmptyFlow.SciterAPI {
 
 		public nint GraphicsPath ( Action<nint> callback ) {
 			var result = m_graphicsApi.pathCreate ( out var path );
-			if ( result != GraphInResult.Ok ) return path;
+			if ( result != GraphInResult.Ok ) return nint.Zero;
 
 			callback ( path );
 
 			m_graphicsApi.pathClosePath ( path );
 
-			return nint.Zero;
+			return path;
 		}
 
 		public bool GraphicsDrawPath ( nint hgfx, nint path, DrawPathMode pathMode ) {
