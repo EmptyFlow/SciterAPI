@@ -28,6 +28,10 @@
 			SciterAPIHost.NodeParent get node type
 			SciterAPIHost.NodeNthChild get node type
 			SciterAPIHost.NodeChildrenCount get node type
+			SciterAPIHost.NodeCastFromElement cast element to node
+			SciterAPIHost.NodeCastToElement cast node to element
+			SciterAPIHost.NodeInsert
+			SciterAPIHost.NodeCreateTextNode
 			SciterValue.ToBoolean convert to C# boolean value
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>

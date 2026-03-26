@@ -26,7 +26,7 @@ namespace EmptyFlow.SciterAPI.Structs {
     public delegate GraphInResult GraphicsGPolygon ( IntPtr hgfx, float[] xy, uint numPoints );
     public delegate GraphInResult GraphicsGPolyline ( IntPtr hgfx, float[] xy, uint numPoints );
 
-    public delegate GraphInResult GraphicsPathCreate ( IntPtr path );
+    public delegate GraphInResult GraphicsPathCreate ( out nint path );
     public delegate GraphInResult GraphicsPathAddRef ( IntPtr path );
     public delegate GraphInResult GraphicsPathRelease ( IntPtr path );
     public delegate GraphInResult GraphicsPathMoveTo ( IntPtr path, float x, float y, bool relative );

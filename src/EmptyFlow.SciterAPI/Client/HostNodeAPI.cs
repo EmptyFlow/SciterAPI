@@ -1,4 +1,5 @@
-﻿using EmptyFlow.SciterAPI.Structs;
+﻿using EmptyFlow.SciterAPI.Enums;
+using EmptyFlow.SciterAPI.Structs;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -137,6 +138,52 @@ namespace EmptyFlow.SciterAPI {
 			if ( domResult == DomResult.SCDOM_OK ) return (int) count;
 
 			return 0;
+		}
+
+		/// <summary>
+		/// Cast node from element.
+		/// </summary>
+		/// <param name="element">Element.</param>
+		public nint NodeCastFromElement ( nint element ) {
+			var domResult = m_basicApi.SciterNodeCastFromElement ( element, out var node );
+			if ( domResult == DomResult.SCDOM_OK ) return node;
+
+			return 0;
+		}
+
+		/// <summary>
+		/// Insert node to another node.
+		/// </summary>
+		/// <param name="node">Node/Element.</param>
+		/// <param name="target">Target location.</param>
+		/// <param name="what">What node/element need to insert.</param>
+		public bool NodeInsert ( nint node, NodeInsertTarget target, nint what ) {
+			var domResult = m_basicApi.SciterNodeInsert ( node, (uint) target, what );
+			if ( domResult == DomResult.SCDOM_OK ) return true;
+
+			return false;
+		}
+
+		/// <summary>
+		/// Create new text node.
+		/// </summary>
+		/// <param name="element">Element.</param>
+		public nint NodeCreateTextNode ( string content ) {
+			var domResult = m_basicApi.SciterCreateTextNode ( content, (uint)content.Length, out var node );
+			if ( domResult == DomResult.SCDOM_OK ) return node;
+
+			return nint.Zero;
+		}
+
+		/// <summary>
+		/// Create new comment node.
+		/// </summary>
+		/// <param name="element">Element.</param>
+		public nint NodeCreateCommentNode ( string content ) {
+			var domResult = m_basicApi.SciterCreateCommentNode ( content, (uint) content.Length, out var node );
+			if ( domResult == DomResult.SCDOM_OK ) return node;
+
+			return nint.Zero;
 		}
 
 	}
