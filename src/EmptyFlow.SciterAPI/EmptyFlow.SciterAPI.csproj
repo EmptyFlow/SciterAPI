@@ -36,6 +36,7 @@
 			From many methods Graphics API removed redundant check
 			SciterAPIHost.GraphicsPath create path
 			SciterAPIHost.GraphicsDrawPath draw path
+			SciterAPIHost.GraphicsFillMode set fill mode
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>

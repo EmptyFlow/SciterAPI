@@ -316,6 +316,11 @@ namespace EmptyFlow.SciterAPI {
 			m_graphicsApi.gDrawImage ( hgfx, image, position.X, position.Y, position.X, position.Y, ix, iy, iw, ih, opacity );
 		}
 
+		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
+		public bool GraphicsFillMode ( nint hgfx, bool evenOdd ) {
+			return m_graphicsApi.gFillMode ( hgfx, evenOdd ) == GraphInResult.Ok;
+		}
+
 		/// <summary>
 		/// Graphics get color from different channel components.
 		/// </summary>
