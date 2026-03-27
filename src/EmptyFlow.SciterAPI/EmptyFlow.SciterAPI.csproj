@@ -18,21 +18,24 @@
 		<RepositoryUrl>https://github.com/EmptyFlow/SciterAPI</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>html;html-engine;htmlengine;sciter;binding</PackageTags>
-		<Version>1.2.5.0</Version>
+		<Version>1.2.6.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
 			SciterAPIHost.GetNodeType get node type
-			SciterAPIHost.GetNodeText get node type
-			SciterAPIHost.SetNodeText get node type
-			SciterAPIHost.NodeParent get node type
-			SciterAPIHost.NodeParent get node type
-			SciterAPIHost.NodeNthChild get node type
-			SciterAPIHost.NodeChildrenCount get node type
+			SciterAPIHost.GetNodeText get node text
+			SciterAPIHost.SetNodeText set node text
+			SciterAPIHost.NodeParent get node parent
+			SciterAPIHost.NodeNthChild get nth child of node
+			SciterAPIHost.NodeChildrenCount get children count
 			SciterAPIHost.NodeCastFromElement cast element to node
 			SciterAPIHost.NodeCastToElement cast node to element
-			SciterAPIHost.NodeInsert
-			SciterAPIHost.NodeCreateTextNode
+			SciterAPIHost.NodeInsert insert node to another node
+			SciterAPIHost.NodeCreateTextNode create text node
+			SciterAPIHost.NodeCreateCommentNode create comment node
 			SciterValue.ToBoolean convert to C# boolean value
+			From many methods Graphics API removed redundant check
+			SciterAPIHost.GraphicsPath create path
+			SciterAPIHost.GraphicsDrawPath draw path
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
