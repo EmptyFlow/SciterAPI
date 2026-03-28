@@ -231,8 +231,8 @@ namespace EmptyFlow.SciterAPI {
 		/// <param name="rx">Radius X.</param>
 		/// <param name="ry">Radius Y.</param>
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsDrawEllipse ( nint hgfx, float x1, float y1, float rx, float ry ) {
-			m_graphicsApi.gEllipse ( hgfx, x1, y1, rx, ry );
+		public bool GraphicsDrawEllipse ( nint hgfx, float x1, float y1, float rx, float ry ) {
+			return m_graphicsApi.gEllipse ( hgfx, x1, y1, rx, ry ) == GraphInResult.Ok;
 		}
 
 		/// <summary>
@@ -244,8 +244,8 @@ namespace EmptyFlow.SciterAPI {
 		/// <param name="x2">X2 coordinate.</param>
 		/// <param name="y2">Y2 coordinate.</param>
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsDrawRectangle ( nint hgfx, float x1, float y1, float x2, float y2 ) {
-			m_graphicsApi.gRectangle ( hgfx, x1, y1, x2, y2 );
+		public bool GraphicsDrawRectangle ( nint hgfx, float x1, float y1, float x2, float y2 ) {
+			return m_graphicsApi.gRectangle ( hgfx, x1, y1, x2, y2 ) == GraphInResult.Ok;
 		}
 
 		/// <summary>
@@ -258,8 +258,8 @@ namespace EmptyFlow.SciterAPI {
 		/// <param name="y2">Y2 coordinate.</param>
 		/// <param name="radii8">8 pair array.</param>
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsDrawRoundedRectangle ( nint hgfx, float x1, float y1, float x2, float y2, float[] radii8 ) {
-			m_graphicsApi.gRoundedRectangle ( hgfx, x1, y1, x2, y2, radii8 );
+		public bool GraphicsDrawRoundedRectangle ( nint hgfx, float x1, float y1, float x2, float y2, float[] radii8 ) {
+			return m_graphicsApi.gRoundedRectangle ( hgfx, x1, y1, x2, y2, radii8 ) == GraphInResult.Ok;
 		}
 
 		public GraphicsTextModel GraphicsCreateTextForElement ( nint he, string text, string className ) {
@@ -301,19 +301,25 @@ namespace EmptyFlow.SciterAPI {
 		/// <param name="x">X coordinate.</param>
 		/// <param name="y">Y coordinate.</param>
 		/// <param name="coordinates">Position (1..9).</param>
-		public void GraphicsDrawText ( nint hgfx, GraphicsTextModel text, Vector2 coordinates, SciterTextPosition position ) {
-			var graphResult = m_graphicsApi.gDrawText ( hgfx, text.Id, coordinates.X, coordinates.Y, (uint) position );
-			if ( graphResult != GraphInResult.Ok ) Console.WriteLine ( "GraphicsDrawText resulted with error, actual result - " + graphResult );
+		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
+		public bool GraphicsDrawText ( nint hgfx, GraphicsTextModel text, Vector2 coordinates, SciterTextPosition position ) {
+			return m_graphicsApi.gDrawText ( hgfx, text.Id, coordinates.X, coordinates.Y, (uint) position ) == GraphInResult.Ok;
 		}
 
+		/// <summary>
+		/// Draw image.
+		/// </summary>
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsDrawImage ( nint hgfx, nint image, float x, float y, float w, float h, uint ix, uint iy, uint iw, uint ih, float opacity ) {
-			m_graphicsApi.gDrawImage ( hgfx, image, x, y, w, h, ix, iy, iw, ih, opacity );
+		public bool GraphicsDrawImage ( nint hgfx, nint image, float x, float y, float w, float h, uint ix, uint iy, uint iw, uint ih, float opacity ) {
+			return m_graphicsApi.gDrawImage ( hgfx, image, x, y, w, h, ix, iy, iw, ih, opacity ) == GraphInResult.Ok;
 		}
 
+		/// <summary>
+		/// Draw image.
+		/// </summary>
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsDrawImage ( nint hgfx, nint image, Vector2 position, Vector2 size, uint ix, uint iy, uint iw, uint ih, float opacity ) {
-			m_graphicsApi.gDrawImage ( hgfx, image, position.X, position.Y, position.X, position.Y, ix, iy, iw, ih, opacity );
+		public bool GraphicsDrawImage ( nint hgfx, nint image, Vector2 position, Vector2 size, uint ix, uint iy, uint iw, uint ih, float opacity ) {
+			return m_graphicsApi.gDrawImage ( hgfx, image, position.X, position.Y, position.X, position.Y, ix, iy, iw, ih, opacity ) == GraphInResult.Ok;
 		}
 
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
