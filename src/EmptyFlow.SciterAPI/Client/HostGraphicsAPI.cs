@@ -68,8 +68,8 @@ namespace EmptyFlow.SciterAPI {
 		/// <param name="hgfx">Pointer on graphics surface.</param>
 		/// <param name="color">Line color. You need to get color from GraphicsGetColor method.</param>
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsLineColor ( nint hgfx, uint color ) {
-			m_graphicsApi.gLineColor ( hgfx, color );
+		public bool GraphicsLineColor ( nint hgfx, uint color ) {
+			return m_graphicsApi.gLineColor ( hgfx, color ) == GraphInResult.Ok;
 		}
 
 		/// <summary>
@@ -83,8 +83,8 @@ namespace EmptyFlow.SciterAPI {
 		/// <param name="stops">Color stops.</param>
 		/// <param name="nstops">No idea what is it.</param>
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsLineGradientLinear ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
-			m_graphicsApi.gLineGradientLinear ( hgfx, x1, y1, x2, y2, stops, nstops );
+		public bool GraphicsLineGradientLinear ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
+			return m_graphicsApi.gLineGradientLinear ( hgfx, x1, y1, x2, y2, stops, nstops ) == GraphInResult.Ok;
 		}
 
 		/// <summary>
@@ -98,8 +98,8 @@ namespace EmptyFlow.SciterAPI {
 		/// <param name="stops">Color stops.</param>
 		/// <param name="nstops">No idea what is it.</param>
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsLineGradientRadial ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
-			m_graphicsApi.gLineGradientRadial ( hgfx, x1, y1, x2, y2, stops, nstops );
+		public bool GraphicsLineGradientRadial ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
+			return m_graphicsApi.gLineGradientRadial ( hgfx, x1, y1, x2, y2, stops, nstops ) == GraphInResult.Ok;
 		}
 
 		/// <summary>
@@ -108,8 +108,8 @@ namespace EmptyFlow.SciterAPI {
 		/// <param name="hgfx">Pointer on graphics surface.</param>
 		/// <param name="color">Line color. You need to get color from GraphicsGetColor method.</param>
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsFillColor ( nint hgfx, uint color ) {
-			m_graphicsApi.gFillColor ( hgfx, color );
+		public bool GraphicsFillColor ( nint hgfx, uint color ) {
+			return m_graphicsApi.gFillColor ( hgfx, color ) == GraphInResult.Ok;
 		}
 
 		/// <summary>
@@ -123,8 +123,8 @@ namespace EmptyFlow.SciterAPI {
 		/// <param name="stops">Color stops.</param>
 		/// <param name="nstops">No idea what is it.</param>
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsFillGradientLinear ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
-			m_graphicsApi.gFillGradientLinear ( hgfx, x1, y1, x2, y2, stops, nstops );
+		public bool GraphicsFillGradientLinear ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
+			return m_graphicsApi.gFillGradientLinear ( hgfx, x1, y1, x2, y2, stops, nstops ) == GraphInResult.Ok;
 		}
 
 		/// <summary>
@@ -138,8 +138,8 @@ namespace EmptyFlow.SciterAPI {
 		/// <param name="stops">Color stops.</param>
 		/// <param name="nstops">No idea what is it.</param>
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsFillGradientRadial ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
-			m_graphicsApi.gFillGradientRadial ( hgfx, x1, y1, x2, y2, stops, nstops );
+		public bool GraphicsFillGradientRadial ( nint hgfx, float x1, float y1, float x2, float y2, ColorStop[] stops, uint nstops ) {
+			return m_graphicsApi.gFillGradientRadial ( hgfx, x1, y1, x2, y2, stops, nstops ) == GraphInResult.Ok;
 		}
 
 		/// <summary>
@@ -148,8 +148,8 @@ namespace EmptyFlow.SciterAPI {
 		/// <param name="hgfx">Pointer on graphics surface.</param>
 		/// <param name="width">New width for the line.</param>
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsSetLineWidth ( nint hgfx, float width ) {
-			m_graphicsApi.gLineWidth ( hgfx, width );
+		public bool GraphicsSetLineWidth ( nint hgfx, float width ) {
+			return m_graphicsApi.gLineWidth ( hgfx, width ) == GraphInResult.Ok;
 		}
 
 		/// <summary>
@@ -184,28 +184,28 @@ namespace EmptyFlow.SciterAPI {
 		}
 
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsPathLineTo ( nint path, SciterPoint position, bool relative ) {
-			m_graphicsApi.pathLineTo ( path, position.X, position.Y, relative );
+		public bool GraphicsPathLineTo ( nint path, SciterPoint position, bool relative ) {
+			return m_graphicsApi.pathLineTo ( path, position.X, position.Y, relative ) == GraphInResult.Ok;
 		}
 
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsPathMoveTo ( nint path, SciterPoint position, bool relative ) {
-			m_graphicsApi.pathMoveTo ( path, position.X, position.Y, relative );
+		public bool GraphicsPathMoveTo ( nint path, SciterPoint position, bool relative ) {
+			return m_graphicsApi.pathMoveTo ( path, position.X, position.Y, relative ) == GraphInResult.Ok;
 		}
 
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsPathArcTo ( nint path, SciterPoint position, float angle, SciterPoint radius, bool largeArc, bool clockwise, bool relative ) {
-			m_graphicsApi.pathArcTo ( path, position.X, position.Y, angle, radius.X, radius.Y, largeArc, clockwise, relative );
+		public bool GraphicsPathArcTo ( nint path, SciterPoint position, float angle, SciterPoint radius, bool largeArc, bool clockwise, bool relative ) {
+			return m_graphicsApi.pathArcTo ( path, position.X, position.Y, angle, radius.X, radius.Y, largeArc, clockwise, relative ) == GraphInResult.Ok;
 		}
 
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsPathQuadraticCurveTo ( nint path, float xc, float yc, float x, float y, bool relative ) {
-			m_graphicsApi.pathQuadraticCurveTo ( path, xc, yc, x, y, relative );
+		public bool GraphicsPathQuadraticCurveTo ( nint path, float xc, float yc, float x, float y, bool relative ) {
+			return m_graphicsApi.pathQuadraticCurveTo ( path, xc, yc, x, y, relative ) == GraphInResult.Ok;
 		}
 
 		[MethodImpl ( MethodImplOptions.AggressiveInlining )]
-		public void GraphicsPathQuadraticCurveTo ( nint path, float xc1, float yc1, float xc2, float yc2, float x, float y, bool relative ) {
-			m_graphicsApi.pathBezierCurveTo ( path, xc1, yc1, xc2, yc2, x, y, relative );
+		public bool GraphicsPathQuadraticCurveTo ( nint path, float xc1, float yc1, float xc2, float yc2, float x, float y, bool relative ) {
+			return m_graphicsApi.pathBezierCurveTo ( path, xc1, yc1, xc2, yc2, x, y, relative ) == GraphInResult.Ok;
 		}
 
 		/// <summary>
