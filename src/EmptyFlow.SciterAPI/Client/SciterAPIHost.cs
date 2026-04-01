@@ -195,8 +195,14 @@ namespace EmptyFlow.SciterAPI {
 			m_requestApi = Marshal.PtrToStructure<RequestApiStruct> ( pointer );
 		}
 
+		public void Initialization () {
+			m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_INIT, nint.Zero, nint.Zero );
+		}
+
 		public int Process () {
 			if (m_mainWindow != nint.Zero) ShowWindow ( m_mainWindow );
+
+			Initialization ();
 
 			// run loop for waiting close all windows
 			var code = m_basicApi.SciterExec ( ApplicationCommand.SCITER_APP_LOOP, nint.Zero, nint.Zero );

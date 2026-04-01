@@ -21,22 +21,9 @@
 		<Version>1.2.6.0</Version>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReleaseNotes>
-			SciterAPIHost.GetNodeType get node type
-			SciterAPIHost.GetNodeText get node text
-			SciterAPIHost.SetNodeText set node text
-			SciterAPIHost.NodeParent get node parent
-			SciterAPIHost.NodeNthChild get nth child of node
-			SciterAPIHost.NodeChildrenCount get children count
-			SciterAPIHost.NodeCastFromElement cast element to node
-			SciterAPIHost.NodeCastToElement cast node to element
-			SciterAPIHost.NodeInsert insert node to another node
-			SciterAPIHost.NodeCreateTextNode create text node
-			SciterAPIHost.NodeCreateCommentNode create comment node
-			SciterValue.ToBoolean convert to C# boolean value
-			From many methods Graphics API removed redundant check
-			SciterAPIHost.GraphicsPath create path
-			SciterAPIHost.GraphicsDrawPath draw path
-			SciterAPIHost.GraphicsFillMode set fill mode
+			SciterAPIHost.Initialization for run initialization
+			SciterCallbackNotificationLoadedData fix structure
+			SciterCallbackNotificationLoadData fix structure
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>

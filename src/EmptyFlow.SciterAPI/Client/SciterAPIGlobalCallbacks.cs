@@ -19,7 +19,7 @@ namespace EmptyFlow.SciterAPI {
 		private Dictionary<string, Func<string, byte[]>> m_protocolHandlers = new Dictionary<string, Func<string, byte[]>> ();
 
 		[DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
-		private Action<string, uint, uint> m_loadedDataAction;
+		private Action<string, uint, uint, nint> m_loadedDataAction;
 
 		[DynamicDependency ( DynamicallyAccessedMemberTypes.All, typeof ( SciterAPIGlobalCallbacks ) )]
 		private Action m_engineDestroyedAction;
@@ -48,7 +48,7 @@ namespace EmptyFlow.SciterAPI {
 			m_sciterHostCallback = SciterHostCallback;
 		}
 
-		public Action<string, uint, uint> LoadedDataAction {
+		public Action<string, uint, uint, nint> LoadedDataAction {
 			get => m_loadedDataAction;
 			set => m_loadedDataAction = value;
 		}
@@ -113,7 +113,7 @@ namespace EmptyFlow.SciterAPI {
 					return OnLoadData ( loadDataStructure );
 				case SciterCallbackNotificationCode.SC_DATA_LOADED:
 					var loadedDataStructure = Marshal.PtrToStructure<SciterCallbackNotificationLoadedData> ( pns );
-					m_loadedDataAction ( loadedDataStructure.uri, loadedDataStructure.status, loadedDataStructure.dataSize );
+					m_loadedDataAction ( loadedDataStructure.uri, loadedDataStructure.status, loadedDataStructure.dataSize, loadedDataStructure.requestId );
 					return 0;
 				case SciterCallbackNotificationCode.SC_ATTACH_BEHAVIOR:
 					var behaviourStructure = Marshal.PtrToStructure<SciterCallbackNotificationAttachBehaviour> ( pns );
@@ -157,8 +157,8 @@ namespace EmptyFlow.SciterAPI {
 			return (uint) LoadDataReturnCode.LOAD_OK; // in this case we don't need override load something
 		}
 
-		private void EmptyLoadedDataAction ( string uri, uint status, uint dataSize ) {
-			Console.WriteLine ( $"{uri} - {status}({dataSize})" );
+		private void EmptyLoadedDataAction ( string uri, uint status, uint dataSize, nint request ) {
+			Console.WriteLine ( $"{uri}, size: {dataSize}" );
 		}
 
 		private void EmptyAction () {
