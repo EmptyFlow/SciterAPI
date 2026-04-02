@@ -62,7 +62,7 @@ namespace EmptyFlow.SciterAPI {
 		/// Convert sciter value to boolean.
 		/// </summary>
 		/// <returns>True/false or null if value was not boolean.</returns>
-		bool? ToBoolean () {
+		public bool? ToBoolean () {
 			if ( IsBoolean ) return d == 1;
 
 			return null;
