@@ -77,3 +77,4 @@ You can check the table below to see which version of SciterAPI is compatible wi
 * ~~Helpers for Node API~~
 * Support SOM mapping
 * Helpers for Graphics API
+* Helpers for Request API
