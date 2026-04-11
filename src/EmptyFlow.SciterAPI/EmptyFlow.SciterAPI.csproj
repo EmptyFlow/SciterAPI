@@ -24,6 +24,7 @@
 			SciterAPIHost.Initialization for run initialization
 			SciterCallbackNotificationLoadedData fix structure
 			SciterCallbackNotificationLoadData fix structure
+			SciterAPIHost.RequestAttention control attention on task bar icon
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>

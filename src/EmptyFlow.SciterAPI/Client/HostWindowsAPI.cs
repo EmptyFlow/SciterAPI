@@ -7,17 +7,10 @@ namespace EmptyFlow.SciterAPI {
 
 	public partial class SciterAPIHost {
 
-		[Obsolete ( "Please use CloseWindow instead" )]
-		public void CloseMainWindow () {
-			if ( m_mainWindow == IntPtr.Zero ) return;
+		public void CloseWindow ( nint window ) {
+			if ( window == nint.Zero ) return;
 
-			m_basicApi.SciterWindowExec ( m_mainWindow, WindowCommand.SCITER_WINDOW_SET_STATE, (int) WindowState.SCITER_WINDOW_STATE_CLOSED, IntPtr.Zero );
-		}
-
-		public void CloseWindow ( IntPtr window ) {
-			if ( window == IntPtr.Zero ) return;
-
-			m_basicApi.SciterWindowExec ( window, WindowCommand.SCITER_WINDOW_SET_STATE, (int) WindowState.SCITER_WINDOW_STATE_CLOSED, IntPtr.Zero );
+			m_basicApi.SciterWindowExec ( window, WindowCommand.SCITER_WINDOW_SET_STATE, (int) WindowState.SCITER_WINDOW_STATE_CLOSED, nint.Zero );
 		}
 
 		/// <summary>
@@ -504,7 +497,7 @@ namespace EmptyFlow.SciterAPI {
 		}
 
 		public int CountOfScreens ( nint window ) {
-			var script = $"Window.screens";
+			var script = $"Window.this.screens";
 			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
 				if ( result.IsErrorString || result.IsObjectError ) {
 					Console.WriteLine ( "CountOfScreens: error is happened! " );
@@ -588,7 +581,33 @@ namespace EmptyFlow.SciterAPI {
 			return null;
 		}
 
+		public void RequestAttention ( nint window, SciterRequestAttention mode ) {
+			var parameter = mode switch {
+				SciterRequestAttention.Info => "info",
+				SciterRequestAttention.Alert => "alert",
+				SciterRequestAttention.Stop => "stop",
+				_ => ""
+			};
+			var script = $"Window.this.requestAttention(\"{parameter}\")";
+			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
+				if ( result.IsErrorString || result.IsObjectError ) {
+					Console.WriteLine ( "RequestAttention: error is happened! " );
+					return;
+				}
+			}
+		}
+
 	}
+
+	public enum SciterRequestAttention {
+
+		Info = 0,
+
+		Alert = 1,
+
+		Stop = 2
+
+	};
 
 	public enum SciterSelectFileDialogMode {
 
