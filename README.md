@@ -23,8 +23,10 @@ using EmptyFlow.SciterAPI;
 
 var sciterFolder = Environment.CurrentDirectory; // you need specify folder where will be located sciter library file (sciter.dll/libsciter.so/libsciter.dylib)
 var host = new SciterAPIHost ( sciterFolder ); // create host and load API
-host.CreateMainWindow ( 300, 300, enableDebug: true, enableFeature: true ); // create main window and enable debug mode and sciter features (like access to system in JavaScript)
-host.AddWindowEventHandler ( new MyWindowEventHandler ( host ) ); // create and register window Event Handler (via event handler you can handle events from windows or elements)
+host.EnableDebugMode(); // enable debug mode
+host.EnableFeatures(); // enable all feature by default, or you can pass you set via parameter
+host.CreateWindow ( asMain: true ); // create main window and enable debug mode and sciter features (like access to system in JavaScript)
+host.AddWindowEventHandler ( new SciterEventHandler ( host.MainWindow, host ) ); // create and register window Event Handler (via event handler you can handle events from windows or elements)
 host.LoadFile ( "file://path/my.html" ); // load HTML page, path specified in first argument
 host.Process (); // start sciter and run main loop for show main window
 
@@ -75,3 +77,4 @@ You can check the table below to see which version of SciterAPI is compatible wi
 * ~~Helpers for Node API~~
 * Support SOM mapping
 * Helpers for Graphics API
+* Helpers for Request API
