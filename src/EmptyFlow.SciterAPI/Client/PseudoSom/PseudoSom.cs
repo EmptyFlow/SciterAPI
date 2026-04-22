@@ -29,7 +29,13 @@ namespace EmptyFlow.SciterAPI.Client.PseudoSom {
 			script.AppendLine ( $"const element = document.querySelector('[{tempId}]')" );
 			script.AppendLine ( "const model = Object.create(Object.prototype, {" );
 
-			foreach ( var property in model.GetProperties () ) {
+			var properties = model.GetProperties ();
+			var methods = model.GetMethods ();
+			var hasMethods = methods.Any ();
+			var lastProperty = properties.LastOrDefault ();
+			var lastMethod = methods.LastOrDefault ();
+
+			foreach ( var property in properties ) {
 				script.Append (
 					$$"""
 					{{property}}: {
@@ -41,11 +47,11 @@ namespace EmptyFlow.SciterAPI.Client.PseudoSom {
 						set: (value) => {
 							element.xcall('set_{{property}}', value);
 						}
-					}
+					}{{( ( lastProperty == property && !hasMethods ) ? "" : "," )}}
 					"""
 				);
 			}
-			foreach ( var method in model.GetMethods () ) {
+			foreach ( var method in methods ) {
 				script.Append (
 					$$"""
 					{{method}}: {
@@ -55,7 +61,7 @@ namespace EmptyFlow.SciterAPI.Client.PseudoSom {
 						value: function(...args) {
 							element.xcall('call_{{method}}', args);
 						}
-					}
+					}{{( ( lastMethod == method ) ? "" : "," )}}
 					"""
 				);
 			}
@@ -67,6 +73,7 @@ namespace EmptyFlow.SciterAPI.Client.PseudoSom {
 			host.ExecuteWindowEval ( window, script.ToString (), out var result );
 
 			if ( result.IsErrorString || result.IsObjectError ) {
+				Console.WriteLine ( $"PSOM Register Model({tempId}): " + host.GetValueString ( ref result ) );
 				return false;
 			}
 

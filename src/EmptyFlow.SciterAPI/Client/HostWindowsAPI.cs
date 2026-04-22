@@ -13,6 +13,22 @@ namespace EmptyFlow.SciterAPI {
 			m_basicApi.SciterWindowExec ( window, WindowCommand.SCITER_WINDOW_SET_STATE, (int) WindowState.SCITER_WINDOW_STATE_CLOSED, nint.Zero );
 		}
 
+		public bool CloseWindow ( nint window, string value ) {
+			if ( window == nint.Zero ) return false;
+
+			var script = $"Window.this.close({value})";
+			if ( m_basicApi.SciterEval ( window, script, (uint) script.Length, out var result ) ) {
+				if ( result.IsErrorString || result.IsObjectError ) {
+					var message = GetValueString ( ref result );
+					Console.WriteLine ( "CloseWindow: error is happened! " + message );
+					return false;
+				}
+				return result.ToBoolean () ?? false;
+			}
+
+			return false;
+		}
+
 		/// <summary>
 		/// Create window.
 		/// </summary>
