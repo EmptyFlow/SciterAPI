@@ -58,8 +58,8 @@ namespace EmptyFlow.SciterAPI.Client.PseudoSom {
 						writable: false,
 						configurable: false,
 						enumerable: true,
-						value: function(...args) {
-							element.xcall('call_{{method}}', args);
+						value: function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
+							element.xcall('call_{{method}}', arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
 						}
 					}{{( ( lastMethod == method ) ? "" : "," )}}
 					"""
@@ -73,7 +73,7 @@ namespace EmptyFlow.SciterAPI.Client.PseudoSom {
 			host.ExecuteWindowEval ( window, script.ToString (), out var result );
 
 			if ( result.IsErrorString || result.IsObjectError ) {
-				Console.WriteLine ( $"PSOM Register Model({tempId}): " + host.GetValueString ( ref result ) );
+				Console.WriteLine ( $"PSOM Register Model Error({tempId}): " + host.GetValueString ( ref result ) );
 				return false;
 			}
 
