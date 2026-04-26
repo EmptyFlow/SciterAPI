@@ -64,5 +64,6 @@ SciterAPI from version 1.2.7 can be used in production ready environment. Most o
 Some of parts in progress:
 - Graphics API implemented on 45%
 - Request API not implemented (will be after Graphics API)
+  
 Some of parts not planned:
 - Archive API, I don't think it not required when .NET have it own way to store files inside Assemblies.
