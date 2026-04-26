@@ -25,7 +25,7 @@ var sciterFolder = Environment.CurrentDirectory; // you need specify folder wher
 var host = new SciterAPIHost ( sciterFolder ); // create host and load API
 host.EnableDebugMode(); // enable debug mode
 host.EnableFeatures(); // enable all feature by default, or you can pass you set via parameter
-host.CreateWindow ( asMain: true ); // create main window and enable debug mode and sciter features (like access to system in JavaScript)
+host.CreateWindow ( asMain: true ); // create window (asMain mean pointer will be store in host.MainWindow property, instead you need to store it youself via returned variable)
 host.AddWindowEventHandler ( new SciterEventHandler ( host.MainWindow, host ) ); // create and register window Event Handler (via event handler you can handle events from windows or elements)
 host.LoadFile ( "file://path/my.html" ); // load HTML page, path specified in first argument
 host.Process (); // start sciter and run main loop for show main window
