@@ -66,4 +66,4 @@ Some of parts in progress:
 - Request API not implemented (will be after Graphics API)
   
 Some of parts not planned:
-- Archive API, I don't think it not required when .NET have it own way to store files inside Assemblies.
+- Archive API, I don't think it required when .NET have it own way to store files inside Assemblies.
