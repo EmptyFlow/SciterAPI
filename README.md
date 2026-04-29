@@ -5,7 +5,7 @@
 
 # SciterAPI
 C# cross platform binding and low-level helpers for Sciter HTML/CSS/JS rendering library. You can check out more about Sciter [here](https://sciter.com/). 
-Library support net8+, also trimming and compilation to NativeAot. Supported Sciter from version 6.0.0.0+ (also known as SciterJS).
+Library support net8+, also trimming and compilation to NativeAot. Supported Sciter from version 6.0.0.0+ (also known as SciterJS). Package is production ready.
 
 ### Install instruction
 
@@ -25,7 +25,7 @@ var sciterFolder = Environment.CurrentDirectory; // you need specify folder wher
 var host = new SciterAPIHost ( sciterFolder ); // create host and load API
 host.EnableDebugMode(); // enable debug mode
 host.EnableFeatures(); // enable all feature by default, or you can pass you set via parameter
-host.CreateWindow ( asMain: true ); // create main window and enable debug mode and sciter features (like access to system in JavaScript)
+host.CreateWindow ( asMain: true ); // create window (asMain mean pointer will be store in host.MainWindow property, instead you need to store it youself via returned variable)
 host.AddWindowEventHandler ( new SciterEventHandler ( host.MainWindow, host ) ); // create and register window Event Handler (via event handler you can handle events from windows or elements)
 host.LoadFile ( "file://path/my.html" ); // load HTML page, path specified in first argument
 host.Process (); // start sciter and run main loop for show main window
@@ -58,23 +58,13 @@ You can check the table below to see which version of SciterAPI is compatible wi
 | 1.0.4 | 6.0.1.8 |
 | 1.0.0 | 6.0.0.0 |
 
-### Roadmap
+### Production Ready and Current Progress
 
-* ~~Binding for core API~~
-* ~~Create main window and start process~~
-* ~~Behaviour Event Handler Factory (inject `behavior: name` from css or style attribute)~~
-* ~~Add custom file protocol~~
-* ~~Create/Delete Event Handler~~
-* ~~Element(s) selector~~
-* ~~Get/Set Element Text/Html~~
-* ~~Event Handler as class with overrided methods~~
-* ~~Get/Set Element Attributes~~
-* ~~Helpers for Scriter Value API~~
-* ~~Binding for Graphics API~~
-* ~~Binding for Request API~~
-* ~~Get/Set Variables~~
-* ~~Helpers for Window Management~~
-* ~~Helpers for Node API~~
-* Support SOM mapping
-* Helpers for Graphics API
-* Helpers for Request API
+SciterAPI from version 1.2.7 can be used in production ready environment. Most of the library APIs have reached their final form, if something will be changes in future it will be introduced as new APIs.
+Some of parts in progress:
+- Graphics API implemented on 45%
+- Request API not implemented (will be after Graphics API)
+  
+Some of parts not planned:
+- Archive API, I don't think it required when .NET have it own way to store files inside Assemblies.
+- SOM API, not sure I can do binding for SOM, I really try but no luck, instead I suggest PseudoSOM it analog of SOM but based on EventHandler.
