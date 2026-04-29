@@ -23,6 +23,9 @@
 		<PackageReleaseNotes>
 			PseudoSomModelHandler default handler for single model
 			Fixed Register Model for PseudoSOM
+			PseudoSomModelHandler basic event handler for PseudoSom models
+			InnerPseudoSomModelHandler event handler for Inner PseudoSom models
+			PseudoSomModelFactory factory for create PseudoSom models
 		</PackageReleaseNotes>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>

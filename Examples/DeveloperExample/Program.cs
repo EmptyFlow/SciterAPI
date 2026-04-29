@@ -28,13 +28,13 @@ namespace GaiaiLogic {
 			//host.EnableDebugMode ();
 			//host.EnableFeatures ();
 			host.CreateWindow ( asMain: true, debugOutput: true );
-			//host.AddWindowEventHandler ( new MyWindowEventHandler ( host.MainWindow, host ) );
+			host.AddWindowEventHandler ( new MyWindowEventHandler ( host.MainWindow, host ) );
 			host.LoadFile ( path );
 			host.Process ();
 		}
 	}
 
-	public class MyWindowEventHandler : ElementEventHandler {
+	public class MyWindowEventHandler : SciterEventHandler {
 
 		DeveloperConsole _devConsole;
 
@@ -45,7 +45,9 @@ namespace GaiaiLogic {
 		public override void BehaviourEvent ( BehaviourEvents cmd, nint heTarget, nint he, nint reason, SciterValue data, string name ) {
 			if ( cmd == BehaviourEvents.DOCUMENT_READY ) {
 
-				var result = Host.ShowWindowSelectFolderDialog ( Host.MainWindow, "testFolder", "" );
+				if ( Host.CloseWindow ( Host.MainWindow, "10" ) ) {
+
+				}
 			}
 		}
 
