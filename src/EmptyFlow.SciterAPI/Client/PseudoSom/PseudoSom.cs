@@ -26,6 +26,8 @@ namespace EmptyFlow.SciterAPI.Client.PseudoSom {
 			var tempId = model.Unique;
 			host.SetElementAttribute ( element, tempId, "enabled" );
 			var script = new StringBuilder ();
+			script.AppendLine ( "(function () {" );
+
 			script.AppendLine ( $"const element = document.querySelector('[{tempId}]')" );
 			script.AppendLine ( "const model = Object.create(Object.prototype, {" );
 
@@ -59,7 +61,7 @@ namespace EmptyFlow.SciterAPI.Client.PseudoSom {
 						configurable: false,
 						enumerable: true,
 						value: function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
-							element.xcall('call_{{method}}', arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+							return element.xcall('call_{{method}}', arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
 						}
 					}{{( ( lastMethod == method ) ? "" : "," )}}
 					"""
@@ -69,6 +71,8 @@ namespace EmptyFlow.SciterAPI.Client.PseudoSom {
 			script.AppendLine ( "});" );
 
 			script.AppendLine ( $"element.{model.GetModelName ()} = model;" );
+
+			script.AppendLine ( "})();" );
 
 			host.ExecuteWindowEval ( window, script.ToString (), out var result );
 
