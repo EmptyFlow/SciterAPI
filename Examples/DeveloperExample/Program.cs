@@ -42,13 +42,17 @@ namespace GaiaiLogic {
 			_devConsole = new DeveloperConsole ( host, host.MainWindow );
 		}
 
+		public override EventBehaviourGroups BeforeRegisterEvent () {
+			return EventBehaviourGroups.HANDLE_BEHAVIOR_EVENT;
+		}
+
 		public override void BehaviourEvent ( BehaviourEvents cmd, nint heTarget, nint he, nint reason, SciterValue data, string name ) {
 			if ( cmd == BehaviourEvents.DOCUMENT_READY ) {
-
-				if ( Host.CloseWindow ( Host.MainWindow, "10" ) ) {
-
-				}
 			}
+		}
+
+		public override void HandleInitializationEvent ( InitializationEvents command ) {
+			
 		}
 
 	}
