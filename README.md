@@ -67,4 +67,4 @@ Some of parts in progress:
   
 Some of parts not planned:
 - Archive API, I don't think it required when .NET have it own way to store files inside Assemblies.
-- SOM API, not sure I can do binding for SOM, I really try but no luck, instead I suggest PseudoSOM it analog of SOM but based on EventHandler.
+- SOM API, not sure I can do binding for SOM, I really try but no luck, instead I suggest [PseudoSOM](https://emptyflow.github.io/SciterAPIDocs/pseudosom/) it analog of SOM but based on EventHandler.
